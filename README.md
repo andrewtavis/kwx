@@ -4,6 +4,8 @@
 
 --------------------------------------
 
+[![PyPI Version](https://badge.fury.io/py/kwgen.svg)](https://pypi.org/project/kwgen/)
+[![Python Version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)](https://pypi.org/project/kwgen/)
 [![GitHub](https://img.shields.io/github/license/andrewtavis/kwgen.svg)](https://github.com/andrewtavis/kwgen/blob/master/LICENSE)
 
 ### Unsupervised keyword generation in Python
