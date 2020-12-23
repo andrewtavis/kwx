@@ -1,0 +1,28 @@
+# Editor files
+##############
+.vscode/
+.ipynb_checkpoints
+
+# OS files
+##########
+.DS_Store
+
+# Python files
+##############
+# setup.py working directory
+build
+# setup.py dist directory
+dist
+# Egg metadata
+*.egg-info
+# Caches
+__pycache__
+
+# Documentation files
+#####################
+env/
+
+# Display files
+###############
+*_preview.png
+*.sketch
