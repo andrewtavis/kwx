@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/andrewtavis/kwgen"><img src="https://github.com/andrewtavis/kwgen/blob/main/resources/kwgen_logo_transparent.png" width="517" height="223"></a>
+  <a href="https://github.com/andrewtavis/kwgen"><img src="https://github.com/andrewtavis/kwgen/blob/main/resources/kwgen_logo.png" width="517" height="223"></a>
 </div>
 
 --------------------------------------
@@ -13,6 +13,8 @@
 **Jump to:** [Data](#data) • [Methods](#methods) • [Examples](#examples) • [To-Do](#to-do)
 
 **kwgen**...
+
+See the [Google Presentation](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing) for a thorough overview of the process and methods.
 
 # Data
 
