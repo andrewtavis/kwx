@@ -17,7 +17,7 @@
 
 **Jump to:** [Methods](#methods) • [Examples](#examples) • [To-Do](#to-do)
 
-**kwgen** is a toolkit for unsupervised keyword generation based on Latent Dirichlet Allocation and Google's BERT. It provides a multilingual suite of methods to generate and analyze keywords from a corpus of texts. See the [Google slides (WIP)](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing) for a thorough overview of the process and techniques.
+**kwgen** is a toolkit for unsupervised keyword generation based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to generate and analyze keywords from a corpus of texts. See the [Google slides (WIP)](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing) for a thorough overview of the process and techniques.
 
 # Installation via PyPi
 ```bash
@@ -35,11 +35,11 @@ import kwgen
 ### LDA with BERT embeddings
 
 # Examples
-- Including more methods to generate keywords
-- Updates as lemmatization and other package dependencies evolve
 
-<!--
-- Creating, improving and sharing [examples](https://github.com/andrewtavis/kwgen/tree/main/examples)
--->
+[examples.research_paper_kws](https://github.com/andrewtavis/kwgen/blob/main/examples/research_paper_kws.ipynb) provides an example of how to use kwgen by deriving keywords from research papers in the Kaggle [COVID-19 Open Research Dataset](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge/).
 
 # To-Do
+
+- Including more methods to generate keywords
+- Updates as lemmatization and other package dependencies evolve
+- Creating, improving and sharing [examples](https://github.com/andrewtavis/kwgen/tree/main/examples)
