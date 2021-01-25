@@ -21,7 +21,7 @@ import kwgen
 # -- Project information -----------------------------------------------------
 
 project = "kwgen"
-copyright = "2021, kwgen developers (BSD License)"
+copyright = "2020-2021, kwgen developers (BSD License)"
 author = "kwgen developers"
 
 # The full version, including alpha/beta/rc tags
