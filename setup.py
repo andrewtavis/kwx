@@ -9,15 +9,30 @@ with open("README.md", "r") as fh:
 
 setup_args = dict(
     name="kwgen",
-    version="0.0.1",
+    version="0.0.1.1",
+    author="Andrew Tavis McAllister",
+    author_email="andrew.t.mcallister@gmail.com",
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Education",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: BSD License",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Operating System :: OS Independent",
+    ],
     description="Unsupervised keyword generation in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_namespace_packages(),
     license="new BSD",
     url="https://github.com/andrewtavis/kwgen",
-    author="Andrew Tavis McAllister",
-    author_email="andrew.t.mcallister@gmail.com",
 )
 
 install_requires = []
