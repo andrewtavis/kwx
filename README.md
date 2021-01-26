@@ -12,6 +12,7 @@
 [![pypistatus](https://img.shields.io/pypi/status/kwgen.svg)](https://pypi.org/project/kwgen/)
 [![license](https://img.shields.io/github/license/andrewtavis/kwgen.svg)](https://github.com/andrewtavis/kwgen/blob/main/LICENSE)
 [![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/andrewtavis/kwgen/blob/main/CONTRIBUTING.md)
 
 ### Unsupervised keyword generation in Python
 
