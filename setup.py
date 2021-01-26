@@ -50,7 +50,6 @@ install_requires = [
     "pyLDAvis",
     "wordcloud",
     "nltk",
-    "spacy",
     "emoji",
     "googletrans",
 ]
