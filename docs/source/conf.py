@@ -17,7 +17,6 @@ sys.path.insert(0, os.path.abspath(".."))
 
 import kwgen
 
-
 # -- Project information -----------------------------------------------------
 
 project = "kwgen"
