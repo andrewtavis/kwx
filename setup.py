@@ -37,7 +37,6 @@ setup_args = dict(
 
 install_requires = [
     "numpy",
-    "xlrd",
     "pandas",
     "matplotlib",
     "seaborn",
