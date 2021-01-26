@@ -53,6 +53,7 @@ install_requires = [
     "spacy",
     "emoji",
     "googletrans",
+    "Cython",
 ]
 
 if __name__ == "__main__":

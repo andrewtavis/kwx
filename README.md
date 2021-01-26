@@ -32,6 +32,8 @@ import kwgen
 
 ### LDA
 
+### BERT
+
 ### LDA with BERT embeddings
 
 # Examples
