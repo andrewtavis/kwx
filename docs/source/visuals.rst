@@ -1,5 +1,5 @@
 visuals
-=====
+=======
 
 The :py:mod:`visuals` module provides functions for keyword and topic visualization
 
