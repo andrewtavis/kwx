@@ -17,3 +17,9 @@ dependencies:
   - nltk
   - emoji
   - googletrans
+  - xlrd
+  - spacy
+  - sklearn
+  - tensorflow
+  - keras
+  - sentence_transformers
