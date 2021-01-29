@@ -22,6 +22,10 @@ from kwgen.autoencoder import Autoencoder
 
 
 class TopicModel:
+    """
+    The topic model class to fit and predict given an unsupervised learning technique
+    """
+
     def __init__(self, num_topics=15, method="lda_bert", bert_model=None):
         """
         Parameters
@@ -62,10 +66,19 @@ class TopicModel:
 
         Parameters
         ----------
+            texts : list
+                Text strings that are formatted for cluster models
+
+            text_corpus : list, list of lists, or str
+                The text corpus over which analysis should be done
+
+            method : str
+                The modeling technique to use
 
         Returns
         -------
-
+            vec : np.array
+                An array of text vectorizations
         """
         if method == None:
             method = self.method
@@ -92,7 +105,8 @@ class TopicModel:
 
                 Parameters
                 ----------
-                    bow_corpus
+                    bow_corpus : list of lists
+                        Contains doc2bow representations of the given texts
 
                     num_topics : int
                         The number of categories for LDA and BERT based approaches
@@ -147,13 +161,17 @@ class TopicModel:
 
         Parameters
         ----------
-            texts
+            texts : list
+                Text strings that are formatted for cluster models
 
-            text_corpus
+            text_corpus : list, list of lists, or str
+                The text corpus over which analysis should be done
 
-            method
+            method : str
+                The modeling technique to use
 
-            m_clustering
+            m_clustering : sklearn.cluster.object
+                The method that should be used to cluster
 
         Returns
         -------
@@ -198,10 +216,19 @@ class TopicModel:
 
         Parameters
         ----------
+            texts : list
+                Text strings that are formatted for cluster models
+
+            text_corpus : list, list of lists, or str
+                The text corpus over which analysis should be done
+
+            out_of_sample : None
+                Whether to trigger the creation of a new bow_corpus
 
         Returns
         -------
-
+            lbls : np.array
+                An array of labels for derived topics
         """
         out_of_sample = out_of_sample is not None
 

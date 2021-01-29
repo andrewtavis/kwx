@@ -67,8 +67,6 @@ def get_coherence(model, text_corpus, num_topics=15, num_keywords=15, measure="c
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
 
-            Note: generated using prepare_data
-
         num_topics : int (default=15)
             The number of categories for LDA and BERT based approaches
 
