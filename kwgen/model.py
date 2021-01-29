@@ -323,15 +323,15 @@ def gen_keywords(
         valid_methods
     )
 
-    if input_language in languages.lem_lang_abbr_dict().keys():
-        input_language = languages.lem_lang_abbr_dict()[input_language]
+    if input_language in languages.lem_abbr_dict().keys():
+        input_language = languages.lem_abbr_dict()[input_language]
 
     if output_language == None:
         output_language = input_language
     else:
         output_language = output_language.lower()
-        if output_language in languages.lem_lang_abbr_dict().keys():
-            output_language = languages.lem_lang_abbr_dict()[output_language]
+        if output_language in languages.lem_abbr_dict().keys():
+            output_language = languages.lem_abbr_dict()[output_language]
 
     if ignore_words is not None:
         if type(ignore_words) == str:
@@ -638,15 +638,15 @@ def gen_analysis_files(
         if os.path.exists(dest_name):
             os.rmdir(dest_name)
 
-    if input_language in languages.lem_lang_abbr_dict().keys():
-        input_language = languages.lem_lang_abbr_dict()[input_language]
+    if input_language in languages.lem_abbr_dict().keys():
+        input_language = languages.lem_abbr_dict()[input_language]
 
     if output_language == None:
         output_language = input_language
     else:
         output_language = output_language.lower()
-        if output_language in languages.lem_lang_abbr_dict().keys():
-            output_language = languages.lem_lang_abbr_dict()[output_language]
+        if output_language in languages.lem_abbr_dict().keys():
+            output_language = languages.lem_abbr_dict()[output_language]
 
     text_corpus, clean_texts = utils._prepare_corpus_path(
         text_corpus=text_corpus,

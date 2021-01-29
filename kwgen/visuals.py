@@ -148,8 +148,8 @@ def graph_topic_num_evals(
 
     input_language = input_language.lower()
 
-    if input_language in languages.lem_lang_abbr_dict().keys():
-        input_language = languages.lem_lang_abbr_dict()[input_language]
+    if input_language in languages.lem_abbr_dict().keys():
+        input_language = languages.lem_abbr_dict()[input_language]
 
     text_corpus, clean_texts = utils._prepare_corpus_path(
         text_corpus=text_corpus,
@@ -530,8 +530,8 @@ def pyLDAvis_topics(
     method = method.lower()
     input_language = input_language.lower()
 
-    if input_language in languages.lem_lang_abbr_dict().keys():
-        input_language = languages.lem_lang_abbr_dict()[input_language]
+    if input_language in languages.lem_abbr_dict().keys():
+        input_language = languages.lem_abbr_dict()[input_language]
 
     text_corpus, clean_texts = utils._prepare_corpus_path(
         text_corpus=text_corpus,

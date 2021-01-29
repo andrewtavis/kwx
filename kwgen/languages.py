@@ -4,22 +4,31 @@ Languages
 
 Module for organizing language dependencies for text cleaning
 
+The following languages have been selected because their stopwords can be removed via https://github.com/stopwords-iso/stopwords-iso/tree/master/python
+
 Contents
-    lem_lang_abbr_dict,
-    stem_lang_abbr_dict,
-    stop_wrods_lang_abbr_dict
+    lem_abbr_dict,
+    stem_abbr_dict,
+    sw_abbr_dict
 """
 
 
-# The following languages have been selected because:
-# Their stopwords can be removed via https://github.com/stopwords-iso/stopwords-iso/tree/master/python
+def lem_abbr_dict():
+    """
+    Calls a dictionary of languages and their abbreviations for lemmatization
 
-# Their following can be lemmatized via https://spacy.io/usage/models
-# These languages are also those that can have their words ordered by part of speech
+    Notes
+    -----
+        These languages can be lemmatized via https://spacy.io/usage/models
 
+        They are also those that can have their words ordered by parts of speech
 
-def lem_lang_abbr_dict():
-    lem_lang_abbr_dict = {
+    Returns
+    -------
+        lem_abbr_dict : dict
+            A dictionary with languages as keys and their abbreviations as items
+    """
+    lem_abbr_dict = {
         "chinese": "zh",
         "danish": "da",
         "dutch": "nl",
@@ -28,33 +37,55 @@ def lem_lang_abbr_dict():
         "german": "de",
         "greek": "el",
         "italian": "it",
-        "japaneze": "ja",
+        "japanese": "ja",
         "lithuanian": "lt",
         "norwegian": "nb",
         "polish": "pl",
-        "portugese": "pt",
+        "portuguese": "pt",
         "romanian": "ro",
         "spanish": "es",
     }
 
-    return lem_lang_abbr_dict
+    return lem_abbr_dict
 
 
-# Hungarian and other languages don't have good lemmatizers, and will thus be stemmed via: https://www.nltk.org/api/nltk.stem.html
-def stem_lang_abbr_dict():
-    stem_lang_abbr_dict = {
+def stem_abbr_dict():
+    """
+    Calls a dictionary of languages and their abbreviations for stemming
+
+    Notes
+    -----
+        These languages don't have good lemmatizers, and will thus be stemmed via https://www.nltk.org/api/nltk.stem.html
+
+    Returns
+    -------
+        stem_abbr_dict : dict
+            A dictionary with languages as keys and their abbreviations as items
+    """
+    stem_abbr_dict = {
         "arabic": "ar",
         "finnish": "fi",
         "hungarian": "hu",
         "swedish": "sv",
     }
 
-    return stem_lang_abbr_dict
+    return stem_abbr_dict
 
 
-# The final languages can only have their stopwords removed (see https://github.com/stopwords-iso/stopwords-iso)
-def stop_wrods_lang_abbr_dict():
-    stop_wrods_lang_abbr_dict = {
+def sw_abbr_dict():
+    """
+    Calls a dictionary of languages and their abbreviations for stop word removal
+
+    Notes
+    -----
+        # These languages can only have their stopwords removed via https://github.com/stopwords-iso/stopwords-iso)
+
+    Returns
+    -------
+        sw_abbr_dict : dict
+            A dictionary with languages as keys and their abbreviations as items
+    """
+    sw_abbr_dict = {
         "afrikaans": "af",
         "bulgarian": "bg",
         "bengali": "bn",
@@ -98,4 +129,4 @@ def stop_wrods_lang_abbr_dict():
         "zulu": "zu",
     }
 
-    return stop_wrods_lang_abbr_dict
+    return sw_abbr_dict

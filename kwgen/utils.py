@@ -186,8 +186,8 @@ def clean_and_tokenize_texts(
     input_language = input_language.lower()
 
     # Select abbreviation for the lemmatizer, if it's available
-    if input_language in languages.lem_lang_abbr_dict().keys():
-        input_language = languages.lem_lang_abbr_dict()[input_language]
+    if input_language in languages.lem_abbr_dict().keys():
+        input_language = languages.lem_abbr_dict()[input_language]
 
     if type(responses) == str:
         responses = [responses]
@@ -230,10 +230,10 @@ def clean_and_tokenize_texts(
     # Remove stopwords and tokenize
     if stopwords(input_language) != set():  # the input language has stopwords
         stop_words = stopwords(input_language)
-    elif input_language in languages.stem_lang_abbr_dict().keys():
-        stop_words = stopwords(languages.stem_lang_abbr_dict()[input_language])
-    elif input_language in languages.stop_wrods_lang_abbr_dict().keys():
-        stop_words = stopwords(languages.stop_wrods_lang_abbr_dict()[input_language])
+    elif input_language in languages.stem_abbr_dict().keys():
+        stop_words = stopwords(languages.stem_abbr_dict()[input_language])
+    elif input_language in languages.sw_abbr_dict().keys():
+        stop_words = stopwords(languages.sw_abbr_dict()[input_language])
     else:
         stop_words = []
 
@@ -402,8 +402,8 @@ def prepare_data(
     input_language = input_language.lower()
 
     # Select abbreviation for the lemmatizer, if it's available
-    if input_language in languages.lem_lang_abbr_dict().keys():
-        input_language = languages.lem_lang_abbr_dict()[input_language]
+    if input_language in languages.lem_abbr_dict().keys():
+        input_language = languages.lem_abbr_dict()[input_language]
 
     df_responses = load_data(data)
 
@@ -524,11 +524,11 @@ def _order_by_pos(outputs, output_language):
         ordered_outputs : list
             The given keywords ordered by their pos
     """
-    if output_language in languages.lem_lang_abbr_dict().keys():
-        output_language = languages.lem_lang_abbr_dict()[output_language]
+    if output_language in languages.lem_abbr_dict().keys():
+        output_language = languages.lem_abbr_dict()[output_language]
 
     if (
-        output_language in languages.lem_lang_abbr_dict().values()
+        output_language in languages.lem_abbr_dict().values()
     ):  # we can use spacy to detect parts of speech
         nlp = spacy.load(output_language)
         nlp_outputs = [nlp(o)[0] for o in outputs]
