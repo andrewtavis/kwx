@@ -24,9 +24,9 @@ from collections import defaultdict
 import importlib
 
 # Make sure xlrd is installed for pandas
-xlrd_spec = importlib.util.find_spec("xlrd")
-if xlrd_spec == None:
-    os.system("pip install xlrd")
+# xlrd_spec = importlib.util.find_spec("xlrd")
+# if xlrd_spec == None:
+#     os.system("pip install xlrd")
 
 import pandas as pd
 

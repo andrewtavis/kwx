@@ -37,6 +37,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "numpydoc",
     "sphinx.ext.viewcode",
+    "sphinx.ext.autosummary",
 ]
 
 numpydoc_show_inherited_class_members = False
@@ -59,7 +60,7 @@ autodoc_mock_imports = [
     "nltk",
     "emoji",
     "googletrans",
-    "scikit-learn",
+    "sklearn",
     "keras",
     "IPython",
     "sentence-transformers",
