@@ -63,7 +63,7 @@ autodoc_mock_imports = [
     "sklearn",
     "keras",
     "IPython",
-    "sentence-transformers",
+    "sentence_transformers",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
