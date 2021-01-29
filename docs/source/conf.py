@@ -10,12 +10,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
-import os
-import sys
+# import os
+# import sys
 
-sys.path.insert(0, os.path.abspath(".."))
+# sys.path.insert(0, os.path.abspath(".."))
 
-import kwgen
+# import kwgen
 
 # -- Project information -----------------------------------------------------
 
@@ -47,7 +47,23 @@ autodoc_member_order = "bysource"
 
 # To avoid installing Tensorflow and all its dependencies when building doc
 # https://stackoverflow.com/a/15912502/8729698
-autodoc_mock_imports = ["tensorflow"]
+autodoc_mock_imports = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "seaborn",
+    "stopwordsiso",
+    "gensim",
+    "pyLDAvis",
+    "wordcloud",
+    "nltk",
+    "emoji",
+    "googletrans",
+    "scikit-learn",
+    "keras",
+    "IPython",
+    "sentence-transformers",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
