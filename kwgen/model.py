@@ -263,7 +263,9 @@ def gen_keywords(
 
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
-            Note 1: generated using prepare_data
+
+            Note 1: generated using prepare_text_data
+
             Note 2: if a str is provided, then the data will be loaded from a path
 
         clean_texts : list
@@ -290,7 +292,7 @@ def gen_keywords(
         incl_mc_questions : bool (default=False)
             Whether to include the multiple choice questions (True) or just the free answer questions
 
-            Note: included so that it can be passed to prepare_data if a path is provided
+            Note: included so that it can be passed to prepare_text_data if a path is provided
 
         ignore_words : str or list (default=None)
             Words that should be removed (such as the name of the publisher)
@@ -307,7 +309,9 @@ def gen_keywords(
     Returns
     -------
         output_keywords : list or list of lists
+
             - A list of togs that should be used to present the publisher
+
             - A list of lists where sub_lists are the keywords best assosciated with the data entry
     """
     input_language = input_language.lower()
@@ -371,7 +375,7 @@ def gen_keywords(
             if type(corpuses_to_compare) == str:
                 try:
                     os.path.exists(corpuses_to_compare)  # a path has been provided
-                    corpuses_to_compare = utils.prepare_data(
+                    corpuses_to_compare = utils.prepare_text_data(
                         data=corpuses_to_compare,
                         input_language=input_language,
                         incl_mc_questions=incl_mc_questions,
@@ -388,7 +392,7 @@ def gen_keywords(
                     corpus_paths = [c for c in corpuses_to_compare]
                     for c in corpus_paths:
                         corpuses_to_compare.append(
-                            utils.prepare_data(
+                            utils.prepare_text_data(
                                 data=c,
                                 input_language=input_language,
                                 incl_mc_questions=incl_mc_questions,

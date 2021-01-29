@@ -78,7 +78,7 @@ def sw_abbr_dict():
 
     Notes
     -----
-        # These languages can only have their stopwords removed via https://github.com/stopwords-iso/stopwords-iso)
+        These languages can only have their stopwords removed via https://github.com/stopwords-iso/stopwords-iso)
 
     Returns
     -------

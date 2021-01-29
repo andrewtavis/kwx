@@ -81,7 +81,9 @@ def graph_topic_num_evals(
 
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
-            Note 1: generated using prepare_data
+
+            Note 1: generated using prepare_text_data
+
             Note 2: if a str is provided, then the data will be loaded from a path
 
         clean_texts : list
@@ -99,7 +101,8 @@ def graph_topic_num_evals(
 
         incl_mc_questions : bool (default=False)
             Whether to include the multiple choice questions (True) or just the free answer questions
-            Note: included so that it can be passed to prepare_data if a path is provided
+
+            Note: included so that it can be passed to prepare_text_data if a path is provided
 
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
@@ -129,10 +132,8 @@ def graph_topic_num_evals(
 
     Returns
     -------
-        ax : matplotlb axis
+        ax : matplotlib axis
             A graph of the given metrics for each of the given models based on each topic number
-
-
     """
     assert (
         metrics == "stability" or metrics == "coherence" or metrics == True
@@ -387,7 +388,7 @@ def gen_word_cloud(
         incl_mc_questions : bool (default=False)
             Whether to include the multiple choice questions (True) or just the free answer questions
 
-            Note: included so that it can be passed to prepare_data if a path is provided
+            Note: included so that it can be passed to prepare_text_data if a path is provided
 
         ignore_words : str or list (default=None)
             Words that should be removed (such as the name of the publisher)
@@ -410,7 +411,8 @@ def gen_word_cloud(
 
     Returns
     -------
-        A word cloud based on the occurences of words in a list without removed words
+        plt.savefig or plt.show : pyplot methods
+            A word cloud based on the occurrences of words in a list without removed words
     """
     text_corpus = utils._prepare_corpus_path(
         text_corpus=text_corpus,
@@ -488,12 +490,13 @@ def pyLDAvis_topics(
                 LDA: Latent Dirichlet Allocation
 
                     - Text data is classified into a given number of categories
+
                     - These categories are then used to classify individual entries given the percent they fall into categories
 
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
 
-            Note 1: generated using prepare_data
+            Note 1: generated using prepare_text_data
 
             Note 2: if a str is provided, then the data will be loaded from a path
 
@@ -506,7 +509,7 @@ def pyLDAvis_topics(
         incl_mc_questions : bool (default=False)
             Whether to include the multiple choice questions (True) or just the free answer questions
 
-            Note: included so that it can be passed to prepare_data if a path is provided
+            Note: included so that it can be passed to prepare_text_data if a path is provided
 
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
@@ -525,7 +528,8 @@ def pyLDAvis_topics(
 
     Returns
     -------
-        A visualization of the topics and their main keywords via pyLDAvis
+        pyLDAvis.save_html or pyLDAvis.show : pyLDAvis methods
+            A visualization of the topics and their main keywords via pyLDAvis
     """
     method = method.lower()
     input_language = input_language.lower()

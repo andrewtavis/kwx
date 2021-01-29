@@ -9,7 +9,7 @@ Contents
     _combine_tokens_to_str,
     _clean_text_strings,
     clean_and_tokenize_texts,
-    prepare_data,
+    prepare_text_data,
     _prepare_corpus_path,
     translate_output,
     _order_by_pos,
@@ -36,7 +36,7 @@ from gensim.models import Phrases
 from kwgen import languages
 
 
-def load_data(data):
+def load_data(data, target_cols=None):
     """
     Loads data from a path and formats it into a pandas df
 
@@ -44,6 +44,9 @@ def load_data(data):
     ----------
         data : pd.DataFrame or csv/xlsx path
             The data in df or path form
+
+        target_cols : str or list (default=None)
+            The columns in the csv/xlsx or dataframe that contain the text data to be modeled
 
     Returns
     -------
@@ -56,63 +59,40 @@ def load_data(data):
         elif data[-len("csv") :] == "csv":
             df_responses = pd.read_csv(filepath_or_buffer=data)
         else:
-            df_responses = data
+            ValueError("Strings passed should be csv or xlsx files.")
+    elif type(data) == pd.DataFrame:
+        df_responses = data
+    else:
+        ValueError(
+            "The 'data' argument should be either the name of a csv/xlsx file or a pandas dataframe."
+        )
 
-    column_names = [
-        "user_id",
-        "val_benefit",
-        "unval_benefit",
-        "val_personal",
-        "unval_personal",
-        "most_important",
-        "mission_description",
-        "higher_purpose",
-        "expensive_ok",
-        "expensive_not_ok",
-        "bargain_ok",
-        "bargain_not_ok",
-        "likelihood_expensive",
-        "likelihood_bargain",
-        "contact_duraction",
-        "start_time",
-        "submit_time",
-        "network_id",
-    ]
-
-    extra_index = 0
-    while len(column_names) < len(df_responses.columns):
-        column_names.append("extra_col_{}".format(extra_index))
-        extra_index += 1
-
-    df_responses.columns = column_names
-
-    for col in df_responses.columns:
-        # This could be used to combine the 'Other' columns, but each dataset would then need them
-        if "other" in col:
-            if df_responses[col].isnull().all():
-                df_responses.drop(col, axis=1, inplace=True)
-
-            else:
-                col_idx = df_responses.columns.get_loc(col)
-                for i in df_responses.index:
-                    if type(df_responses.loc[i, col]) == str:
-                        df_responses.loc[
-                            i, df_responses.columns[col_idx - 1]
-                        ] = df_responses.loc[i, col]
-
-                df_responses.drop(col, axis=1, inplace=True)
+    df_responses = df_responses[target_cols]
 
     return df_responses
 
 
-def _combine_tokens_to_str(responses, ignore_words=None):
+def _combine_tokens_to_str(texts, ignore_words=None):
     """
     Combines the texts into one string
+
+    Parameters
+    ----------
+        texts : str or list
+            The texts to be combined
+
+        ignore_words : str or list
+            Strings that should be removed from the text body
+
+    Returns
+    -------
+        texts_str : str
+            A string of the full text with unwanted words removed
     """
-    if type(responses[0]) == list:
-        flat_words = [word for sublist in responses for word in sublist]
+    if type(texts[0]) == list:
+        flat_words = [word for sublist in texts for word in sublist]
     else:
-        flat_words = responses
+        flat_words = texts
 
     if type(ignore_words) == str:
         ignore_words = [ignore_words]
@@ -120,9 +100,9 @@ def _combine_tokens_to_str(responses, ignore_words=None):
         ignore_words = []
 
     flat_words = [word for word in flat_words if word not in ignore_words]
-    response_str = " ".join([word for word in flat_words])
+    texts_str = " ".join([word for word in flat_words])
 
-    return response_str
+    return texts_str
 
 
 def _clean_text_strings(s):
@@ -155,6 +135,38 @@ def _clean_text_strings(s):
     return s.strip()
 
 
+def lemmatize(tokens, nlp=None):
+    """
+    Lemmatizes tokens (allows for one line in each of the next try and except clauses)
+
+    Parameters
+    ----------
+        tokens : list or list of lists
+
+        nlp : spacy.load object
+            A spacy language model
+
+    Returns
+    -------
+        lemmatized_tokens : list or list of lists
+            Tokens that have been lemmatized for nlp analysis
+    """
+    allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
+
+    lemmatized_tokens = []
+    for tokens in tokens:
+        combined_tokens = _combine_tokens_to_str(tokens)
+
+        lem_tokens = nlp(combined_tokens)
+        lemmed_tokens = [
+            token.lemma_ for token in lem_tokens if token.pos_ in allowed_pos_tags
+        ]
+
+        lemmatized_tokens.append(lemmed_tokens)
+
+    return lemmatized_tokens
+
+
 def clean_and_tokenize_texts(
     responses, input_language=None, min_freq=2, min_word_len=4, sample_size=1
 ):
@@ -167,7 +179,7 @@ def clean_and_tokenize_texts(
             The texts to be cleaned and tokenized
 
         input_language : str (default=None)
-            The English name of the input_language in which the texts are found
+            The English name of the language in which the texts are found
 
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
@@ -230,6 +242,7 @@ def clean_and_tokenize_texts(
     # Remove stopwords and tokenize
     if stopwords(input_language) != set():  # the input language has stopwords
         stop_words = stopwords(input_language)
+    # Stemming and normal stopwords are still full language names
     elif input_language in languages.stem_abbr_dict().keys():
         stop_words = stopwords(languages.stem_abbr_dict()[input_language])
     elif input_language in languages.sw_abbr_dict().keys():
@@ -260,40 +273,22 @@ def clean_and_tokenize_texts(
 
         tokens_with_bigrams.append(tokenized_texts[i])
 
-    # Lemmatize or stem words
-    def lemmatize(tokens):
-        """
-        Lemmatizes tokens (allows for one line in each of the next try and except clauses)
-        """
-        allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
-
-        lemmatized_tokens = []
-        for tokens in tokens:
-            combined_tokens = _combine_tokens_to_str(tokens)
-
-            lem_tokens = nlp(combined_tokens)
-            lemmed_tokens = [
-                token.lemma_ for token in lem_tokens if token.pos_ in allowed_pos_tags
-            ]
-
-            lemmatized_tokens.append(lemmed_tokens)
-
-        return lemmatized_tokens
-
+    # Lemmatize or stem words (try the former first, then the latter)
     nlp = None
     try:
         nlp = spacy.load(input_language)
-        lemmatized_tokens = lemmatize(tokens_with_bigrams)
+        lemmatized_tokens = lemmatize(tokens=tokens_with_bigrams, nlp=nlp)
 
     except OSError:
         try:
             os.system("python -m spacy download {}".format(input_language))
             nlp = spacy.load(input_language)
-            lemmatized_tokens = lemmatize(tokens_with_bigrams)
+            lemmatized_tokens = lemmatize(tokens=tokens_with_bigrams, nlp=nlp)
         except:
             pass
 
     if nlp == None:
+        # Lemmatization failed, so try stemmiing
         stemmer = None
         if input_language in SnowballStemmer.languages:
             stemmer = SnowballStemmer(input_language)
@@ -363,10 +358,10 @@ def clean_and_tokenize_texts(
     return text_corpus, clean_texts, selected_idxs
 
 
-def prepare_data(
+def prepare_text_data(
     data=None,
+    target_cols=None,
     input_language=None,
-    incl_mc_questions=False,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
@@ -379,11 +374,11 @@ def prepare_data(
         data : pd.DataFrame or csv/xlsx path
             The data in df or path form
 
-        incl_mc_questions : bool (default=False)
-            Whether to include the multiple choice questions (True) or just the free answer questions
+        target_cols : str or list (default=None)
+            The columns in the csv/xlsx or dataframe that contain the text data to be modeled
 
         input_language : str (default=None)
-            The English name of the input_language in which the texts are found
+            The English name of the language in which the texts are found
 
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
@@ -409,20 +404,10 @@ def prepare_data(
 
     # Select columns from which texts should come
     raw_texts = []
-    if incl_mc_questions:
-        included_cols = [
-            "val_benefit",
-            "val_personal",
-            "most_important",
-            "mission_description",
-            "higher_purpose",
-        ]
-    else:
-        included_cols = ["most_important", "mission_description", "higher_purpose"]
 
     for i in df_responses.index:
         text = ""
-        for c in included_cols:
+        for c in target_cols:
             if type(df_responses.loc[i, c]) == str:
                 text += " " + df_responses.loc[i, c]
 
@@ -443,22 +428,50 @@ def prepare_data(
 def _prepare_corpus_path(
     text_corpus=None,
     clean_texts=None,
+    target_cols=None,
     input_language=None,
-    incl_mc_questions=False,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
 ):
     """
     Checks a text corpus to see if it's a path, and prepares the data if so
+
+    Parameters
+    ----------
+        text_corpus : str or list or list of lists
+            A path or text corpus over which analysis should be done
+
+        clean_texts : str
+            The texts formatted for analysis as strings
+
+        target_cols : str or list (default=None)
+            The columns in the csv/xlsx or dataframe that contain the text data to be modeled
+
+        input_language : str (default=None)
+            The English name of the language in which the texts are found
+
+        min_freq : int (default=2)
+            The minimum allowable frequency of a word inside the text corpus
+
+        min_word_len : int (default=4)
+            The smallest allowable length of a word
+
+        sample_size : float (default=None: sampling for non-BERT techniques)
+            The size of a sample for BERT models
+
+    Returns
+    -------
+        text_corpus : list or list of lists
+            A prepared text corpus for the data in the given path
     """
     if type(text_corpus) == str:
         try:
             os.path.exists(text_corpus)  # a path has been provided
-            text_corpus, clean_texts = prepare_data(
+            text_corpus, clean_texts = prepare_text_data(
                 data=text_corpus,
+                target_cols=target_cols,
                 input_language=input_language,
-                incl_mc_questions=incl_mc_questions,
                 min_freq=min_freq,
                 min_word_len=min_word_len,
                 sample_size=sample_size,
@@ -481,6 +494,22 @@ def _prepare_corpus_path(
 def translate_output(outputs, input_language, output_language):
     """
     Translates model outputs using https://github.com/ssut/py-googletrans
+
+    Parameters
+    ----------
+        outputs : list
+            Output keywords of a model
+
+        input_language : str
+            The English name of the language in which the texts are found
+
+        output_language
+            The English name of the desired language for outputs
+
+    Returns
+    -------
+        translated_outputs : list
+            A list of keywords translated to the given output_language
     """
     translator = Translator()
 
@@ -574,6 +603,16 @@ def _order_by_pos(outputs, output_language):
 def prompt_for_ignore_words(ignore_words=None):
     """
     Prompts the user for words that should be ignored in kewword generation
+
+    Parameters
+    ----------
+        ignore_words : str or list
+            Words that should not be included in the output
+
+    Returns
+    -------
+        ignore words, words_added : list, bool
+            A new list of words to ignore and a boolean indicating if words have been added
     """
     if ignore_words == None:
         ignore_words = []
