@@ -1,5 +1,5 @@
 """
-Model
+model
 -----
 
 Functions for modeling text corpuses and generating keywords

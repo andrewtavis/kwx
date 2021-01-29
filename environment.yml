@@ -1,0 +1,19 @@
+# This file may be used to create an environment using:
+# conda env create -f environment.yml
+name: kwgen-dev
+channels:
+  - anaconda
+  - conda-forge
+  - defaults
+dependencies:
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - stopwordsiso
+  - gensim
+  - pyLDAvis
+  - wordcloud
+  - nltk
+  - emoji
+  - googletrans

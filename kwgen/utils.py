@@ -1,5 +1,5 @@
 """
-Utilities
+utils
 ---------
 
 Utility functions for data loading, cleaning, output formatting, and user interaction

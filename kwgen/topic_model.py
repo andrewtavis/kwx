@@ -1,5 +1,5 @@
 """
-Topic Model
+topic_model
 -----------
 
 The unsupervised learning topic model for keyword generation

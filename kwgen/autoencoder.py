@@ -1,5 +1,5 @@
 """
-Autoencoder
+autoencoder
 -----------
 
 The autoencoder for combining topic modeling techniques

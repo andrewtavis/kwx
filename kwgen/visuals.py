@@ -1,5 +1,5 @@
 """
-Visuals
+visuals
 -------
 
 Functions for keyword and topic visualization
