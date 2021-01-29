@@ -56,8 +56,6 @@ else:
         "scikit-learn",
         "keras",
         "IPython",
-        "funcy",
-        "sentencepiece==0.1.91",
         "sentence-transformers",
         "tensorflow",
     ]
