@@ -18,13 +18,25 @@ import re
 import inspect
 import zipfile
 from collections import Counter
+import importlib
 
 import numpy as np
+
+# Make sure xlrd is installed for pandas
+xlrd_spec = importlib.util.find_spec("xlrd")
+if xlrd_spec == None:
+    os.system("pip install xlrd")
+
 import pandas as pd
 
 from gensim.models import CoherenceModel
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sentence_transformers import SentenceTransformer
+
+try:
+    from sentence_transformers import SentenceTransformer
+except:
+    os.system("pip install sentence-transformers")
+    from sentence_transformers import SentenceTransformer
 
 from kwgen import utils, languages, topic_model, visuals
 

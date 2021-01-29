@@ -17,8 +17,15 @@ import math
 import time
 import zipfile
 import io
+import importlib
 
 import numpy as np
+
+# Make sure xlrd is installed for pandas
+xlrd_spec = importlib.util.find_spec("xlrd")
+if xlrd_spec == None:
+    os.system("pip install xlrd")
+
 import pandas as pd
 from IPython import get_ipython
 from IPython.display import display

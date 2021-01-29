@@ -21,11 +21,22 @@ import re
 import string
 import random
 from collections import defaultdict
+import importlib
+
+# Make sure xlrd is installed for pandas
+xlrd_spec = importlib.util.find_spec("xlrd")
+if xlrd_spec == None:
+    os.system("pip install xlrd")
 
 import pandas as pd
 
 from nltk.stem.snowball import SnowballStemmer
-import spacy
+
+try:
+    import spacy
+except:
+    os.system("pip install spacy")
+    import spacy
 
 from googletrans import Translator
 from stopwordsiso import stopwords
