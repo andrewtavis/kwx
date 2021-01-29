@@ -51,6 +51,7 @@ install_requires = [
     "keras",
     "IPython",
     "funcy",
+    "sentencepiece",
     "sentence-transformers",
 ]
 
