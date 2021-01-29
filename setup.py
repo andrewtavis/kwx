@@ -50,6 +50,7 @@ install_requires = [
     "scikit-learn",
     "keras",
     "IPython",
+    "funcy",
 ]
 
 if __name__ == "__main__":
