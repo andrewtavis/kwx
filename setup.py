@@ -51,7 +51,6 @@ install_requires = [
     "keras",
     "IPython",
     "sentence-transformers",
-    "tensorflow",
 ]
 
 if __name__ == "__main__":

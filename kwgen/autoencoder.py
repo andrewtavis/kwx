@@ -11,11 +11,6 @@ Contents
 """
 
 from sklearn.model_selection import train_test_split
-
-import tensorflow as tf
-
-tf.get_logger().setLevel("ERROR")
-
 import keras
 from keras.layers import Input, Dense
 from keras.models import Model
