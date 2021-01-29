@@ -48,8 +48,6 @@ install_requires = [
     "emoji",
     "googletrans",
     "scikit-learn",
-    "tensorflow",
-    "keras",
 ]
 
 if __name__ == "__main__":

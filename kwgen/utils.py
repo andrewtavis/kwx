@@ -78,6 +78,9 @@ def load_data(data, target_cols=None):
             "The 'data' argument should be either the name of a csv/xlsx file or a pandas dataframe."
         )
 
+    if target_cols == None:
+        target_cols = df_responses.columns
+
     df_responses = df_responses[target_cols]
 
     return df_responses

@@ -156,7 +156,7 @@ t_sne(
 
 # Examples
 
-[examples.research_paper_kws](https://github.com/andrewtavis/kwgen/blob/main/examples/research_paper_kws.ipynb) provides an example of how to use kwgen by deriving keywords from research papers in the Kaggle [COVID-19 Open Research Dataset](https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge/).
+[examples.gen_kws](https://github.com/andrewtavis/kwgen/blob/main/examples/gen_kws.ipynb) provides an example of how to use kwgen by deriving keywords from research papers in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment).
 
 # To-Do
 
