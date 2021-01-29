@@ -53,6 +53,7 @@ Installation
    topic_model
    autoencoder
    visuals
+   languages
    utils
    notes
 

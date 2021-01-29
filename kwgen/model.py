@@ -567,7 +567,7 @@ def gen_keywords(
         return keywords
 
 
-def gen_analysis_files(
+def gen_files(
     method=["lda", "lda_bert"],
     text_corpus=None,
     clean_texts=None,
