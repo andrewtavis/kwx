@@ -49,6 +49,11 @@ Installation
    :maxdepth: 2
    :caption: Contents:
 
+   model
+   topic_model
+   autoencoder
+   visuals
+   utils
    notes
 
 Project Indices

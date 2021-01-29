@@ -1,5 +1,5 @@
 """
-Languages
+languages
 ---------
 
 Module for organizing language dependencies for text cleaning

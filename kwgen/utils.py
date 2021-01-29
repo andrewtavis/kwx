@@ -2,7 +2,7 @@
 Utilities
 ---------
 
-Utility functions for general operations
+Utility functions for data loading, cleaning, output formatting, and user interaction
 
 Contents
     load_data,
