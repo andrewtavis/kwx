@@ -52,7 +52,6 @@ install_requires = [
     "keras",
     "sentence-transformers",
     "spacy",
-    "xlrd",
 ]
 
 if __name__ == "__main__":

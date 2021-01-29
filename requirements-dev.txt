@@ -110,6 +110,5 @@ wasabi @ file:///tmp/build/80754af9/wasabi_1599244993840/work
 Werkzeug==1.0.1
 wordcloud @ file:///Users/runner/miniforge3/conda-bld/wordcloud_1610647003699/work
 wrapt==1.12.1
-xlrd==1.2.0
 yarl @ file:///opt/concourse/worker/volumes/live/33e35c6f-e0f3-4e8f-41a6-47322106cfc8/volume/yarl_1598045184895/work
 zipp @ file:///tmp/build/80754af9/zipp_1603306325174/work

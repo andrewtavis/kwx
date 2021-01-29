@@ -16,7 +16,6 @@ dependencies:
   - nltk
   - emoji
   - googletrans
-  - xlrd
   - spacy
   - scikit-learn
   - tensorflow
