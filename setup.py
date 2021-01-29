@@ -53,6 +53,7 @@ install_requires = [
     "funcy",
     "sentencepiece==0.1.91",
     "sentence-transformers",
+    "tensorflow",
 ]
 
 if __name__ == "__main__":
