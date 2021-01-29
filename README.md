@@ -45,7 +45,7 @@ The combination of LDA with BERT via an [kwgen.autoencoder](https://github.com/a
 
 ### Other
 
-The user can also choose to simply query the most common words from a text corpus or compute TFIDF (Term Frequency Inverse Document Frequency) words - those that are unique in a text body in comparison to another that's compared. The former method is used in kwgen as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target against.
+The user can also choose to simply query the most common words from a text corpus or compute TFIDF (Term Frequency Inverse Document Frequency) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwgen as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
 
 # Algorithm
 
@@ -58,7 +58,7 @@ The basic structure of kwgen's machine learning based keyword generation algorit
   - For example: topic 1 is 25% coherent to the texts, topic 2 45%, and topic 3 30%
   - These percentages come from averaging topic coherence across all texts
 - Words are selected from the derived topics based on their coherence to the text body
-  - If a word has already been selected, then the next word in the topic will chosen
+  - If a word has already been selected, then the next word in the topic will be chosen
   - From the above example: the best 25%, 45% and 30% of words from topics 1-3 are selected
   - Words are selected from less coherent topics first (common words come from weakly coherent topics, and unique words come from those with strong coherence)
 - The user is presented the generated keywords and asked if they're appropriate
