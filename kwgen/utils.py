@@ -61,29 +61,33 @@ def load_data(data, target_cols=None):
 
     Returns
     -------
-        df_responses : pd.DataFrame
+        df_texts : pd.DataFrame
             The texts as a df
     """
     if type(data) == str:
         if data[-len("xlsx") :] == "xlsx":
-            df_responses = pd.read_excel(io=data)
+            df_texts = pd.read_excel(io=data)
         elif data[-len("csv") :] == "csv":
-            df_responses = pd.read_csv(filepath_or_buffer=data)
+            df_texts = pd.read_csv(filepath_or_buffer=data)
         else:
             ValueError("Strings passed should be csv or xlsx files.")
+
     elif type(data) == pd.DataFrame:
-        df_responses = data
+        df_texts = data
+
     else:
         ValueError(
-            "The 'data' argument should be either the name of a csv/xlsx file or a pandas dataframe."
+            "The 'data' argument should be either the name of a csv/xlsx file a pandas dataframe."
         )
 
     if target_cols == None:
-        target_cols = df_responses.columns
+        target_cols = df_texts.columns
+    elif type(target_cols) == str:
+        target_cols = [target_cols]
 
-    df_responses = df_responses[target_cols]
+    df_texts = df_texts[target_cols]
 
-    return df_responses
+    return df_texts
 
 
 def _combine_tokens_to_str(texts, ignore_words=None):
@@ -414,16 +418,19 @@ def prepare_text_data(
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
-    df_responses = load_data(data)
+    if type(target_cols) == str:
+        target_cols = [target_cols]
+
+    df_texts = load_data(data)
 
     # Select columns from which texts should come
     raw_texts = []
 
-    for i in df_responses.index:
+    for i in df_texts.index:
         text = ""
         for c in target_cols:
-            if type(df_responses.loc[i, c]) == str:
-                text += " " + df_responses.loc[i, c]
+            if type(df_texts.loc[i, c]) == str:
+                text += " " + df_texts.loc[i, c]
 
         text = text[1:]  # remove first blank space
         raw_texts.append(text)

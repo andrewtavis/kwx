@@ -609,7 +609,9 @@ def t_sne(dimension="both", corpus=None, num_topics=10, remove_3d_outliers=False
     """
     Returns the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding)
 
-    Note: t-SNE reduces the dimensionality of a space such that similar points will be closer and dissimilar points farther
+    Notes
+    -----
+    t-SNE reduces the dimensionality of a space such that similar points will be closer and dissimilar points farther
 
     Parameters
     ----------
