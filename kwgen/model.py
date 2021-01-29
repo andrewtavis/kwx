@@ -32,11 +32,7 @@ import pandas as pd
 from gensim.models import CoherenceModel
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-try:
-    from sentence_transformers import SentenceTransformer
-except:
-    os.system("pip install sentence-transformers")
-    from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
 from kwgen import utils, languages, topic_model, visuals
 
