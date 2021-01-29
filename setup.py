@@ -50,7 +50,6 @@ install_requires = [
     "scikit-learn",
     "tensorflow",
     "keras",
-    "sentence-transformers",
 ]
 
 if __name__ == "__main__":
