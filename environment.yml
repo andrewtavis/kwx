@@ -21,3 +21,4 @@ dependencies:
   - scikit-learn
   - tensorflow
   - keras
+  - sentence-transformers

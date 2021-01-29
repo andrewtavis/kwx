@@ -93,7 +93,7 @@ smart-open @ file:///tmp/build/80754af9/smart_open_1602262876581/work
 spacy @ file:///opt/concourse/worker/volumes/live/86dfc0a0-eb49-44ed-4708-075e95c55f24/volume/spacy_1600557263332/work
 srsly==1.0.2
 tensorboard==2.0.0
-tensorflow==2.0.0
+tensorflow==2.2.0
 tensorflow-estimator==2.0.0
 termcolor==1.1.0
 thinc @ file:///opt/concourse/worker/volumes/live/e89002ad-4458-4d39-7bda-cf0911a97791/volume/thinc_1594251935291/work

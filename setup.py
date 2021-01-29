@@ -49,6 +49,7 @@ install_requires = [
     "googletrans",
     "scikit-learn",
     "keras",
+    "IPython",
 ]
 
 if __name__ == "__main__":
