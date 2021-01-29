@@ -56,5 +56,11 @@ install_requires = [
     "tensorflow",
 ]
 
+extras_require = {
+    # "keras": ["tensorflow"],
+}
+
 if __name__ == "__main__":
-    setup(**setup_args, install_requires=install_requires)
+    setup(
+        **setup_args, install_requires=install_requires, extras_require=extras_require
+    )
