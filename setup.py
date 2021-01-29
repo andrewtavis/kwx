@@ -51,6 +51,7 @@ install_requires = [
     "keras",
     "IPython",
     "funcy",
+    "sentence-transformers",
 ]
 
 if __name__ == "__main__":
