@@ -1,0 +1,115 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+absl-py @ file:///opt/concourse/worker/volumes/live/5183a274-c173-4ec1-5db6-bf74e5e0e067/volume/absl-py_1600297518967/work
+aiohttp @ file:///opt/concourse/worker/volumes/live/3627c32e-8d42-4d71-527a-27fa88477793/volume/aiohttp_1603204943480/work
+astor==0.8.1
+async-timeout==3.0.1
+attrs @ file:///tmp/build/80754af9/attrs_1600298409949/work
+blis @ file:///opt/concourse/worker/volumes/live/cd6a6bea-d063-4b62-4c10-fcc89b17d0ac/volume/cython-blis_1594246851083/work
+boto==2.49.0
+boto3 @ file:///tmp/build/80754af9/boto3_1603222673683/work
+botocore @ file:///tmp/build/80754af9/botocore_1603297996270/work
+brotlipy==0.7.0
+cachetools @ file:///tmp/build/80754af9/cachetools_1596822027882/work
+catalogue==1.0.0
+certifi==2020.6.20
+cffi @ file:///opt/concourse/worker/volumes/live/74b22aae-8eb9-44eb-6c00-a8a07af62b36/volume/cffi_1600699174113/work
+chardet==3.0.4
+click==7.1.2
+cryptography @ file:///opt/concourse/worker/volumes/live/449c9d42-da39-4138-6bf0-843317a1ad24/volume/cryptography_1601046862310/work
+cycler==0.10.0
+cymem==2.0.3
+docutils==0.15.2
+emoji @ file:///home/conda/feedstock_root/build_artifacts/emoji_1611421689564/work
+filelock==3.0.12
+funcy @ file:///home/conda/feedstock_root/build_artifacts/funcy_1601143499053/work
+future==0.18.2
+gast==0.2.2
+gensim==3.8.0
+google-api-core @ file:///opt/concourse/worker/volumes/live/90039cee-b0cc-4768-5185-ef0e1dd991c4/volume/google-api-core-split_1601307084352/work
+google-auth @ file:///tmp/build/80754af9/google-auth_1601995530934/work
+google-cloud-core @ file:///tmp/build/80754af9/google-cloud-core_1602864831599/work
+google-cloud-storage @ file:///tmp/build/80754af9/google-cloud-storage_1603300774238/work
+google-crc32c @ file:///opt/concourse/worker/volumes/live/6a887a19-e8f8-4a34-65c0-4484a02a8a50/volume/google-crc32c_1601305176293/work
+google-pasta==0.2.0
+google-resumable-media @ file:///tmp/build/80754af9/google-resumable-media_1601995638063/work
+googleapis-common-protos @ file:///opt/concourse/worker/volumes/live/a1d0ae7a-4b4c-4542-4018-a1971cb98eaa/volume/googleapis-common-protos-feedstock_1600455645482/work
+googletrans==2.4.0
+grpcio @ file:///opt/concourse/worker/volumes/live/b5e6cc9f-d048-411b-5e0a-34cf579ea9aa/volume/grpcio_1597424489035/work
+h5py @ file:///opt/concourse/worker/volumes/live/98bee3fd-2687-4017-5421-d742d1f18c35/volume/h5py_1593454156895/work
+idna @ file:///tmp/build/80754af9/idna_1593446292537/work
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1602276842396/work
+Jinja2==2.11.2
+jmespath @ file:///tmp/build/80754af9/jmespath_1594304593830/work
+joblib @ file:///tmp/build/80754af9/joblib_1601912903842/work
+jsonschema==3.0.2
+Keras==2.3.1
+Keras-Applications @ file:///tmp/build/80754af9/keras-applications_1594366238411/work
+Keras-Preprocessing==1.1.0
+kiwisolver==1.2.0
+Markdown @ file:///opt/concourse/worker/volumes/live/999d2d62-5989-4105-6e2c-b665eaebdbfb/volume/markdown_1603216489061/work
+MarkupSafe==1.1.1
+matplotlib @ file:///opt/concourse/worker/volumes/live/415740a8-e00a-411a-7129-aa05c3842a43/volume/matplotlib-base_1597876353062/work
+mkl-fft==1.2.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+multidict @ file:///opt/concourse/worker/volumes/live/36866b75-3506-404d-4bf8-25adbcd7e41f/volume/multidict_1600456436970/work
+murmurhash==1.0.2
+nltk @ file:///tmp/build/80754af9/nltk_1592496090529/work
+numexpr==2.7.1
+numpy @ file:///opt/concourse/worker/volumes/live/40d975a3-7e82-44c8-53df-feccdbce8b96/volume/numpy_and_numpy_base_1596233859108/work
+olefile==0.46
+opt-einsum==3.1.0
+packaging==20.4
+pandas @ file:///opt/concourse/worker/volumes/live/bfd63b8c-6035-4ed3-5bce-5690df409bf9/volume/pandas_1602088141563/work
+Pillow @ file:///opt/concourse/worker/volumes/live/28f094e1-d4b0-436d-6751-607fa59ce512/volume/pillow_1602788716788/work
+plac @ file:///opt/concourse/worker/volumes/live/52c78438-45d9-4d63-4838-52a0b185385f/volume/plac_1594261919082/work
+preshed==3.0.2
+protobuf==3.13.0
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pyLDAvis==2.1.2
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
+pyparsing==2.4.7
+pyrsistent @ file:///opt/concourse/worker/volumes/live/656e0c1b-ef87-4251-4a51-1290b2351993/volume/pyrsistent_1600141745371/work
+PySocks==1.7.1
+python-dateutil==2.8.1
+pytz==2020.1
+PyYAML==5.3.1
+regex @ file:///opt/concourse/worker/volumes/live/3ea1565c-1e6c-4a53-5638-17c5cb7b9b68/volume/regex_1602786648534/work
+requests @ file:///tmp/build/80754af9/requests_1592841827918/work
+rfc3986==1.4.0
+rsa @ file:///tmp/build/80754af9/rsa_1596998415516/work
+s3transfer==0.3.3
+sacremoses @ file:///home/conda/feedstock_root/build_artifacts/sacremoses_1588857588528/work
+scikit-learn @ file:///opt/concourse/worker/volumes/live/2dacdc11-21e7-44f5-57b4-6b8eb6ceb626/volume/scikit-learn_1598376924598/work
+scipy @ file:///opt/concourse/worker/volumes/live/9698578f-91da-4d5f-6fce-b26b1f42eb5a/volume/scipy_1597686637948/work
+seaborn @ file:///tmp/build/80754af9/seaborn_1600553570093/work
+sentence-transformers @ file:///home/conda/feedstock_root/build_artifacts/sentence-transformers_1609775254464/work
+six==1.15.0
+smart-open @ file:///tmp/build/80754af9/smart_open_1602262876581/work
+spacy @ file:///opt/concourse/worker/volumes/live/86dfc0a0-eb49-44ed-4708-075e95c55f24/volume/spacy_1600557263332/work
+srsly==1.0.2
+tensorboard==2.0.0
+tensorflow==2.0.0
+tensorflow-estimator==2.0.0
+termcolor==1.1.0
+thinc @ file:///opt/concourse/worker/volumes/live/e89002ad-4458-4d39-7bda-cf0911a97791/volume/thinc_1594251935291/work
+threadpoolctl @ file:///tmp/tmp9twdgx9k/threadpoolctl-2.1.0-py3-none-any.whl
+tokenizers @ file:///Users/runner/miniforge3/conda-bld/tokenizers_1605764310624/work
+torch==1.4.0
+tornado==6.0.4
+tqdm @ file:///tmp/build/80754af9/tqdm_1602185206534/work
+transformers @ file:///home/conda/feedstock_root/build_artifacts/transformers_1611231080242/work
+twine==3.2.0
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1598376058250/work
+urllib3 @ file:///tmp/build/80754af9/urllib3_1603305693037/work
+wasabi @ file:///tmp/build/80754af9/wasabi_1599244993840/work
+Werkzeug==1.0.1
+wordcloud @ file:///Users/runner/miniforge3/conda-bld/wordcloud_1610647003699/work
+wrapt==1.12.1
+xlrd==1.2.0
+yarl @ file:///opt/concourse/worker/volumes/live/33e35c6f-e0f3-4e8f-41a6-47322106cfc8/volume/yarl_1598045184895/work
+zipp @ file:///tmp/build/80754af9/zipp_1603306325174/work

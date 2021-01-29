@@ -10,7 +10,6 @@ dependencies:
   - pandas
   - matplotlib
   - seaborn
-  - stopwordsiso
   - gensim
   - pyLDAvis
   - wordcloud
@@ -19,7 +18,7 @@ dependencies:
   - googletrans
   - xlrd
   - spacy
-  - sklearn
+  - scikit-learn
   - tensorflow
   - keras
-  - sentence_transformers
+  - sentence-transformers

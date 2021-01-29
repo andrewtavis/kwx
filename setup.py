@@ -35,8 +35,6 @@ setup_args = dict(
     url="https://github.com/andrewtavis/kwgen",
 )
 
-# xlrd, spacy, sklearn, tensorflow, keras, sentence_transformers
-
 install_requires = [
     "numpy",
     "pandas",
@@ -49,6 +47,12 @@ install_requires = [
     "nltk",
     "emoji",
     "googletrans",
+    "scikit-learn",
+    "tensorflow",
+    "keras",
+    "sentence-transformers",
+    "spacy",
+    "xlrd",
 ]
 
 if __name__ == "__main__":

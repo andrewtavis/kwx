@@ -32,6 +32,25 @@ from kwgen import utils, languages, topic_model, visuals
 def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
     """
     Get top words within each topic for cluster models
+
+    Parameters
+    ----------
+        text_corpus : list, list of lists, or str
+            The text corpus over which analysis should be done
+
+        labels : list
+            The labels assigned to topics
+
+        num_topics : int (default=None)
+            The number of categories for LDA and BERT based approaches
+
+        num_keywords : int (default=None)
+            The number of keywords that should be generated
+
+    Returns
+    -------
+        topics, non_blank_topic_idxs : list and list
+            Topic keywords and indexes of those that are not empty lists
     """
     if num_topics == None:
         num_topics = len(np.unique(labels))

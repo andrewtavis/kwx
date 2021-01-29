@@ -68,11 +68,90 @@ The basic structure of kwgen's machine learning based keyword generation algorit
 
 # Usage
 
-The following presents the usage of kwgen to derive keywords from a text corpus:
+The following presents using kwgen to derive keywords from a text corpus:
 
 ```python
 import kwgen
 
+```
+
+# Visuals
+
+[kwgen.visuals](https://github.com/andrewtavis/kwgen/blob/main/kwgen/visuals.py) includes functions for both presenting and analyzing the results of keyword generation. Each can be included in the final output folder or zip. The following types of visuals are integrated:
+
+### Topic Number Evaluations
+
+A graph of topic coherence and overlap given a variable number of topics to derive keywords from.
+
+```python
+from kwgen.visuals import graph_topic_num_evals
+
+graph_topic_num_evals(
+    method=["lda", "lda_bert"],
+    text_corpus=None,
+    clean_texts=None,
+    input_language=None,
+    num_keywords=15,
+    topic_nums_to_compare=None,
+    incl_mc_questions=False,
+    min_freq=2,
+    min_word_len=4,
+    sample_size=1,
+    metrics=True,
+    fig_size=(20, 10),
+    save_file=False,
+    return_ideal_metrics=False
+)
+```
+
+### Word Clouds
+
+```python
+from kwgen.visuals import gen_word_cloud
+
+gen_word_cloud(
+    text_corpus,
+    input_language=None,
+    ignore_words=None,
+    incl_mc_questions=False,
+    min_freq=2,
+    min_word_len=4,
+    sample_size=1,
+    height=500,
+    save_file=False,
+)
+```
+
+### pyLDAvis
+
+```python
+from kwgen.visuals import pyLDAvis_topics
+
+pyLDAvis_topics(
+    method="lda",
+    text_corpus=None,
+    input_language=None,
+    num_topics=15,
+    incl_mc_questions=False,
+    min_freq=2,
+    min_word_len=4,
+    sample_size=1,
+    save_file=False,
+    display_ipython=False,
+)
+```
+
+### t-SNE
+
+```python
+from kwgen.visuals import t_sne
+
+t_sne(
+    dimension="both", # 2d and 3d are also options
+    corpus=None,
+    num_topics=10,
+    remove_3d_outliers=True
+)
 ```
 
 # Examples

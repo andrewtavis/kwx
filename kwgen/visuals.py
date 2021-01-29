@@ -493,6 +493,8 @@ def pyLDAvis_topics(
 
                     - These categories are then used to classify individual entries given the percent they fall into categories
 
+                Hierarchical Dirichlet process could also be added, but was not shown to be effective
+
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
 
