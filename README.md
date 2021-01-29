@@ -16,7 +16,7 @@
 
 ### Unsupervised keyword generation in Python
 
-**Jump to:** [Methods](#methods) • [Algorithm](#algorithm) • [Examples](#examples) • [Usage](#usage) • [To-Do](#to-do)
+**Jump to:** [Methods](#methods) • [Algorithm](#algorithm) • [Examples](#examples) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
 
 **kwgen** is a toolkit for unsupervised keyword generation based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to generate and analyze keywords from a corpus (group) of texts. See the [Google slides (WIP)](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing) for a thorough overview of the process and techniques, and the [documentation](https://kwgen.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
