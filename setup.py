@@ -35,32 +35,32 @@ setup_args = dict(
     url="https://github.com/andrewtavis/kwgen",
 )
 
-install_requires = [
-    "numpy",
-    "pandas",
-    "matplotlib",
-    "seaborn",
-    "stopwordsiso",
-    "gensim",
-    "pyLDAvis",
-    "wordcloud",
-    "nltk",
-    "emoji",
-    "googletrans",
-    "scikit-learn",
-    "keras",
-    "IPython",
-    "funcy",
-    "sentencepiece==0.1.91",
-    "sentence-transformers",
-    "tensorflow",
-]
+import os
 
-extras_require = {
-    # "keras": ["tensorflow"],
-}
+on_rtd = os.environ.get("READTHEDOCS") == "True"
+if on_rtd:
+    install_requires = []
+else:
+    install_requires = [
+        "numpy",
+        "pandas",
+        "matplotlib",
+        "seaborn",
+        "stopwordsiso",
+        "gensim",
+        "pyLDAvis",
+        "wordcloud",
+        "nltk",
+        "emoji",
+        "googletrans",
+        "scikit-learn",
+        "keras",
+        "IPython",
+        "funcy",
+        "sentencepiece==0.1.91",
+        "sentence-transformers",
+        "tensorflow",
+    ]
 
 if __name__ == "__main__":
-    setup(
-        **setup_args, install_requires=install_requires, extras_require=extras_require
-    )
+    setup(**setup_args, install_requires=install_requires)
