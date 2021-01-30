@@ -16,9 +16,9 @@
 
 ### Unsupervised keyword generation in Python
 
-**Jump to:** [Methods](#methods) • [Algorithm](#algorithm) • [Examples](#examples) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
+**Jump to:** [Methods](#methods) • [Algorithm](#algorithm) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
 
-**kwgen** is a toolkit for unsupervised keyword generation based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to generate and analyze keywords from a corpus (group) of texts. See the [Google slides (WIP)](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing) for a thorough overview of the process and techniques, and the [documentation](https://kwgen.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
+**kwgen** is a toolkit for unsupervised keyword generation based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to generate and analyze keywords from a corpus (group) of texts (refer to [kwgen.languages](https://github.com/andrewtavis/kwgen/blob/main/kwgen/languages.py) for language options). Keyword generation can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. See the [Google slides (WIP)](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing) for a thorough overview of the process and techniques, and the [documentation](https://kwgen.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
 # Installation via PyPi
 ```bash
@@ -45,7 +45,7 @@ The combination of LDA with BERT via an [kwgen.autoencoder](https://github.com/a
 
 ### Other
 
-The user can also choose to simply query the most common words from a text corpus or compute TFIDF (Term Frequency Inverse Document Frequency) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwgen as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
+The user can also choose to simply query the most common words from a text corpus or compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwgen as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
 
 # Algorithm
 
@@ -53,6 +53,7 @@ The basic structure of kwgen's machine learning based keyword generation algorit
 
 - The user inputs a desired number of keywords
 - The user inputs a number of topics to use, or this is determined by optimizing topic coherence and overlap across a potential topic numbers
+- The texts are fully cleaned and tokenized
 - Topics are derived for the text corpus
 - The prevalence of topics in the text corpus is found
   - For example: topic 1 is 25% coherent to the texts, topic 2 45%, and topic 3 30%
@@ -68,7 +69,9 @@ The basic structure of kwgen's machine learning based keyword generation algorit
 
 # Usage
 
-The following presents using kwgen to derive keywords from a text corpus:
+[examples.gen_kws](https://github.com/andrewtavis/kwgen/blob/main/examples/gen_kws.ipynb) provides an example of how to use kwgen by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
+
+The following presents a brief outline of using kwgen to derive keywords from a text corpus:
 
 ```python
 import kwgen
@@ -87,7 +90,7 @@ A graph of topic coherence and overlap given a variable number of topics to deri
 from kwgen.visuals import graph_topic_num_evals
 
 graph_topic_num_evals(
-    method=["lda", "lda_bert"],
+    method=["lda", "bert", "lda_bert"],
     text_corpus=None,
     clean_texts=None,
     input_language=None,
@@ -151,13 +154,10 @@ t_sne(
 )
 ```
 
-# Examples
-
-[examples.gen_kws](https://github.com/andrewtavis/kwgen/blob/main/examples/gen_kws.ipynb) provides an example of how to use kwgen by deriving keywords from research papers in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment).
-
 # To-Do
 
 - Including more methods to generate keywords
+- Adding more options to fine tune the cleaning process in [kwgen.utils](https://github.com/andrewtavis/kwgen/blob/main/kwgen/utils.py)
 - Updates to [kwgen.languages](https://github.com/andrewtavis/kwgen/blob/main/kwgen/languages.py) as lemmatization and other linguistic package dependencies evolve
 - Creating, improving and sharing [examples](https://github.com/andrewtavis/kwgen/tree/main/examples)
 - Updating and refining the [documentation](https://kwgen.readthedocs.io/en/latest/)
