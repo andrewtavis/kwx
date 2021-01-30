@@ -15,16 +15,16 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-# import kwgen
+# import kwx
 
 # -- Project information -----------------------------------------------------
 
-project = "kwgen"
-copyright = "2020-2021, kwgen developers (BSD License)"
-author = "kwgen developers"
+project = "kwx"
+copyright = "2020-2021, kwx developers (BSD License)"
+author = "kwx developers"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1.3"
+release = "0.0.2"
 
 
 # -- General configuration ---------------------------------------------------
@@ -66,6 +66,7 @@ autodoc_mock_imports = [
     "keras",
     "IPython",
     "sentence_transformers",
+    "tqdm",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -118,7 +119,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "kwgen_doc"
+htmlhelp_basename = "kwx_doc"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -144,8 +145,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "kwgen.tex",
-        "kwgen Documentation",
+        "kwx.tex",
+        "kwx Documentation",
         "andrewtavis",
         "manual",
     )
@@ -156,7 +157,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "kwgen", "kwgen Documentation", [author], 1)]
+man_pages = [(master_doc, "kwx", "kwx Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -167,10 +168,10 @@ man_pages = [(master_doc, "kwgen", "kwgen Documentation", [author], 1)]
 texinfo_documents = [
     (
         master_doc,
-        "kwgen",
-        "kwgen Documentation",
+        "kwx",
+        "kwx Documentation",
         author,
-        "kwgen",
+        "kwx",
         "Unsupervised keyword generation in Python",
         "Miscellaneous",
     )

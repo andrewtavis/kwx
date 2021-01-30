@@ -9,10 +9,10 @@ Contents
     _combine_tokens_to_str,
     _clean_text_strings,
     clean_and_tokenize_texts,
-    prepare_text_data,
+    prepare_data,
     _prepare_corpus_path,
     translate_output,
-    _order_by_pos,
+    order_by_pos,
     prompt_for_ignore_words
 """
 
@@ -31,12 +31,7 @@ if xlrd_spec == None:
 import pandas as pd
 
 from nltk.stem.snowball import SnowballStemmer
-
-try:
-    import spacy
-except:
-    os.system("pip install spacy")
-    import spacy
+import spacy
 
 from googletrans import Translator
 from stopwordsiso import stopwords
@@ -173,7 +168,7 @@ def lemmatize(tokens, nlp=None):
 
     lemmatized_tokens = []
     for tokens in tokens:
-        combined_tokens = _combine_tokens_to_str(tokens)
+        combined_tokens = _combine_tokens_to_str(texts=tokens)
 
         lem_tokens = nlp(combined_tokens)
         lemmed_tokens = [
@@ -210,7 +205,7 @@ def clean_and_tokenize_texts(
 
     Returns
     -------
-        text_corpus, clean_texts, selection_idxs : list or list of lists (default=None), list, list
+        text_corpus, clean_texts, selection_idxs : list or list of lists, list, list
             The responses formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
     """
     input_language = input_language.lower()
@@ -376,7 +371,7 @@ def clean_and_tokenize_texts(
     return text_corpus, clean_texts, selected_idxs
 
 
-def prepare_text_data(
+def prepare_data(
     data=None,
     target_cols=None,
     input_language=None,
@@ -409,8 +404,8 @@ def prepare_text_data(
 
     Returns
     -------
-        text_corpus : list or list of lists
-            The text corpus over which analysis should be done
+        text_corpus, clean_texts, selected_idxs : list or list of lists, list, list
+            The responses formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
     """
     input_language = input_language.lower()
 
@@ -489,7 +484,7 @@ def _prepare_corpus_path(
     if type(text_corpus) == str:
         try:
             os.path.exists(text_corpus)  # a path has been provided
-            text_corpus, clean_texts = prepare_text_data(
+            text_corpus, clean_texts = prepare_data(
                 data=text_corpus,
                 target_cols=target_cols,
                 input_language=input_language,
@@ -508,7 +503,8 @@ def _prepare_corpus_path(
 
     else:
         return text_corpus, [
-            _clean_text_strings(_combine_tokens_to_str(t_c)) for t_c in text_corpus
+            _clean_text_strings(_combine_tokens_to_str(texts=t_c))
+            for t_c in text_corpus
         ]
 
 
@@ -555,7 +551,7 @@ def translate_output(outputs, input_language, output_language):
     return translated_outputs
 
 
-def _order_by_pos(outputs, output_language):
+def order_by_pos(outputs, output_language):
     """
     Orders a keyword output by the part of speech of the words
 

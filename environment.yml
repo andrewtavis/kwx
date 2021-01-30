@@ -1,6 +1,6 @@
 # This file may be used to create an environment using:
 # conda env create -f environment.yml
-name: kwgen-dev
+name: kwx-dev
 channels:
   - anaconda
   - conda-forge

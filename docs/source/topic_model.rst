@@ -1,3 +1,3 @@
-.. automodule:: kwgen.topic_model
+.. automodule:: kwx.topic_model
    :members:
    :private-members:

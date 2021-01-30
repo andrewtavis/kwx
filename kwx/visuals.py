@@ -21,6 +21,7 @@ import importlib
 
 import numpy as np
 import pandas as pd
+from tqdm.auto import tqdm
 from IPython import get_ipython
 from IPython.display import display
 
@@ -41,12 +42,61 @@ from sentence_transformers import SentenceTransformer
 from kwgen import utils, languages, model, topic_model
 
 
+def save_vis(vis, save_file, file_name):
+    """
+    Saves a visualization file in the local or given directory if directed
+
+    Parameters
+    ----------
+        vis : matplotlib.pyplot
+            The visualization to be saved
+
+        save_file : bool or str (default=False)
+            Whether to save the figure as a png or a path in which to save it
+
+        file_name : str
+            The name for the file
+
+    Returns
+    -------
+        The file saved in the local or given directory if directed
+    """
+    if save_file == True:
+        vis.savefig(
+            f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
+            bbox_inches="tight",
+            dpi=300,
+        )
+    elif type(save_file) == str:  # a save path has been provided
+        if save_file[-4:] == ".zip":
+            with zipfile.ZipFile(save_file, mode="a") as zf:
+                vis.plot([0, 0])
+                buf = io.BytesIO()
+                vis.savefig(buf, bbox_inches="tight", dpi=300)
+                vis.close()
+                zf.writestr(zinfo_or_arcname=f"{file_name}.png", data=buf.getvalue())
+                zf.close()
+        else:
+            if os.path.exists(save_file):
+                vis.savefig(
+                    save_file + f"/{file_name}.png",
+                    bbox_inches="tight",
+                    dpi=300,
+                )
+            else:
+                vis.savefig(
+                    f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
+                    bbox_inches="tight",
+                    dpi=300,
+                )
+
+
 def graph_topic_num_evals(
     method=["lda", "lda_bert"],
     text_corpus=None,
     clean_texts=None,
     input_language=None,
-    num_keywords=15,
+    num_keywords=10,
     topic_nums_to_compare=None,
     min_freq=2,
     min_word_len=4,
@@ -55,6 +105,7 @@ def graph_topic_num_evals(
     fig_size=(20, 10),
     save_file=False,
     return_ideal_metrics=False,
+    verbose=True,
 ):
     """
     Graphs metrics for the given models over the given number of topics
@@ -92,7 +143,7 @@ def graph_topic_num_evals(
         input_language : str (default=None)
             The spoken language in which the text is found
 
-        num_keywords : int (default=15)
+        num_keywords : int (default=10)
             The number of keywords that should be generated
 
         topic_nums_to_compare : list (default=None)
@@ -124,6 +175,9 @@ def graph_topic_num_evals(
 
         return_ideal_metrics : bool (default=False)
             Whether to return the ideal number of topics for the best model based on metrics
+
+        verbose : bool (default=True)
+            Whether to show a tqdm progress bar for the query
 
     Returns
     -------
@@ -203,7 +257,12 @@ def graph_topic_num_evals(
         stability_dict = {}
         coherence_dict = {}
 
-        for t_n in topic_nums_to_compare:
+        disable = not verbose
+        for t_n in tqdm(
+            topic_nums_to_compare,
+            desc=f"{m}-topics",
+            disable=disable,
+        ):
             tm = topic_model.TopicModel(num_topics=t_n, method=m, bert_model=bert_model)
             tm.fit(
                 texts=clean_texts, text_corpus=text_corpus, method=m, m_clustering=None
@@ -276,8 +335,11 @@ def graph_topic_num_evals(
 
             plot_model_ideal_topic_num = model_ideal_topic_num
             if plot_model_ideal_topic_num == topic_nums_to_compare[-1] - 1:
-                # Prevent the line from not appearing on the plot
+                # Prevents the line from not appearing on the plot
                 plot_model_ideal_topic_num = plot_model_ideal_topic_num - 0.005
+            elif plot_model_ideal_topic_num == topic_nums_to_compare[0]:
+                # Prevents the line from not appearing on the plot
+                plot_model_ideal_topic_num = plot_model_ideal_topic_num + 0.005
 
             ax.axvline(
                 x=plot_model_ideal_topic_num,
@@ -299,38 +361,8 @@ def graph_topic_num_evals(
     ax.set_xlabel("Number of Topics", fontsize=20)
     plt.legend(fontsize=20, ncol=len(method))
 
-    if save_file == True:
-        plt.savefig(
-            "topic_number_metrics_{}.png".format(time.strftime("%Y%m%d-%H%M%S")),
-            bbox_inches="tight",
-            dpi=250,
-        )
-    elif type(save_file) == str:  # a save path has been provided
-        if save_file[-4:] == ".zip":
-            with zipfile.ZipFile(save_file, mode="a") as zf:
-                plt.plot([0, 0])
-                buf = io.BytesIO()
-                plt.savefig(buf, bbox_inches="tight", dpi=250)
-                plt.close()
-                zf.writestr(
-                    zinfo_or_arcname="topic_number_metrics.png", data=buf.getvalue()
-                )
-                zf.close()
-        else:
-            if os.path.exists(save_file):
-                plt.savefig(
-                    save_file + "/topic_number_metrics.png",
-                    bbox_inches="tight",
-                    dpi=250,
-                )
-            else:
-                plt.savefig(
-                    "topic_number_metrics_{}.png".format(
-                        time.strftime("%Y%m%d-%H%M%S")
-                    ),
-                    bbox_inches="tight",
-                    dpi=250,
-                )
+    # Save file if directed to
+    save_vis(vis=plt, save_file=save_file, file_name="topic_number_metrics")
 
     # Return the ideal model and its topic number, as well as the best LDA topic number for pyLDAvis
     if return_ideal_metrics:
@@ -412,7 +444,7 @@ def gen_word_cloud(
     )[0]
 
     display_string = utils._combine_tokens_to_str(
-        responses=text_corpus, ignore_words=ignore_words
+        texts=text_corpus, ignore_words=ignore_words
     )
 
     width = int(
@@ -429,25 +461,25 @@ def gen_word_cloud(
         plt.savefig(
             "word_cloud_{}.png".format(time.strftime("%Y%m%d-%H%M%S")),
             bbox_inches="tight",
-            dpi=200,
+            dpi=300,
         )
     elif type(save_file) == str:  # a save path has been provided
         if save_file[-4:] == ".zip":
             with zipfile.ZipFile(save_file, mode="a") as zf:
                 plt.plot([0, 0])
                 buf = io.BytesIO()
-                plt.savefig(buf, bbox_inches="tight", dpi=200)
+                plt.savefig(buf, bbox_inches="tight", dpi=300)
                 plt.close()
                 zf.writestr(zinfo_or_arcname="word_cloud.png", data=buf.getvalue())
                 zf.close()
         else:
             if os.path.exists(save_file):
-                plt.savefig(save_file + "/word_cloud.png", bbox_inches="tight", dpi=200)
+                plt.savefig(save_file + "/word_cloud.png", bbox_inches="tight", dpi=300)
             else:
                 plt.savefig(
                     "word_cloud_{}.png".format(time.strftime("%Y%m%d-%H%M%S")),
                     bbox_inches="tight",
-                    dpi=200,
+                    dpi=300,
                 )
 
     plt.show()
@@ -457,7 +489,7 @@ def pyLDAvis_topics(
     method="lda",
     text_corpus=None,
     input_language=None,
-    num_topics=15,
+    num_topics=10,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
@@ -491,7 +523,7 @@ def pyLDAvis_topics(
         input_language : str (default=None)
             The spoken language in which the text is found
 
-        num_topics : int (default=15)
+        num_topics : int (default=10)
             The number of categories for LDA and BERT based approaches
 
         min_freq : int (default=2)
@@ -578,7 +610,14 @@ def pyLDAvis_topics(
             pyLDAvis.show(vis)
 
 
-def t_sne(dimension="both", corpus=None, num_topics=10, remove_3d_outliers=False):
+def t_sne(
+    dimension="both",
+    text_corpus=None,
+    num_topics=10,
+    remove_3d_outliers=False,
+    fig_size=(20, 10),
+    save_file=False,
+):
     """
     Returns the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding)
 
@@ -592,7 +631,7 @@ def t_sne(dimension="both", corpus=None, num_topics=10, remove_3d_outliers=False
             The dimension that t-SNE should reduce the data to for visualization
             Options: 2d, 3d, and both (a plot with two subplots)
 
-        corpus : list, list of lists
+        text_corpus : list, list of lists
             The tokenized and cleaned text corpus over which analysis should be done
 
         num_topics : int (default=10)
@@ -601,13 +640,19 @@ def t_sne(dimension="both", corpus=None, num_topics=10, remove_3d_outliers=False
         remove_3d_outliers : bool (default=False)
             Whether to remove outliers from a 3d plot
 
+        fig_size : tuple (default=(20,10))
+            The size of the figure
+
+        save_file : bool or str (default=False)
+            Whether to save the figure as a png or a path in which to save it
+
     Returns
     -------
         fig : matplotlib.pyplot.figure
             A t-SNE lower dimensional representation of an LDA model's topics and their constituent members
     """
-    dirichlet_dict = corpora.Dictionary(corpus)
-    bow_corpus = [dirichlet_dict.doc2bow(text) for text in corpus]
+    dirichlet_dict = corpora.Dictionary(text_corpus)
+    bow_corpus = [dirichlet_dict.doc2bow(text) for text in text_corpus]
 
     dirichlet_model = LdaModel(
         corpus=bow_corpus,
@@ -709,12 +754,12 @@ def t_sne(dimension="both", corpus=None, num_topics=10, remove_3d_outliers=False
 
     if tsne_2 is not None and tsne_3 is not None:
         fig, (ax1, ax2) = plt.subplots(
-            nrows=1, ncols=2, figsize=(20, 10)  # pylint: disable=unused-variable
+            nrows=1, ncols=2, figsize=fig_size  # pylint: disable=unused-variable
         )
         ax1.axis("off")
 
     else:
-        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 10))
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=fig_size)
 
     if tsne_2 is not None and tsne_3 is not None:
         # Plot tsne_2, with tsne_3 being added later
@@ -838,5 +883,8 @@ def t_sne(dimension="both", corpus=None, num_topics=10, remove_3d_outliers=False
                 loc="upper left",
                 facecolor=light_grey_tup,
             )
+
+    # Save file if directed to
+    save_vis(vis=plt, save_file=save_file, file_name="t_sne_represenation")
 
     return fig

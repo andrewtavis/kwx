@@ -11,7 +11,7 @@ Contents
         predict
 """
 
-import datetime
+from datetime import datetime
 import numpy as np
 
 from gensim import corpora
@@ -26,11 +26,11 @@ class TopicModel:
     The topic model class to fit and predict given an unsupervised learning technique
     """
 
-    def __init__(self, num_topics=15, method="lda_bert", bert_model=None):
+    def __init__(self, num_topics=10, method="lda_bert", bert_model=None):
         """
         Parameters
         ----------
-            num_topics : int (default=15)
+            num_topics : int (default=10)
                 The number of categories for LDA and BERT based approaches
 
             method : str (default=lda_bert)

@@ -76,7 +76,7 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
     return topics, non_blank_topic_idxs
 
 
-def get_coherence(model, text_corpus, num_topics=15, num_keywords=15, measure="c_v"):
+def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c_v"):
     """
     Gets model coherence from gensim.models.coherencemodel
 
@@ -88,10 +88,10 @@ def get_coherence(model, text_corpus, num_topics=15, num_keywords=15, measure="c
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
 
-        num_topics : int (default=15)
+        num_topics : int (default=10)
             The number of categories for LDA and BERT based approaches
 
-        num_keywords : int (default=15)
+        num_keywords : int (default=10)
             The number of keywords that should be generated
 
         measure : str (default=c_v)
@@ -131,7 +131,7 @@ def get_coherence(model, text_corpus, num_topics=15, num_keywords=15, measure="c
     return coherence
 
 
-def _order_and_subset_by_coherence(model, num_topics=15, num_keywords=15):
+def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
     """
     Orders topics based on their average coherence across the text corpus
 
@@ -140,10 +140,10 @@ def _order_and_subset_by_coherence(model, num_topics=15, num_keywords=15):
         model : kwgen.topic_model.TopicModel
             A model trained on the given text corpus
 
-        num_topics : int (default=15)
+        num_topics : int (default=10)
             The number of categories for LDA and BERT based approaches
 
-        num_keywords : int (default=15)
+        num_keywords : int (default=10)
             The number of keywords that should be generated
 
     Returns
@@ -242,8 +242,8 @@ def gen_keywords(
     clean_texts=None,
     input_language=None,
     output_language=None,
-    num_keywords=15,
-    num_topics=15,
+    num_keywords=10,
+    num_topics=10,
     corpuses_to_compare=None,
     return_topics=False,
     ignore_words=None,
@@ -297,10 +297,10 @@ def gen_keywords(
         output_language : str (default=None: same as input_language)
             The spoken language in which the results should be given
 
-        num_topics : int (default=15)
+        num_topics : int (default=10)
             The number of categories for LDA and BERT based approaches
 
-        num_keywords : int (default=15)
+        num_keywords : int (default=10)
             The number of keywords that should be generated
 
         corpuses_to_compare : list : contains lists (default=None)
@@ -587,14 +587,16 @@ def gen_files(
     clean_texts=None,
     input_language=None,
     output_language=None,
-    num_keywords=15,
+    num_keywords=10,
     topic_nums_to_compare=None,
     corpuses_to_compare=None,
     ignore_words=None,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
+    verbose=True,
     fig_size=(20, 10),
+    visuals=True,
     zip_results=True,
 ):
     """
@@ -615,6 +617,13 @@ def gen_files(
             model.gen_keywords
 
             utils.prompt_for_ignore_words
+
+        visuals : str or bool (default=True)
+            Which visual graphs to include in the output
+
+            Str options: topic_num_evals, word_cloud, pyLDAvis, t_sne
+
+            Bool options: True - all; False - none
 
         zip_results : bool (default=True)
             Whether to zip the results from the analysis
@@ -648,6 +657,35 @@ def gen_files(
         os.makedirs(dest_name)
         if os.path.exists(dest_name):
             os.rmdir(dest_name)
+
+    # Provide destinations for visuals
+    topic_num_evals_dest = False
+    word_cloud_dest = False
+    pyLDAvis_dest = False
+    t_sne_dest = False
+
+    if type(visuals) == str:
+        visuals = [visuals]
+
+    if type(visuals) == list:
+        if "topic_num_evals" in visuals:
+            topic_num_evals_dest = dest_name
+
+        if "word_cloud" in visuals:
+            word_cloud_dest = dest_name
+
+        if "pyLDAvis" in visuals:
+            pyLDAvis_dest = dest_name
+
+        if "t_sne" in visuals:
+            t_sne_dest = dest_name
+
+    else:
+        if visuals == True:
+            topic_num_evals_dest = dest_name
+            word_cloud_dest = dest_name
+            pyLDAvis_dest = dest_name
+            t_sne_dest = dest_name
 
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
@@ -685,11 +723,12 @@ def gen_files(
         sample_size=sample_size,
         metrics=True,
         fig_size=fig_size,
-        save_file=dest_name,
+        save_file=topic_num_evals_dest,
         return_ideal_metrics=True,
+        verbose=verbose,
     )
 
-    if ideal_lda_num_topics != False:
+    if pyLDAvis_dest != False:
         # LDA was tested, so also include the pyLDAvis html using its best number of topics
         visuals.pyLDAvis_topics(
             method="lda",
@@ -699,11 +738,11 @@ def gen_files(
             min_freq=min_freq,
             min_word_len=min_word_len,
             sample_size=sample_size,
-            save_file=dest_name,
+            save_file=pyLDAvis_dest,
             display_ipython=False,
         )
 
-    # Generate most frequent keywords and words based on the best model and topic number
+    # Generate most frequent keywords
     most_fred_kw = gen_keywords(
         method="frequency",
         text_corpus=text_corpus,
@@ -720,6 +759,7 @@ def gen_files(
         sample_size=sample_size,
     )
 
+    # Generate keywords based on the best topic model
     model_kw = gen_keywords(
         method=best_method,
         text_corpus=text_corpus,
@@ -796,17 +836,28 @@ def gen_files(
         else:
             more_words_to_ignore = False
 
-    # Make a word cloud that doesn't include the words that should be ignored
-    visuals.gen_word_cloud(
-        text_corpus=text_corpus,
-        input_language=input_language,
-        ignore_words=new_words_to_ignore,
-        min_freq=min_freq,
-        min_word_len=min_word_len,
-        sample_size=sample_size,
-        height=500,
-        save_file=dest_name,
-    )
+    if word_cloud_dest != False:
+        # Make a word cloud that doesn't include the words that should be ignored
+        visuals.gen_word_cloud(
+            text_corpus=text_corpus,
+            input_language=input_language,
+            ignore_words=new_words_to_ignore,
+            min_freq=min_freq,
+            min_word_len=min_word_len,
+            sample_size=sample_size,
+            height=500,
+            save_file=word_cloud_dest,
+        )
+
+    if t_sne_dest != False:
+        visuals.t_sne(
+            dimension="both",  # 2d and 3d are also options
+            text_corpus=text_corpus,
+            num_topics=10,
+            remove_3d_outliers=True,
+            fig_size=fig_size,
+            save_file=t_sne_dest,
+        )
 
     # Order words by part of speech and format them for a .txt file output
     ordered_most_freq_kw = utils._order_by_pos(

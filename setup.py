@@ -9,12 +9,12 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup_args = dict(
-    name="kwgen",
-    version="0.0.1.3",
+    name="kwx",
+    version="0.0.1",
     author="Andrew Tavis McAllister",
     author_email="andrew.t.mcallister@gmail.com",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
@@ -28,12 +28,12 @@ setup_args = dict(
         "Programming Language :: Python :: 3.9",
         "Operating System :: OS Independent",
     ],
-    description="Unsupervised keyword generation in Python",
+    description="Unsupervised keyword extraction in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_namespace_packages(),
     license="new BSD",
-    url="https://github.com/andrewtavis/kwgen",
+    url="https://github.com/andrewtavis/kwx",
 )
 
 on_rtd = os.environ.get("READTHEDOCS") == "True"
@@ -59,6 +59,7 @@ else:
         "keras",
         "IPython",
         "sentence-transformers",
+        "tqdm",
     ]
 
 if __name__ == "__main__":

@@ -1,3 +1,3 @@
-.. automodule:: kwgen.autoencoder
+.. automodule:: kwx.autoencoder
    :members:
    :private-members:

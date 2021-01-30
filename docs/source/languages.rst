@@ -1,3 +1,3 @@
-.. automodule:: kwgen.languages
+.. automodule:: kwx.languages
    :members:
    :private-members:
