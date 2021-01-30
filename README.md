@@ -16,7 +16,7 @@
 
 ### Unsupervised keyword extraction in Python
 
-**Jump to:** [Methods](#methods) • [Algorithm](#algorithm) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
+**Jump to:** [Models](#models) • [Algorithm](#algorithm) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
 
 **kwx** is a toolkit for unsupervised keyword extraction based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to process texts and then extract and analyze keywords from the created corpus. A unique focus is allowing users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
 
@@ -31,7 +31,7 @@ pip install kwx
 import kwx
 ```
 
-# Methods
+# Models
 
 ### LDA
 
@@ -53,11 +53,11 @@ The user can also choose to simply query the most common words from a text corpu
 
 # Algorithm
 
-The basic structure of kwx's machine learning based keyword extraction algorithms is the following:
+The structure `kwx.model.extract_kws`, kwx's natural language processing keyword extraction algorithm, is the following:
 
 - The user inputs a desired number of keywords
 - The user inputs a number of topics to use, or this is determined by optimizing topic coherence and overlap across potential topic numbers
-- The texts are fully cleaned and tokenized
+- The texts are fully cleaned and tokenized ([see kwx.utils.clean_and_tokenize_texts](https://github.com/andrewtavis/kwx/blob/main/kwx/utils.py))
 - Topics are derived for the text corpus
 - The prevalence of topics in the text corpus is found
   - For example: topic 1 is 25% coherent to the texts, topic 2 45%, and topic 3 30%
