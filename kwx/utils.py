@@ -12,8 +12,8 @@ Contents
     prepare_data,
     _prepare_corpus_path,
     translate_output,
-    order_by_pos,
-    prompt_for_ignore_words
+    organize_by_pos,
+    prompt_for_word_removal
 """
 
 import os
@@ -551,7 +551,7 @@ def translate_output(outputs, input_language, output_language):
     return translated_outputs
 
 
-def order_by_pos(outputs, output_language):
+def organize_by_pos(outputs, output_language):
     """
     Orders a keyword output by the part of speech of the words
 
@@ -617,7 +617,7 @@ def order_by_pos(outputs, output_language):
         return outputs
 
 
-def prompt_for_ignore_words(ignore_words=None):
+def prompt_for_word_removal(ignore_words=None):
     """
     Prompts the user for words that should be ignored in kewword extraction
 

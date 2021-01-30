@@ -75,7 +75,7 @@ The basic structure of kwx's machine learning based keyword extraction algorithm
 
 Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
-The following `pseudoscope` presents a brief outline of using kwx to derive keywords from a text corpus:
+The following `pseudoscope` presents a brief outline of using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` where the user will be asked if the extracted words are acceptable:
 
 ```python
 from kwx.utils import prepare_data
@@ -84,35 +84,33 @@ from kwx.model import extract_kws
 input_language = "english"
 num_keywords = 10
 num_topics = 10
-ignore_words = ["words", "user", "knows", "are", "not", "wanted"]
+ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
 # Arguments from examples.kw_extraction
 text_corpus = prepare_data(
     data='df-or-csv/xlsx-path',
     target_cols='cols-where-texts-are',
     input_language=input_language,
-    min_freq=2, # remove infrequent words
-    min_word_len=4, # remove small words
-    sample_size=1, # sample size for testing)
+    min_freq=2,  # remove infrequent words
+    min_word_len=4,  # remove small words
+    sample_size=1,  # sample size for testing)
+)[0]
 
 bert_kws = extract_kws(
     method='BERT',
     text_corpus=text_corpus,
-    clean_texts=None, # argument for BERT models
     input_language=input_language,
-    output_language=None, # allows the output to be translated
+    output_language=None,  # allows the output to be translated
     num_keywords=num_keywords,
     num_topics=num_topics,
-    corpuses_to_compare=None, # for TFIDF
-    return_topics=False, # to inspect topics rather than produce kws
+    corpuses_to_compare=None,  # for TFIDF
+    return_topics=False,  # to inspect topics rather than produce kws
     ignore_words=ignore_words,
-    min_freq=2,
-    min_word_len=4,
-    sample_size=1
+    prompt_remove_words=True,  # check words with user
 )
 ```
 
-`kwx.model.gen_files` saves the results of the above keyword extraction process in a directory or zip file along with desired visuals from the following section.
+The model will be re-ran until all words known to be unreasonable are removed for a suitable output. `kwx.model.gen_files` saves the results of the above keyword extraction process in a directory or zip file along with desired visuals from the following section. This function serves as a run-all for experienced users wanting quick results.
 
 # Visuals
 
@@ -128,16 +126,10 @@ from kwx.visuals import graph_topic_num_evals
 graph_topic_num_evals(
     method=["lda", "bert", "lda_bert"],
     text_corpus=text_corpus,
-    clean_texts=None,
     input_language=input_language,
     num_keywords=num_keywords,
     topic_nums_to_compare=list(range(5,15)),
-    min_freq=2,
-    min_word_len=4,
-    sample_size=1,
     metrics=True, # stability and coherence
-    fig_size=(20, 10),
-    save_file=False,
     return_ideal_metrics=False, # selects ideal model given metrics
 )
 ```
@@ -155,11 +147,7 @@ gen_word_cloud(
     text_corpus=text_corpus,
     input_language=input_language,
     ignore_words=None,
-    min_freq=2,
-    min_word_len=4,
-    sample_size=1,
     height=500,
-    save_file=False,
 )
 ```
 
@@ -175,11 +163,7 @@ pyLDAvis_topics(
     text_corpus=text_corpus,
     input_language=input_language,
     num_topics=10,
-    min_freq=2,
-    min_word_len=4,
-    sample_size=1,
-    save_file=False,
-    display_ipython=False, # For Jupyter integration
+    display_ipython=False,  # For Jupyter integration
 )
 ```
 
@@ -191,12 +175,10 @@ pyLDAvis_topics(
 from kwx.visuals import t_sne
 
 t_sne(
-    dimension="both", # 2d and 3d are options
-    text_corpus=None,
+    dimension="both",  # 2d and 3d are options
+    text_corpus=text_corpus,
     num_topics=10,
     remove_3d_outliers=True,
-    fig_size=(20, 10),
-    save_file=False,
 )
 ```
 

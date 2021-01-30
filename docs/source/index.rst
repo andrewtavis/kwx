@@ -1,5 +1,5 @@
 .. image:: https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/kwx_logo_transparent.png
-    :scale: 60 %
+    :scale: 45 %
     :target: https://github.com/andrewtavis/kwx
 ============
 

@@ -6,6 +6,7 @@ Functions for keyword and topic visualization
 
 Contents
 --------
+    save_vis,
     graph_topic_num_evals,
     gen_word_cloud,
     pyLDAvis_topics,

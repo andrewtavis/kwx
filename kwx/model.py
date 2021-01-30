@@ -250,6 +250,7 @@ def extract_kws(
     min_freq=2,
     min_word_len=4,
     sample_size=1,
+    prompt_remove_words=True,
 ):
     """
     Extracts keywords given data, metadata, and model parameter inputs
@@ -320,6 +321,9 @@ def extract_kws(
 
         sample_size : float (default=None: sampling for non-BERT techniques)
             The size of a sample for BERT models
+
+        prompt_remove_words : bool (default=True)
+            Whether to prompt the user for keywords to remove
 
     Returns
     -------
@@ -568,6 +572,46 @@ def extract_kws(
                     if word not in keywords and len(keywords) < len(frequent_words):
                         keywords.append(word)
 
+    if prompt_remove_words:
+        # Ask user if words should be ignored, and iterate until no more words should be
+        more_words_to_ignore = True
+        first_iteration = True
+        new_words_to_ignore = ignore_words  # initialize so that it can be added to
+        while more_words_to_ignore != False:
+            if first_iteration == True:
+                print("The {} keywords are:\n".format(method.upper()))
+                print(keywords)
+            else:
+                print("\n")
+                print("The new {} keywords are:\n".format(method.upper()))
+                print(keywords)
+
+            new_words_to_ignore, words_added = utils.prompt_for_word_removal(
+                ignore_words=new_words_to_ignore
+            )
+            first_iteration = False
+
+            if words_added == True:
+                keywords = extract_kws(
+                    method=method,
+                    text_corpus=text_corpus,
+                    clean_texts=clean_texts,
+                    input_language=input_language,
+                    output_language=output_language,
+                    num_keywords=num_keywords,
+                    num_topics=num_topics,
+                    corpuses_to_compare=corpuses_to_compare,
+                    return_topics=False,
+                    ignore_words=new_words_to_ignore,
+                    min_freq=min_freq,
+                    min_word_len=min_word_len,
+                    sample_size=sample_size,
+                    prompt_remove_words=False,  # prevent recursion
+                )
+
+            else:
+                more_words_to_ignore = False
+
     if output_language != input_language:
         translated_keywords = utils.translate_output(
             outputs=keywords,
@@ -594,13 +638,16 @@ def gen_files(
     min_freq=2,
     min_word_len=4,
     sample_size=1,
+    prompt_remove_words=True,
     verbose=True,
     fig_size=(20, 10),
-    visuals=True,
+    incl_most_freq=True,
+    org_by_pos=True,
+    incl_visuals=True,
     zip_results=True,
 ):
     """
-    Generates a .zip file of all analysis elements
+    Generates a directory or zip file of all keyword analysis elements
 
     Parameters
     ----------
@@ -616,9 +663,15 @@ def gen_files(
 
             model.extract_kws
 
-            utils.prompt_for_ignore_words
+            utils.prompt_for_word_removal
 
-        visuals : str or bool (default=True)
+        incl_most_freq : bool (defualt=True)
+            Whether to include the most frequent words in the output
+
+        org_by_pos : bool (default=True)
+            Whether to organize words by their parts of speech
+
+        incl_visuals : str or bool (default=True)
             Which visual graphs to include in the output
 
             Str options: topic_num_evals, word_cloud, pyLDAvis, t_sne
@@ -630,22 +683,44 @@ def gen_files(
 
     Returns
     -------
-        A .zip file in the current working directory
+        A directory or zip file in the current working directory
     """
 
-    def get_varname(p):
+    def get_varname(var):
         """
-        Returns a variables name (for the purpose of converting a df name to that of the zip - if necessary)
-        """
-        for line in inspect.getframeinfo(inspect.currentframe().f_back)[3]:
-            m = re.search(r"\bvarname\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)", line)
-            if m:
-                return m.group(1)
+        Returns a variable's name
 
-    if os.path.exists(text_corpus):
-        dest_name = text_corpus.split("/")[-1].split(".")[0] + "_analysis"
-    elif type(text_corpus) == pd.DataFrame:
-        dest_name = get_varname(text_corpus) + "_analysis"
+        Notes
+        -----
+            For the purpose of converting an object's name to that of the directory or zip
+
+        Parameters
+        ----------
+            var : obj
+                A variable
+
+        Returns
+        -------
+            name : str
+                The variable's name
+        """
+        callers_local_vars = inspect.currentframe().f_back.f_locals.items()
+
+        name = [var_name for var_name, var_val in callers_local_vars if var_val is var][
+            0
+        ]
+
+        return name
+
+    if type(text_corpus) == str:
+        if os.path.exists(text_corpus):
+            dest_name = text_corpus.split("/")[-1].split(".")[0] + "_kws"
+        else:
+            ValueError("An invalid path was provided for the data location.")
+
+    elif type(text_corpus) == pd.DataFrame or type(text_corpus) == list:
+        # Name the output after the text_corpus
+        dest_name = get_varname(text_corpus) + "_kws"
 
     if zip_results:
         dest_name += ".zip"
@@ -664,24 +739,24 @@ def gen_files(
     pyLDAvis_dest = False
     t_sne_dest = False
 
-    if type(visuals) == str:
-        visuals = [visuals]
+    if type(incl_visuals) == str:
+        incl_visuals = [incl_visuals]
 
-    if type(visuals) == list:
-        if "topic_num_evals" in visuals:
+    if type(incl_visuals) == list:
+        if "topic_num_evals" in incl_visuals:
             topic_num_evals_dest = dest_name
 
-        if "word_cloud" in visuals:
+        if "word_cloud" in incl_visuals:
             word_cloud_dest = dest_name
 
-        if "pyLDAvis" in visuals:
+        if "pyLDAvis" in incl_visuals:
             pyLDAvis_dest = dest_name
 
-        if "t_sne" in visuals:
+        if "t_sne" in incl_visuals:
             t_sne_dest = dest_name
 
     else:
-        if visuals == True:
+        if incl_visuals == True:
             topic_num_evals_dest = dest_name
             word_cloud_dest = dest_name
             pyLDAvis_dest = dest_name
@@ -728,8 +803,7 @@ def gen_files(
         verbose=verbose,
     )
 
-    if pyLDAvis_dest != False:
-        # LDA was tested, so also include the pyLDAvis html using its best number of topics
+    if pyLDAvis_dest != False and ideal_lda_num_topics != False:
         visuals.pyLDAvis_topics(
             method="lda",
             text_corpus=text_corpus,
@@ -776,65 +850,68 @@ def gen_files(
         sample_size=sample_size,
     )
 
-    # Ask user if words should be ignored, and iterate until no more words should be
-    more_words_to_ignore = True
-    first_iteration = True
-    new_words_to_ignore = ignore_words  # initialize so that it can be added to
-    while more_words_to_ignore != False:
-        if first_iteration == True:
-            print("The most frequent keywords are:\n")
-            print(most_fred_kw)
-            print("")
-            print("The {} keywords are:\n".format(best_method.upper()))
-            print(model_kw)
-        else:
-            print("\n")
-            print("The new most frequent keywords are:\n")
-            print(most_fred_kw)
-            print("")
-            print("The new {} keywords are:\n".format(best_method.upper()))
-            print(model_kw)
+    if prompt_remove_words:
+        # Ask user if words should be ignored, and iterate until no more words should be
+        more_words_to_ignore = True
+        first_iteration = True
+        new_words_to_ignore = ignore_words  # initialize so that it can be added to
+        while more_words_to_ignore != False:
+            if first_iteration == True:
+                print("The most frequent keywords are:\n")
+                print(most_fred_kw)
+                print("")
+                print("The {} keywords are:\n".format(best_method.upper()))
+                print(model_kw)
+            else:
+                print("\n")
+                print("The new most frequent keywords are:\n")
+                print(most_fred_kw)
+                print("")
+                print("The new {} keywords are:\n".format(best_method.upper()))
+                print(model_kw)
 
-        new_words_to_ignore, words_added = utils.prompt_for_ignore_words(
-            ignore_words=new_words_to_ignore
-        )
-        first_iteration = False
-
-        if words_added == True:
-            most_fred_kw = extract_kws(
-                method="frequency",
-                text_corpus=text_corpus,
-                clean_texts=clean_texts,
-                input_language=input_language,
-                output_language=output_language,
-                num_keywords=num_keywords,
-                num_topics=model_ideal_topic_num,
-                corpuses_to_compare=None,
-                return_topics=False,
-                ignore_words=new_words_to_ignore,
-                min_freq=min_freq,
-                min_word_len=min_word_len,
-                sample_size=sample_size,
+            new_words_to_ignore, words_added = utils.prompt_for_word_removal(
+                ignore_words=new_words_to_ignore
             )
+            first_iteration = False
 
-            model_kw = extract_kws(
-                method=best_method,
-                text_corpus=text_corpus,
-                clean_texts=clean_texts,
-                input_language=input_language,
-                output_language=output_language,
-                num_keywords=num_keywords,
-                num_topics=model_ideal_topic_num,
-                corpuses_to_compare=None,
-                return_topics=False,
-                ignore_words=new_words_to_ignore,
-                min_freq=min_freq,
-                min_word_len=min_word_len,
-                sample_size=sample_size,
-            )
+            if words_added == True:
+                most_fred_kw = extract_kws(
+                    method="frequency",
+                    text_corpus=text_corpus,
+                    clean_texts=clean_texts,
+                    input_language=input_language,
+                    output_language=output_language,
+                    num_keywords=num_keywords,
+                    num_topics=model_ideal_topic_num,
+                    corpuses_to_compare=None,
+                    return_topics=False,
+                    ignore_words=new_words_to_ignore,
+                    min_freq=min_freq,
+                    min_word_len=min_word_len,
+                    sample_size=sample_size,
+                    prompt_remove_words=False,  # prevent recursion
+                )
 
-        else:
-            more_words_to_ignore = False
+                model_kw = extract_kws(
+                    method=best_method,
+                    text_corpus=text_corpus,
+                    clean_texts=clean_texts,
+                    input_language=input_language,
+                    output_language=output_language,
+                    num_keywords=num_keywords,
+                    num_topics=model_ideal_topic_num,
+                    corpuses_to_compare=None,
+                    return_topics=False,
+                    ignore_words=new_words_to_ignore,
+                    min_freq=min_freq,
+                    min_word_len=min_word_len,
+                    sample_size=sample_size,
+                    prompt_remove_words=False,  # prevent recursion
+                )
+
+            else:
+                more_words_to_ignore = False
 
     if word_cloud_dest != False:
         # Make a word cloud that doesn't include the words that should be ignored
@@ -859,17 +936,18 @@ def gen_files(
             save_file=t_sne_dest,
         )
 
-    # Order words by part of speech and format them for a .txt file output
-    ordered_most_freq_kw = utils._order_by_pos(
-        outputs=most_fred_kw, output_language=output_language
-    )
-    ordered_model_kw = utils._order_by_pos(
-        outputs=model_kw, output_language=output_language
-    )
+    if org_by_pos:
+        # Organize words by part of speech and format them for a .txt file output
+        most_fred_kw = utils.organize_by_pos(
+            outputs=most_fred_kw, output_language=output_language
+        )
+        model_kw = utils.organize_by_pos(
+            outputs=model_kw, output_language=output_language
+        )
 
     keywords_dict = {
-        "Most Frequent Keywords": ordered_most_freq_kw,
-        "{} Keywords".format(best_method.upper()): ordered_model_kw,
+        "Most Frequent Keywords": most_fred_kw,
+        "{} Keywords".format(best_method.upper()): model_kw,
     }
 
     def add_to_zip_str(input_obj, new_char):

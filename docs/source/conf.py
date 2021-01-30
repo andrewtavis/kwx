@@ -172,7 +172,7 @@ texinfo_documents = [
         "kwx Documentation",
         author,
         "kwx",
-        "Unsupervised keyword generation in Python",
+        "Unsupervised keyword extraction in Python",
         "Miscellaneous",
     )
 ]

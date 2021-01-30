@@ -1,4 +1,4 @@
-### kwx 0.0.1 (Jan 30, 2021)
+### kwx 0.0.2 (Jan 31, 2021)
 
 The minimum viable product of kwx:
 
