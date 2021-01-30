@@ -2,7 +2,7 @@
 topic_model
 -----------
 
-The unsupervised learning topic model for keyword generation
+The unsupervised learning topic model for keyword extraction
 
 Contents
     TopicModel Class
@@ -18,7 +18,7 @@ from gensim import corpora
 from gensim.models import LdaModel
 from sklearn.cluster import KMeans
 
-from kwgen.autoencoder import Autoencoder
+from kwx.autoencoder import Autoencoder
 
 
 class TopicModel:

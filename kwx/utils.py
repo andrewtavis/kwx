@@ -39,7 +39,7 @@ import emoji
 
 from gensim.models import Phrases
 
-from kwgen import languages
+from kwx import languages
 
 
 def load_data(data, target_cols=None):
@@ -560,7 +560,7 @@ def order_by_pos(outputs, output_language):
     Parameters
     ----------
         outputs : list
-            The keywords that have been generated
+            The keywords that have been extracted
 
         output_language : str
             The spoken language in which the results should be given
@@ -619,7 +619,7 @@ def order_by_pos(outputs, output_language):
 
 def prompt_for_ignore_words(ignore_words=None):
     """
-    Prompts the user for words that should be ignored in kewword generation
+    Prompts the user for words that should be ignored in kewword extraction
 
     Parameters
     ----------

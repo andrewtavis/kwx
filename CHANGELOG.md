@@ -1,8 +1,8 @@
-### kwgen 0.0.2 (Jan 30, 2021)
+### kwx 0.0.1 (Jan 30, 2021)
 
-The minimum viable product of kwgen:
+The minimum viable product of kwx:
 
-- Users are able to generate keywords using the following methods
+- Users are able to extract keywords using the following methods
   - Most frequent words
   - TFIDF words unique to one corpus when compared to others
   - Latent Dirichlet Allocation

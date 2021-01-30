@@ -1,7 +1,7 @@
 model
 =====
 
-The :py:mod:`model` module provides needed functions for modeling text corpuses and generating keywords
+The :py:mod:`model` module provides needed functions for modeling text corpuses and extracting keywords
 
 **Functions**
 

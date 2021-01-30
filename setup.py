@@ -45,7 +45,6 @@ else:
         "xlrd",
         "pandas",
         "matplotlib",
-        "mpl_toolkits",
         "seaborn",
         "stopwordsiso",
         "gensim",

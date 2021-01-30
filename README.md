@@ -20,7 +20,7 @@
 
 **kwx** is a toolkit for unsupervised keyword extraction based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to process texts and then extract and analyze keywords from the created corpus. A unique focus is allowing users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
 
-For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods. Also see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/kwx/languages.py) for language dependencies.
+For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods. Also see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/kwx/languages.py) for all available languages.
 
 # Installation via PyPi
 ```bash
@@ -73,19 +73,20 @@ The basic structure of kwx's machine learning based keyword extraction algorithm
 
 # Usage
 
-Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.extract_kws](https://github.com/andrewtavis/kwx/blob/main/examples/extract_kws.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
+Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
 The following `pseudoscope` presents a brief outline of using kwx to derive keywords from a text corpus:
 
 ```python
 from kwx.utils import prepare_data
+from kwx.model import extract_kws
 
 input_language = "english"
 num_keywords = 10
 num_topics = 10
 ignore_words = ["words", "user", "knows", "are", "not", "wanted"]
 
-# Arguments from examples.extract_kws
+# Arguments from examples.kw_extraction
 text_corpus = prepare_data(
     data='df-or-csv/xlsx-path',
     target_cols='cols-where-texts-are',
@@ -143,7 +144,7 @@ graph_topic_num_evals(
 
 ### Word Cloud
 
-Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples.extract_kws](https://github.com/andrewtavis/kwx/blob/main/examples/extract_kws.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
+Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
 
 ```python
 from kwx.visuals import gen_word_cloud

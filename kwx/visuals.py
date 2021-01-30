@@ -39,7 +39,7 @@ from gensim import corpora
 from sklearn.manifold import TSNE
 from sentence_transformers import SentenceTransformer
 
-from kwgen import utils, languages, model, topic_model
+from kwx import utils, languages, model, topic_model
 
 
 def save_vis(vis, save_file, file_name):
@@ -144,7 +144,7 @@ def graph_topic_num_evals(
             The spoken language in which the text is found
 
         num_keywords : int (default=10)
-            The number of keywords that should be generated
+            The number of keywords that should be extracted
 
         topic_nums_to_compare : list (default=None)
             The number of topics to compare metrics over
