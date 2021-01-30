@@ -20,12 +20,6 @@ import io
 import importlib
 
 import numpy as np
-
-# Make sure xlrd is installed for pandas
-# xlrd_spec = importlib.util.find_spec("xlrd")
-# if xlrd_spec == None:
-#     os.system("pip install xlrd")
-
 import pandas as pd
 from IPython import get_ipython
 from IPython.display import display
@@ -54,7 +48,6 @@ def graph_topic_num_evals(
     input_language=None,
     num_keywords=15,
     topic_nums_to_compare=None,
-    incl_mc_questions=False,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
@@ -105,11 +98,6 @@ def graph_topic_num_evals(
         topic_nums_to_compare : list (default=None)
             The number of topics to compare metrics over
             Note: None selects all numbers from 1 to num_keywords
-
-        incl_mc_questions : bool (default=False)
-            Whether to include the multiple choice questions (True) or just the free answer questions
-
-            Note: included so that it can be passed to prepare_text_data if a path is provided
 
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
@@ -163,7 +151,6 @@ def graph_topic_num_evals(
         text_corpus=text_corpus,
         clean_texts=clean_texts,
         input_language=input_language,
-        incl_mc_questions=incl_mc_questions,
         min_freq=min_freq,
         min_word_len=min_word_len,
         sample_size=sample_size,
@@ -374,7 +361,6 @@ def gen_word_cloud(
     text_corpus,
     input_language=None,
     ignore_words=None,
-    incl_mc_questions=False,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
@@ -391,11 +377,6 @@ def gen_word_cloud(
 
         input_language : str (default=None)
             The spoken language in which the text is found
-
-        incl_mc_questions : bool (default=False)
-            Whether to include the multiple choice questions (True) or just the free answer questions
-
-            Note: included so that it can be passed to prepare_text_data if a path is provided
 
         ignore_words : str or list (default=None)
             Words that should be removed (such as the name of the publisher)
@@ -425,7 +406,6 @@ def gen_word_cloud(
         text_corpus=text_corpus,
         clean_texts=None,
         input_language=input_language,
-        incl_mc_questions=incl_mc_questions,
         min_freq=min_freq,
         min_word_len=min_word_len,
         sample_size=sample_size,
@@ -478,7 +458,6 @@ def pyLDAvis_topics(
     text_corpus=None,
     input_language=None,
     num_topics=15,
-    incl_mc_questions=False,
     min_freq=2,
     min_word_len=4,
     sample_size=1,
@@ -515,11 +494,6 @@ def pyLDAvis_topics(
         num_topics : int (default=15)
             The number of categories for LDA and BERT based approaches
 
-        incl_mc_questions : bool (default=False)
-            Whether to include the multiple choice questions (True) or just the free answer questions
-
-            Note: included so that it can be passed to prepare_text_data if a path is provided
-
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
@@ -550,7 +524,6 @@ def pyLDAvis_topics(
         text_corpus=text_corpus,
         clean_texts=None,
         input_language=input_language,
-        incl_mc_questions=incl_mc_questions,
         min_freq=min_freq,
         min_word_len=min_word_len,
         sample_size=sample_size,

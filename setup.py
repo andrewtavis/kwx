@@ -3,6 +3,7 @@ try:
 except ImportError:
     from distutils.core import setup
 from setuptools import find_namespace_packages
+import os
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -35,14 +36,13 @@ setup_args = dict(
     url="https://github.com/andrewtavis/kwgen",
 )
 
-import os
-
 on_rtd = os.environ.get("READTHEDOCS") == "True"
 if on_rtd:
     install_requires = []
 else:
     install_requires = [
         "numpy",
+        "xlrd",
         "pandas",
         "matplotlib",
         "mpl_toolkits",
