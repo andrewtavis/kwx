@@ -56,7 +56,7 @@ The user can also choose to simply query the most common words from a text corpu
 The basic structure of kwx's machine learning based keyword extraction algorithms is the following:
 
 - The user inputs a desired number of keywords
-- The user inputs a number of topics to use, or this is determined by optimizing topic coherence and overlap across a potential topic numbers
+- The user inputs a number of topics to use, or this is determined by optimizing topic coherence and overlap across potential topic numbers
 - The texts are fully cleaned and tokenized
 - Topics are derived for the text corpus
 - The prevalence of topics in the text corpus is found
@@ -68,14 +68,14 @@ The basic structure of kwx's machine learning based keyword extraction algorithm
   - Words are selected from less coherent topics first (common words come from weakly coherent topics, and unique words come from those with strong coherence)
 - The user is presented the extracted keywords and asked if they're appropriate
   - They can then indicate words to be removed and replaced
-  - Keywords are finalized when the user indicates that no more words need to be removed
-- Optionally: the keywords are put into a text file, and this along with desired visuals is saved into a directory or zipped
+  - Keywords are finalized when the user indicates that no more words need to be replaced
+- Optionally: the keywords are put into a text file, and this along with desired visuals is saved into a directory or zipped (see [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/kwx/model.py))
 
 # Usage
 
 Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
-The following `pseudoscope` presents a brief outline of using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` where the user will be asked if the extracted words are acceptable:
+The following `pseudoscope` presents a brief outline of using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
 
 ```python
 from kwx.utils import prepare_data
@@ -110,15 +110,15 @@ bert_kws = extract_kws(
 )
 ```
 
-The model will be re-ran until all words known to be unreasonable are removed for a suitable output. `kwx.model.gen_files` saves the results of the above keyword extraction process in a directory or zip file along with desired visuals from the following section. This function serves as a run-all for experienced users wanting quick results.
+The model will be re-ran until all words known to be unreasonable are removed for a suitable output. `kwx.model.gen_files` could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
 
 # Visuals
 
-[kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/kwx/visuals.py) includes functions for both presenting and analyzing the results of keyword extraction. Each can be called individually, or included in the final output folder or zip.
+[kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/kwx/visuals.py) includes functions for both presenting and analyzing the results of keyword extraction.
 
 ### Topic Number Evaluation
 
-A graph of topic coherence and overlap given a variable number of topics to derive keywords from. The `return_ideal_metrics` argument is further used to derive the ideal model and topic number in [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/kwx/model.py) - allowing for a single run of models and topic numbers to derive optimal keywords.
+A graph of topic coherence and overlap given a variable number of topics to derive keywords from.
 
 ```python
 from kwx.visuals import graph_topic_num_evals
@@ -130,7 +130,7 @@ graph_topic_num_evals(
     num_keywords=num_keywords,
     topic_nums_to_compare=list(range(5,15)),
     metrics=True, # stability and coherence
-    return_ideal_metrics=False, # selects ideal model given metrics
+    return_ideal_metrics=False, # selects ideal model given metrics for kwx.model.gen_files
 )
 ```
 
