@@ -57,7 +57,7 @@ The structure `kwx.model.extract_kws`, kwx's natural language processing keyword
 
 - The user inputs a desired number of keywords
 - The user inputs a number of topics to use, or this is determined by optimizing topic coherence and overlap across potential topic numbers
-- The texts are fully cleaned and tokenized ([see kwx.utils.clean_and_tokenize_texts](https://github.com/andrewtavis/kwx/blob/main/kwx/utils.py))
+- The texts are fully cleaned and tokenized (see [kwx.utils.clean_and_tokenize_texts](https://github.com/andrewtavis/kwx/blob/main/kwx/utils.py))
 - Topics are derived for the text corpus
 - The prevalence of topics in the text corpus is found
   - For example: topic 1 is 25% coherent to the texts, topic 2 45%, and topic 3 30%
