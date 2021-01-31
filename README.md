@@ -16,7 +16,7 @@
 
 ### Unsupervised BERT and LDA based keyword extraction in Python
 
-**Jump to:** [Models](#models) • [Algorithm](#algorithm) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
+**Jump to:** [Models](#models) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
 
 **kwx** is a toolkit for unsupervised keyword extraction based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to process texts and then extract and analyze keywords from the created corpus. A unique focus is allowing users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
 
@@ -37,7 +37,7 @@ import kwx
 
 [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) is a generative statistical model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. In the case of kwx, documents or text entries are posited to be a mixture of a given number of topics, and the presence of each word in a text body comes from its relation to these derived topics.
 
-Although not as statistically strong as the following models, LDA provides quick results that are suitable for many applications.
+Although not as statistically strong as the following machine learning models, LDA provides quick results that are suitable for many applications.
 
 ### BERT
 
@@ -51,26 +51,6 @@ The combination of LDA with BERT via [kwx.autoencoder](https://github.com/andrew
 
 The user can also choose to simply query the most common words from a text corpus or compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwx as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
 
-# Algorithm
-
-The structure `kwx.model.extract_kws`, kwx's natural language processing keyword extraction algorithm, is the following:
-
-- The user inputs a desired number of keywords
-- The user inputs a number of topics to use, or this is determined by optimizing topic coherence and overlap across potential topic numbers
-- The texts are fully cleaned and tokenized (see [kwx.utils.clean_and_tokenize_texts](https://github.com/andrewtavis/kwx/blob/main/kwx/utils.py))
-- Topics are derived for the text corpus
-- The prevalence of topics in the text corpus is found
-  - For example: topic 1 is 25% coherent to the texts, topic 2 45%, and topic 3 30%
-  - These percentages come from averaging topic coherence across all texts
-- Words are selected from the derived topics based on their coherence to the text body
-  - If a word has already been selected, then the next word in the topic will be chosen
-  - From the above example: the best 25%, 45% and 30% of words from topics 1-3 are selected
-  - Words are selected from less coherent topics first (common words come from weakly coherent topics, and unique words come from those with strong coherence)
-- The user is presented the extracted keywords and asked if they're appropriate
-  - They can then indicate words to be removed and replaced
-  - Keywords are finalized when the user indicates that no more words need to be replaced
-- Optionally: the keywords are put into a text file, and this along with desired visuals is saved into a directory or zipped (see [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/kwx/model.py))
-
 # Usage
 
 Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
@@ -81,8 +61,8 @@ The following outlines using kwx to derive keywords from a text corpus with `pro
 from kwx.utils import prepare_data
 from kwx.model import extract_kws
 
-input_language = "english"
-num_keywords = 10
+input_language = "english" # see kwx.languages for options
+num_keywords = 15
 num_topics = 10
 ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
@@ -97,7 +77,7 @@ text_corpus = prepare_data(
 )[0]
 
 bert_kws = extract_kws(
-    method='BERT',
+    method='BERT', # 'LDA', 'BERT', or 'LDA_BERT'
     text_corpus=text_corpus,
     input_language=input_language,
     output_language=None,  # allows the output to be translated
@@ -106,8 +86,26 @@ bert_kws = extract_kws(
     corpuses_to_compare=None,  # for TFIDF
     return_topics=False,  # to inspect topics rather than produce kws
     ignore_words=ignore_words,
+    sample_size=1, # to randomly sample from the corpus
     prompt_remove_words=True,  # check words with user
 )
+```
+
+```
+The BERT keywords are:
+
+['time', 'flight', 'plane', 'southwestair', 'ticket', 'cancel', 'united', 'baggage',
+'love', 'virginamerica', 'service', 'customer', 'delay', 'late', 'hour']
+
+Are there words that should be removed [y/n]? y
+Type or copy word(s) to be removed: southwestair, united, virginamerica
+
+The new BERT keywords are:
+
+['late', 'baggage', 'service', 'flight', 'time', 'love', 'book', 'customer',
+'response', 'hold', 'hour', 'cancel', 'cancelled_flighted', 'delay', 'plane']
+
+Are there words that should be removed [y/n]? n
 ```
 
 The model will be re-ran until all words known to be unreasonable are removed for a suitable output. `kwx.model.gen_files` could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
@@ -129,29 +127,17 @@ graph_topic_num_evals(
     text_corpus=text_corpus,
     input_language=input_language,
     num_keywords=num_keywords,
-    topic_nums_to_compare=list(range(5,15)),
+    topic_nums_to_compare=list(range(5, 15)),
+    sample_size=1,
     metrics=True, # stability and coherence
     return_ideal_metrics=False, # selects ideal model given metrics for kwx.model.gen_files
 )
 plt.show()
 ```
 
-### Word Cloud
-
-Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
-
-```python
-from kwx.visuals import gen_word_cloud
-
-ignore_words = []
-
-gen_word_cloud(
-    text_corpus=text_corpus,
-    input_language=input_language,
-    ignore_words=None,
-    height=500,
-)
-```
+<p align="middle">
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/topic_num_eval.png" width="600" />
+</p>
 
 ### pyLDAvis
 
@@ -169,6 +155,31 @@ pyLDAvis_topics(
 )
 ```
 
+<p align="middle">
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/pyLDAvis.png" width="600" />
+</p>
+
+### Word Cloud
+
+Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
+
+```python
+from kwx.visuals import gen_word_cloud
+
+ignore_words = ["words", "user", "knows", "they", "don't", "want"]
+
+gen_word_cloud(
+    text_corpus=text_corpus,
+    input_language=input_language,
+    ignore_words=None,
+    height=500,
+)
+```
+
+<p align="middle">
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/word_cloud.png" width="600" />
+</p>
+
 ### t-SNE
 
 [t-SNE](https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding) allows the user to visualize their topic distribution in both two and three dimensions. Currently available just for LDA, this technique provides another check for model suitability.
@@ -185,6 +196,10 @@ t_sne(
 )
 plt.show()
 ```
+
+<p align="middle">
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/t_sne.png" width="600" />
+</p>
 
 # To-Do
 

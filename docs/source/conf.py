@@ -24,7 +24,7 @@ copyright = "2020-2021, kwx developers (BSD License)"
 author = "kwx developers"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.2.1"
+release = "0.0.2.2"
 
 
 # -- General configuration ---------------------------------------------------

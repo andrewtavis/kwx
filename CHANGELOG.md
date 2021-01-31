@@ -1,4 +1,4 @@
-### kwx 0.0.2 (Jan 31, 2021)
+### kwx 0.0.2.2 (Jan 31, 2021)
 
 The minimum viable product of kwx:
 
@@ -7,7 +7,7 @@ The minimum viable product of kwx:
   - TFIDF words unique to one corpus when compared to others
   - Latent Dirichlet Allocation
   - Bidirectional Encoder Representations from Transformers
-  - An autoencoder application of LDA and BERT
+  - An autoencoder application of LDA and BERT combined
 
 - Users are able to tell the model to remove certain words to fine tune results
 

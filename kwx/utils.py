@@ -181,14 +181,14 @@ def lemmatize(tokens, nlp=None):
 
 
 def clean_and_tokenize_texts(
-    responses, input_language=None, min_freq=2, min_word_len=4, sample_size=1
+    texts, input_language=None, min_freq=2, min_word_len=4, sample_size=1
 ):
     """
     Cleans and tokenizes a text body to prepare it for analysis
 
     Parameters
     ----------
-        responses : str or list
+        texts : str or list
             The texts to be cleaned and tokenized
 
         input_language : str (default=None)
@@ -200,13 +200,13 @@ def clean_and_tokenize_texts(
         min_word_len : int (default=4)
             The smallest allowable length of a word
 
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
+        sample_size : float (default=1)
+            The amount of data to be randomly sampled
 
     Returns
     -------
         text_corpus, clean_texts, selection_idxs : list or list of lists, list, list
-            The responses formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
+            The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
     """
     input_language = input_language.lower()
 
@@ -214,12 +214,12 @@ def clean_and_tokenize_texts(
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
-    if type(responses) == str:
-        responses = [responses]
+    if type(texts) == str:
+        texts = [texts]
 
     # Remove spaces that are greater that one in length
-    responses_no_large_spaces = []
-    for r in responses:
+    texts_no_large_spaces = []
+    for r in texts:
         for i in range(
             25, 0, -1
         ):  # loop backwards to assure that smaller spaces aren't made
@@ -227,30 +227,30 @@ def clean_and_tokenize_texts(
             if large_space in r:
                 r = r.replace(large_space, " ")
 
-        responses_no_large_spaces.append(r)
+        texts_no_large_spaces.append(r)
 
-    responses_no_random_punctuation = []
+    texts_no_random_punctuation = []
     # Prevent words from being combined when a user types word/word or word-word
-    for r in responses_no_large_spaces:
+    for r in texts_no_large_spaces:
         r = r.replace("/", " ")
         r = r.replace("-", " ")
         if input_language == "fr":
             # Get rid of the 'of' abbreviation for French
             r = r.replace("d'", "")
 
-        responses_no_random_punctuation.append(r)
+        texts_no_random_punctuation.append(r)
 
     # Remove punctuation
-    responses_no_punctuation = []
-    for r in responses_no_random_punctuation:
-        responses_no_punctuation.append(
+    texts_no_punctuation = []
+    for r in texts_no_random_punctuation:
+        texts_no_punctuation.append(
             r.translate(str.maketrans("", "", string.punctuation + "–" + "’"))
         )
 
     # Remove emojis
-    responses_no_emojis = []
-    for response in responses_no_punctuation:
-        responses_no_emojis.append(emoji.get_emoji_regexp().sub(r"", response))
+    texts_no_emojis = []
+    for response in texts_no_punctuation:
+        texts_no_emojis.append(emoji.get_emoji_regexp().sub(r"", response))
 
     # Remove stopwords and tokenize
     if stopwords(input_language) != set():  # the input language has stopwords
@@ -269,7 +269,7 @@ def clean_and_tokenize_texts(
             for word in text.lower().split()
             if word not in stop_words and not word.isnumeric()
         ]
-        for text in responses_no_emojis
+        for text in texts_no_emojis
     ]
     tokenized_texts = [t for t in tokenized_texts if t != []]
 
@@ -347,12 +347,12 @@ def clean_and_tokenize_texts(
             ]
         )
 
-    # Derive those responses that still have valid words
+    # Derive those texts that still have valid words
     non_empty_token_indexes = [
         i for i in range(len(min_len_freq_tokens)) if min_len_freq_tokens[i] != []
     ]
     text_corpus = [min_len_freq_tokens[i] for i in non_empty_token_indexes]
-    clean_texts = [_clean_text_strings(s=responses[i]) for i in non_empty_token_indexes]
+    clean_texts = [_clean_text_strings(s=texts[i]) for i in non_empty_token_indexes]
 
     # Sample words, if necessary
     if sample_size != 1:
@@ -399,13 +399,13 @@ def prepare_data(
         min_word_len : int (default=4)
             The smallest allowable length of a word
 
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
+        sample_size : float (default=1)
+            The amount of data to be randomly sampled
 
     Returns
     -------
         text_corpus, clean_texts, selected_idxs : list or list of lists, list, list
-            The responses formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
+            The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
     """
     input_language = input_language.lower()
 
@@ -431,7 +431,7 @@ def prepare_data(
         raw_texts.append(text)
 
     text_corpus, clean_texts, selected_idxs = clean_and_tokenize_texts(
-        responses=raw_texts,
+        texts=raw_texts,
         input_language=input_language,
         min_freq=min_freq,
         min_word_len=min_word_len,
@@ -473,8 +473,8 @@ def _prepare_corpus_path(
         min_word_len : int (default=4)
             The smallest allowable length of a word
 
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
+        sample_size : float (default=1)
+            The amount of data to be randomly sampled
 
     Returns
     -------

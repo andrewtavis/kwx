@@ -55,6 +55,8 @@ def save_vis(vis, save_file, file_name):
         save_file : bool or str (default=False)
             Whether to save the figure as a png or a path in which to save it
 
+            Note: directory paths can begin from the working directory
+
         file_name : str
             The name for the file
 
@@ -68,6 +70,7 @@ def save_vis(vis, save_file, file_name):
             bbox_inches="tight",
             dpi=300,
         )
+
     elif type(save_file) == str:  # a save path has been provided
         if save_file[-4:] == ".zip":
             with zipfile.ZipFile(save_file, mode="a") as zf:
@@ -77,6 +80,7 @@ def save_vis(vis, save_file, file_name):
                 vis.close()
                 zf.writestr(zinfo_or_arcname=f"{file_name}.png", data=buf.getvalue())
                 zf.close()
+
         else:
             if os.path.exists(save_file):
                 vis.savefig(
@@ -84,6 +88,7 @@ def save_vis(vis, save_file, file_name):
                     bbox_inches="tight",
                     dpi=300,
                 )
+
             else:
                 vis.savefig(
                     f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
@@ -222,7 +227,7 @@ def graph_topic_num_evals(
                 - J(A,B) = (A ∩ B)/(A ∪ B)
                 - Goal is low Jaccard scores for coverage of the diverse elements
         """
-        # Fix for cases where there are not enough responses for clustering models
+        # Fix for cases where there are not enough texts for clustering models
         if topic_1 == [] and topic_2 != []:
             topic_1 = topic_2
         if topic_1 != [] and topic_2 == []:
@@ -886,6 +891,6 @@ def t_sne(
             )
 
     # Save file if directed to
-    save_vis(vis=plt, save_file=save_file, file_name="t_sne_represenation")
+    save_vis(vis=plt, save_file=save_file, file_name="t_sne")
 
     return fig

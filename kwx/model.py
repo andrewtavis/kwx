@@ -151,7 +151,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
         ordered_topic_words, selection_indexes: list of lists and list of lists
             Topics words ordered by average coherence and indexes by which they should be selected
     """
-    # Derive average topics across responses for a given method
+    # Derive average topics across texts for a given method
     if model.method == "lda":
         shown_topics = model.lda_model.show_topics(
             num_topics=num_topics, num_words=num_keywords, formatted=False
@@ -203,7 +203,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
             for k in counts_dict_mapped.keys()
         ]
 
-    # Order ids by the average coherence across the responses
+    # Order ids by the average coherence across the texts
     topic_ids_ordered = [
         tup[0] for tup in sorted(enumerate(topic_averages), key=lambda i: i[1][1])[::-1]
     ]
@@ -319,8 +319,8 @@ def extract_kws(
         min_word_len : int (default=4)
             The smallest allowable length of a word
 
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
+        sample_size : float (default=1)
+            The amount of data to be randomly sampled
 
         prompt_remove_words : bool (default=True)
             Whether to prompt the user for keywords to remove
@@ -470,6 +470,8 @@ def extract_kws(
                 ignore_words=ignore_words,
                 min_freq=min_freq,
                 min_word_len=min_word_len,
+                sample_size=sample_size,
+                prompt_remove_words=False,  # prevent recursion
             )
 
             if len(keywords) > len(frequent_words):
@@ -566,6 +568,8 @@ def extract_kws(
                     ignore_words=ignore_words,
                     min_freq=min_freq,
                     min_word_len=min_word_len,
+                    sample_size=sample_size,
+                    prompt_remove_words=False,  # prevent recursion
                 )
 
                 for word in frequent_words:
@@ -726,6 +730,7 @@ def gen_files(
         dest_name += ".zip"
         if os.path.exists(os.getcwd() + "/" + dest_name):
             os.remove(os.getcwd() + "/" + dest_name)
+
     else:
         # Create a directory
         dest_name = os.getcwd() + "/" + dest_name
@@ -831,6 +836,7 @@ def gen_files(
         min_freq=min_freq,
         min_word_len=min_word_len,
         sample_size=sample_size,
+        prompt_remove_words=False,  # prevent recursion
     )
 
     # Extract keywords based on the best topic model
@@ -848,6 +854,7 @@ def gen_files(
         min_freq=min_freq,
         min_word_len=min_word_len,
         sample_size=sample_size,
+        prompt_remove_words=False,  # prevent recursion
     )
 
     if prompt_remove_words:
@@ -926,7 +933,8 @@ def gen_files(
             save_file=word_cloud_dest,
         )
 
-    if t_sne_dest != False:
+    block_feature = True  # t_sne isn't zipping propertly
+    if t_sne_dest != False and block_feature == False:
         visuals.t_sne(
             dimension="both",  # 2d and 3d are also options
             text_corpus=text_corpus,
