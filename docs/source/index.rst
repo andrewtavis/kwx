@@ -1,5 +1,5 @@
 .. image:: https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/kwx_logo_transparent.png
-    :scale: 45 %
+    :scale: 25 %
     :target: https://github.com/andrewtavis/kwx
 ============
 
@@ -32,7 +32,7 @@
 .. |contributions| image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md
 
-Unsupervised keyword extraction in Python
+Unsupervised BERT and LDA based keyword extraction in Python
 
 Installation
 ------------

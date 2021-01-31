@@ -14,7 +14,7 @@
 [![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md)
 
-### Unsupervised keyword extraction in Python
+### Unsupervised BERT and LDA based keyword extraction in Python
 
 **Jump to:** [Models](#models) • [Algorithm](#algorithm) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
 
@@ -122,6 +122,7 @@ A graph of topic coherence and overlap given a variable number of topics to deri
 
 ```python
 from kwx.visuals import graph_topic_num_evals
+import matplotlib.pyplot as plt
 
 graph_topic_num_evals(
     method=["lda", "bert", "lda_bert"],
@@ -132,6 +133,7 @@ graph_topic_num_evals(
     metrics=True, # stability and coherence
     return_ideal_metrics=False, # selects ideal model given metrics for kwx.model.gen_files
 )
+plt.show()
 ```
 
 ### Word Cloud
@@ -173,6 +175,7 @@ pyLDAvis_topics(
 
 ```python
 from kwx.visuals import t_sne
+import matplotlib.pyplot as plt
 
 t_sne(
     dimension="both",  # 2d and 3d are options
@@ -180,6 +183,7 @@ t_sne(
     num_topics=10,
     remove_3d_outliers=True,
 )
+plt.show()
 ```
 
 # To-Do

@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
 
 setup_args = dict(
     name="kwx",
-    version="0.0.2",
+    version="0.0.2.1",
     author="Andrew Tavis McAllister",
     author_email="andrew.t.mcallister@gmail.com",
     classifiers=[
@@ -28,7 +28,7 @@ setup_args = dict(
         "Programming Language :: Python :: 3.9",
         "Operating System :: OS Independent",
     ],
-    description="Unsupervised keyword extraction in Python",
+    description="Unsupervised BERT and LDA based keyword extraction in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_namespace_packages(),
