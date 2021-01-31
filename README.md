@@ -75,7 +75,7 @@ The structure `kwx.model.extract_kws`, kwx's natural language processing keyword
 
 Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
-The following `pseudoscope` presents a brief outline of using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
+The following outlines using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
 
 ```python
 from kwx.utils import prepare_data
