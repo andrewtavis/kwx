@@ -81,8 +81,8 @@ The following outlines using kwx to derive keywords from a text corpus with `pro
 from kwx.utils import prepare_data
 from kwx.model import extract_kws
 
-input_language = "english"
-num_keywords = 10
+input_language = "english" # see kwx.languages for options
+num_keywords = 15
 num_topics = 10
 ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
@@ -108,6 +108,23 @@ bert_kws = extract_kws(
     ignore_words=ignore_words,
     prompt_remove_words=True,  # check words with user
 )
+```
+
+```
+The BERT keywords are:
+
+['time', 'flight', 'plane', 'southwestair', 'ticket', 'cancel', 'united', 'baggage',
+'love', 'virginamerica', 'service', 'customer', 'delay', 'late', 'hour']
+
+Are there words that should be removed [y/n]? y
+Type or copy word(s) to be removed: southwestair, united, virginamerica
+
+The new BERT keywords are:
+
+['late', 'baggage', 'service', 'flight', 'time', 'love', 'book', 'customer',
+'response', 'hold', 'hour', 'cancel', 'cancelled_flighted', 'delay', 'plane']
+
+Are there words that should be removed [y/n]? n
 ```
 
 The model will be re-ran until all words known to be unreasonable are removed for a suitable output. `kwx.model.gen_files` could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
