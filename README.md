@@ -13,6 +13,8 @@
 [![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE)
 [![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md)
+[![coc](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md)
+
 
 ### Unsupervised BERT and LDA based keyword extraction in Python
 

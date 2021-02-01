@@ -5,7 +5,7 @@
     :target: https://github.com/andrewtavis/kwx
 ============
 
-|rtd| |travis| |codecov| |pyversions| |pypi| |pypistatus| |license| |codestyle| |contributions|
+|rtd| |travis| |codecov| |pyversions| |pypi| |pypistatus| |license| |codestyle| |contributions| |coc|
 
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
@@ -33,6 +33,9 @@
 
 .. |contributions| image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md
+
+.. |coc| image:: https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
+    :target: https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md
 
 Unsupervised BERT and LDA based keyword extraction in Python
 

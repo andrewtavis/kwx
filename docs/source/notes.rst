@@ -15,4 +15,4 @@ License
 Change log
 ----------
 
-.. mdinclude:: ../../CHANGELOG.md
+.. mdinclude:: ../../.github/CHANGELOG.md
