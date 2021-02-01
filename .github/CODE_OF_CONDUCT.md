@@ -69,9 +69,9 @@ values described within this code. Contact details must be readily provided for
 the latter party, and for the former if no community leader has been given the
 specific responsibility to oversee community conduct.
 
-Within source code, the contact can be found in a corresponding CoC_CONTACT file.
-
-All complaints will be reviewed and investigated promptly and fairly.
+Within source code, the contact for those responsible for community conduct can
+be found in a corresponding CoC_CONTACT file. All complaints will be reviewed and
+investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
