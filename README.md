@@ -18,7 +18,7 @@
 
 ### Unsupervised BERT and LDA based keyword extraction in Python
 
-**Jump to:** [Models](#models) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
+**Jump to:**<a id="jumpto"></a> [Models](#models) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
 
 **kwx** is a toolkit for unsupervised keyword extraction based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to process texts and then extract and analyze keywords from the created corpus. A unique focus is allowing users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
 
@@ -33,7 +33,7 @@ pip install kwx
 import kwx
 ```
 
-# Models
+# Models [`↩`](#jumpto)
 
 ### LDA
 
@@ -53,7 +53,7 @@ The combination of LDA with BERT via [kwx.autoencoder](https://github.com/andrew
 
 The user can also choose to simply query the most common words from a text corpus or compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwx as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
 
-# Usage
+# Usage [`↩`](#jumpto)
 
 Keyword extraction can be useful to analyze surveys, tweets, other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
@@ -112,7 +112,7 @@ Are there words that should be removed [y/n]? n
 
 The model will be re-ran until all words known to be unreasonable are removed for a suitable output. `kwx.model.gen_files` could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
 
-# Visuals
+# Visuals [`↩`](#jumpto)
 
 [kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/kwx/visuals.py) includes functions for both presenting and analyzing the results of keyword extraction.
 
@@ -203,7 +203,7 @@ plt.show()
   <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/t_sne.png" width="600" />
 </p>
 
-# To-Do
+# To-Do [`↩`](#jumpto)
 
 - Including more methods to extract keywords, as well as improving the current ones
 - Adding BERT [sentence-transformers](https://github.com/UKPLab/sentence-transformers) language models as an argument in [kwx.model.extract_kws](https://github.com/andrewtavis/kwx/blob/main/kwx/model.py)

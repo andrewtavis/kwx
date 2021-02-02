@@ -144,7 +144,7 @@ class TopicModel:
             vec_bert = self._vectorize(
                 texts=texts, text_corpus=text_corpus, method="bert"
             )
-            vec_bert = vec_bert[: len(vec_lda)]  # Fix if BERT vecctor larger than LDA's
+            vec_bert = vec_bert[: len(vec_lda)]  # Fix if BERT vector larger than LDA's
             vec_lda_bert = np.c_[vec_lda * self.gamma, vec_bert]
             self.vec["LDA_BERT_FULL"] = vec_lda_bert
             if not self.autoencoder:
