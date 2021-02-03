@@ -18,6 +18,7 @@
 
 ### Unsupervised BERT and LDA based keyword extraction in Python
 
+[//]: # "The '-' after the section links is needed to make them work on GH (because of ↩s)"
 **Jump to:**<a id="jumpto"></a> [Models](#models-) • [Usage](#usage-) • [Visuals](#visuals-) • [To-Do](#to-do-)
 
 **kwx** is a toolkit for unsupervised keyword extraction based on [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and Google's [BERT](https://github.com/google-research/bert). It provides a multilingual suite of methods to process texts and then extract and analyze keywords from the created corpus. A unique focus is allowing users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
@@ -207,6 +208,7 @@ plt.show()
 
 - Including more methods to extract keywords, as well as improving the current ones
 - Adding BERT [sentence-transformers](https://github.com/UKPLab/sentence-transformers) language models as an argument in [kwx.model.extract_kws](https://github.com/andrewtavis/kwx/blob/main/kwx/model.py)
+- Splitting the keyword selection process from [kwx.model.extract_kws](https://github.com/andrewtavis/kwx/blob/main/kwx/model.py) into `kwx.model.select_kws` to allow for faster result iteration given user input
 - Allowing key phrase extraction
 - Adding t-SNE and pyLDAvis style visualizations for BERT models
 - Including more options to fine tune the cleaning process in [kwx.utils](https://github.com/andrewtavis/kwx/blob/main/kwx/utils.py)
