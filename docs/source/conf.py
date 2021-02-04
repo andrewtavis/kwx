@@ -56,7 +56,7 @@ autodoc_mock_imports = [
     "seaborn",
     "stopwordsiso",
     "gensim",
-    "pyldavis",
+    "pyLDAvis",
     "wordcloud",
     "nltk",
     "spacy",
