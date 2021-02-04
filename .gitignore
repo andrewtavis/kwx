@@ -17,10 +17,12 @@ dist
 *.egg-info
 # Caches
 __pycache__
-
-# Documentation files
-#####################
-env/
+# Virtual Environment
+.env
+.venv
+env
+venv
+kwx-dev
 
 # Display files
 ###############

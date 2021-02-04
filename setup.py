@@ -39,6 +39,8 @@ if on_rtd:
     install_requires = []
 else:
     install_requires = [
+        "pytest",
+        "black",
         "numpy",
         "xlrd",
         "pandas",
@@ -46,7 +48,7 @@ else:
         "seaborn",
         "stopwordsiso",
         "gensim",
-        "pyLDAvis",
+        "pyldavis",
         "wordcloud",
         "nltk",
         "spacy",
