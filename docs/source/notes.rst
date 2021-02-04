@@ -4,7 +4,7 @@ Release Notes
 Contributing
 ------------
 
-.. mdinclude:: ../../CONTRIBUTING.md
+.. mdinclude:: ../../.github/CONTRIBUTING.md
 
 License
 -------
@@ -15,4 +15,4 @@ License
 Change log
 ----------
 
-.. mdinclude:: ../../.github/CHANGELOG.md
+.. mdinclude:: ../../CHANGELOG.md
