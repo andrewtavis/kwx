@@ -4,7 +4,7 @@ utils
 
 Utility functions for data loading, cleaning, output formatting, and user interaction
 
-Contents
+Contents:
     load_data,
     _combine_tokens_to_str,
     _clean_text_strings,
@@ -502,10 +502,13 @@ def _prepare_corpus_path(
         return text_corpus, clean_texts
 
     else:
-        return text_corpus, [
-            _clean_text_strings(_combine_tokens_to_str(texts=t_c))
-            for t_c in text_corpus
-        ]
+        return (
+            text_corpus,
+            [
+                _clean_text_strings(_combine_tokens_to_str(texts=t_c))
+                for t_c in text_corpus
+            ],
+        )
 
 
 def translate_output(outputs, input_language, output_language):

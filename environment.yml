@@ -8,28 +8,47 @@ channels:
 dependencies:
   - _tflow_select=2.3.0
   - absl-py=0.11.0
+  - aiohttp=3.7.3
   - appdirs=1.4.4
+  - appnope=0.1.2
   - astor=0.8.1
+  - async-timeout=3.0.1
   - attrs=20.3.0
+  - backcall=0.2.0
   - black=19.10b0
   - blas=1.0
+  - bleach=3.3.0
   - boto=2.49.0
   - boto3=1.9.66
   - botocore=1.12.67
   - c-ares=1.17.1
   - ca-certificates=2021.1.19
+  - cachetools=4.2.1
   - catalogue=1.0.0
   - certifi=2020.12.5
   - cffi=1.14.4
+  - chardet=3.0.4
   - click=7.1.2
+  - cmarkgfm=0.4.2
+  - colorama=0.4.4
+  - coverage=5.4
   - cryptography=3.3.1
   - cycler=0.10.0
   - cymem=2.0.4
   - cython-blis=0.4.1
+  - decorator=4.4.2
   - docutils=0.16
   - freetype=2.10.4
+  - future=0.18.2
   - gast=0.4.0
   - gensim=3.8.0
+  - google-api-core=1.22.2
+  - google-auth=1.24.0
+  - google-cloud-core=1.5.0
+  - google-cloud-storage=1.35.0
+  - google-crc32c=1.1.1
+  - google-resumable-media=1.2.0
+  - googleapis-common-protos=1.52.0
   - grpcio=1.31.0
   - h5py=2.10.0
   - hdf5=1.10.6
@@ -38,16 +57,20 @@ dependencies:
   - importlib_metadata=2.0.0
   - iniconfig=1.1.1
   - intel-openmp=2019.4
+  - ipython=7.20.0
+  - ipython_genutils=0.2.0
+  - jedi=0.17.2
   - jmespath=0.10.0
-  - joblib=1.0.0
   - jpeg=9b
   - jsonschema=3.0.2
   - keras=2.3.1
   - keras-applications=1.0.8
   - keras-base=2.3.1
   - keras-preprocessing=1.1.2
+  - keyring=22.0.1
   - kiwisolver=1.3.1
   - lcms2=2.11
+  - libcrc32c=1.1.1
   - libcxx=10.0.0
   - libedit=3.1.20191231
   - libffi=3.3
@@ -65,6 +88,7 @@ dependencies:
   - mkl_fft=1.2.0
   - mkl_random=1.1.1
   - more-itertools=8.6.0
+  - multidict=4.7.6
   - murmurhash=1.0.5
   - mypy_extensions=0.4.3
   - ncurses=6.2
@@ -75,34 +99,48 @@ dependencies:
   - openssl=1.1.1i
   - packaging=20.9
   - pandas=1.2.1
+  - parso=0.7.0
   - pathspec=0.7.0
+  - pexpect=4.8.0
+  - pickleshare=0.7.5
   - pillow=8.1.0
   - pip=20.3.3
+  - pkginfo=1.7.0
   - plac=1.1.0
   - pluggy=0.13.1
   - preshed=3.0.2
+  - prompt-toolkit=3.0.8
   - protobuf=3.14.0
+  - ptyprocess=0.7.0
   - py=1.10.0
+  - pyasn1=0.4.8
+  - pyasn1-modules=0.2.8
   - pycparser=2.20
+  - pygments=2.7.4
   - pyopenssl=20.0.1
   - pyparsing=2.4.7
   - pyrsistent=0.17.3
   - pysocks=1.7.1
   - pytest=6.2.2
+  - pytest-cov=2.11.1
   - python=3.7.9
   - python-dateutil=2.8.1
   - pytz=2021.1
   - pyyaml=5.4.1
   - readline=8.1
+  - readme_renderer=24.0
   - regex=2020.11.13
   - requests=2.25.1
+  - requests-toolbelt=0.9.1
+  - rfc3986=1.4.0
+  - rsa=4.7
   - s3transfer=0.1.13
   - scikit-learn=0.23.2
-  - scipy=1.5.2
+  - scipy=1.6.0
   - seaborn=0.11.1
   - setuptools=52.0.0
   - six=1.15.0
-  - smart_open=1.8.0
+  - smart_open=4.1.2
   - spacy=2.3.5
   - sqlite=3.33.0
   - srsly=1.0.5
@@ -117,25 +155,29 @@ dependencies:
   - toml=0.10.1
   - tornado=6.1
   - tqdm=4.56.0
+  - traitlets=5.0.5
+  - twine=3.3.0
   - typed-ast=1.4.2
+  - typing-extensions=3.7.4.3
   - typing_extensions=3.7.4.3
   - urllib3=1.24.3
   - wasabi=0.8.2
+  - wcwidth=0.2.5
+  - webencodings=0.5.1
   - werkzeug=1.0.1
   - wheel=0.36.2
   - wrapt=1.12.1
   - xlrd=2.0.1
   - xz=5.2.5
   - yaml=0.2.5
+  - yarl=1.5.1
   - zipp=3.4.0
   - zlib=1.2.11
   - zstd=1.4.5
   - pip:
-    - chardet==3.0.4
     - emoji==1.2.0
     - filelock==3.0.12
     - funcy==1.15
-    - future==0.18.2
     - googletrans==3.0.0
     - h11==0.9.0
     - h2==3.2.0
@@ -145,15 +187,16 @@ dependencies:
     - httpx==0.13.3
     - hyperframe==5.2.0
     - jinja2==2.11.3
+    - joblib==1.0.1
     - markupsafe==1.1.1
     - numexpr==2.7.2
-    - pyldavis==2.1.2
+    - pyldavis==3.2.0
     - sacremoses==0.0.43
     - sentence-transformers==0.4.1.2
     - sentencepiece==0.1.95
     - sniffio==1.2.0
     - stopwordsiso==0.6.1
-    - tokenizers==0.9.4
+    - tokenizers==0.10.1
     - torch==1.7.1
-    - transformers==4.2.2
+    - transformers==4.3.2
     - wordcloud==1.8.1

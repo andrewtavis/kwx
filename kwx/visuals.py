@@ -4,8 +4,7 @@ visuals
 
 Functions for keyword and topic visualization
 
-Contents
---------
+Contents:
     save_vis,
     graph_topic_num_evals,
     gen_word_cloud,
@@ -84,9 +83,7 @@ def save_vis(vis, save_file, file_name):
         else:
             if os.path.exists(save_file):
                 vis.savefig(
-                    save_file + f"/{file_name}.png",
-                    bbox_inches="tight",
-                    dpi=300,
+                    save_file + f"/{file_name}.png", bbox_inches="tight", dpi=300,
                 )
 
             else:
@@ -264,11 +261,7 @@ def graph_topic_num_evals(
         coherence_dict = {}
 
         disable = not verbose
-        for t_n in tqdm(
-            topic_nums_to_compare,
-            desc=f"{m}-topics",
-            disable=disable,
-        ):
+        for t_n in tqdm(topic_nums_to_compare, desc=f"{m}-topics", disable=disable,):
             tm = topic_model.TopicModel(num_topics=t_n, method=m, bert_model=bert_model)
             tm.fit(
                 texts=clean_texts, text_corpus=text_corpus, method=m, m_clustering=None

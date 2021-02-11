@@ -4,7 +4,7 @@ model
 
 Functions for modeling text corpuses and extracting keywords
 
-Contents
+Contents:
     get_topic_words,
     get_coherence,
     _order_and_subset_by_coherence,

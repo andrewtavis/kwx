@@ -4,8 +4,8 @@ topic_model
 
 The unsupervised learning topic model for keyword extraction
 
-Contents
-    TopicModel Class
+Contents:
+    TopicModel Class:
         _vectorize,
         fit,
         predict
