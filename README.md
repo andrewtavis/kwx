@@ -5,14 +5,14 @@
 --------------------------------------
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![travis](https://img.shields.io/travis/andrewtavis/kwx.svg?logo=travis-ci)](https://travis-ci.org/andrewtavis/kwx)
-[![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/master/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
+[![travis](https://img.shields.io/travis/com/andrewtavis/kwx.svg?logo=travis-ci)](https://www.travis-ci.com/github/andrewtavis/kwx)
+[![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg)](https://pypi.org/project/kwx/)
 [![pypistatus](https://img.shields.io/pypi/status/kwx.svg)](https://pypi.org/project/kwx/)
-[![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE.text)
 [![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md)
+[![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md)
 [![coc](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md)
 
 
@@ -26,8 +26,17 @@
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods. Also see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/kwx/languages.py) for all available languages.
 
 # Installation via PyPi
+
+kwx can be downloaded from pypi via pip our sourced directly from this repository:
+
 ```bash
 pip install kwx
+```
+
+```bash
+git clone https://github.com/andrewtavis/kwx.git
+cd kwx
+python setup.py install
 ```
 
 ```python

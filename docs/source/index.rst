@@ -10,10 +10,10 @@
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |travis| image:: https://img.shields.io/travis/andrewtavis/kwx.svg?logo=travis-ci
-    :target: https://travis-ci.org/andrewtavis/kwx
+.. |travis| image:: https://img.shields.io/travis/com/andrewtavis/kwx.svg?logo=travis-ci
+    :target: https://www.travis-ci.com/github/andrewtavis/kwx)
 
-.. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/master/graphs/badge.svg
+.. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg
     :target: https://codecov.io/gh/andrewtavis/kwx
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python
@@ -26,13 +26,13 @@
     :target: https://pypi.org/project/kwx/
 
 .. |license| image:: https://img.shields.io/github/license/andrewtavis/kwx.svg
-    :target: https://github.com/andrewtavis/kwx/blob/main/LICENSE
+    :target: https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt
 
 .. |codestyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
 .. |contributions| image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg
-    :target: https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md
+    :target: https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md
 
 .. |coc| image:: https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md
@@ -44,6 +44,12 @@ Installation
 .. code-block:: shell
 
     pip install kwx
+
+.. code-block:: shell
+
+    git clone https://github.com/andrewtavis/kwx.git
+    cd kwx
+    python setup.py install
 
 .. code-block:: python
 

@@ -39,8 +39,7 @@ if on_rtd:
     install_requires = []
 else:
     install_requires = [
-        "pytest",
-        "black",
+        "pytest-cov",
         "numpy",
         "xlrd",
         "pandas",

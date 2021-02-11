@@ -31,4 +31,6 @@ kwx-dev
 
 # Testing files
 ###############
+examples/data/
+.coverage
 _*.ipynb

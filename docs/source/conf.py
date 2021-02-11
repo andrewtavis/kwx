@@ -48,6 +48,7 @@ autodoc_member_order = "bysource"
 # To avoid installing Tensorflow and all its dependencies when building doc
 # https://stackoverflow.com/a/15912502/8729698
 autodoc_mock_imports = [
+    "pytest-cov",
     "numpy",
     "xlrd",
     "pandas",
