@@ -4,7 +4,7 @@ python:
   - "3.8"
 before_install:
   - "pip install -U pip"
-  - "python setup.py install"
+  - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
 script:
 - pytest -s --cov=kwx tests
 after_success:
