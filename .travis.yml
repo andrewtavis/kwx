@@ -22,6 +22,6 @@ install:
   - conda activate test-environment
   - python -m pip install stopwordsiso pyldavis wordcloud emoji googletrans sentence-transformers
 script:
-- pytest -s --cov=kwx tests -W ignore::DeprecationWarning -W ignore::FutureWarning
+- pytest -s --cov=kwx tests
 after_success:
 - bash <(curl -s https://codecov.io/bash)
