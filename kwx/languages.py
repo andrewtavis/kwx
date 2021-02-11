@@ -6,7 +6,7 @@ Module for organizing language dependencies for text cleaning
 
 The following languages have been selected because their stopwords can be removed via https://github.com/stopwords-iso/stopwords-iso/tree/master/python
 
-Contents
+Contents:
     lem_abbr_dict,
     stem_abbr_dict,
     sw_abbr_dict

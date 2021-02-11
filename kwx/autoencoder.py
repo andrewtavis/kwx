@@ -4,8 +4,8 @@ autoencoder
 
 The autoencoder for combining topic modeling techniques
 
-Contents
-    Autoencoder Class
+Contents:
+    Autoencoder Class:
         _compile,
         fit
 """
