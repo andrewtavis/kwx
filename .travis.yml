@@ -3,8 +3,9 @@ language: python
 python:
   - "3.8"
 before_install:
-  - "pip install -U pip"
-  - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
+  - python -m pip install --upgrade pip
+install:
+  - pip install --user -r requirements.txt
 script:
 - pytest -s --cov=kwx tests
 after_success:
