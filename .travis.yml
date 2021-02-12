@@ -1,23 +1,32 @@
 dist: xenial
 language: python
-python:
-  - "3.7"
+
+jobs:
+  include:
+    - python: "3.7"
+      env: DEPS="pytest-cov numpy xlrd pandas matplotlib seaborn gensim nltk spacy scikit-learn keras IPython"
+
 install:
-  # We do this conditionally because it saves us some downloading if the
-  # version is the same.
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - source "$HOME/miniconda/etc/profile.d/conda.sh"
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  # Useful for debugging any issues with conda
-  - conda info -a
 
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pytest-cov numpy xlrd pandas matplotlib seaborn gensim nltk spacy scikit-learn keras IPython
+  # For debugging
+  - echo $PATH
+  - which python
+  - conda info -a
+  - conda list
+
+  - conda create -q -n test-environment --yes $DEPS python=$TRAVIS_PYTHON_VERSION
   - conda activate test-environment
+
   - python -m pip install stopwordsiso pyldavis wordcloud emoji googletrans sentence-transformers
+
 script:
 - pytest -s --cov=kwx tests
+
 after_success:
 - bash <(curl -s https://codecov.io/bash)
