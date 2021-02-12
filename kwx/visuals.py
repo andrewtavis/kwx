@@ -668,14 +668,14 @@ def t_sne(
         columns=["topic_{}".format(i) for i in range(num_topics)]
     )
 
-    for i in range(len(bow_corpus)):
+    for i, b in enumerate(bow_corpus):
         df_topic_coherences.loc[i] = [0] * num_topics
 
-        output = dirichlet_model.__getitem__(bow=bow_corpus[i], eps=0)
+        output = dirichlet_model.__getitem__(bow=b, eps=0)
 
-        for j in range(len(output)):
-            topic_num = output[j][0]
-            coherence = output[j][1]
+        for o in output:
+            topic_num = o[0]
+            coherence = o[1]
             df_topic_coherences.iloc[i, topic_num] = coherence
 
     for i in range(num_topics):
@@ -872,9 +872,9 @@ def t_sne(
                     linestyle="none",
                     marker="o",
                     markersize=8,
-                    markerfacecolor=colors[i],
+                    markerfacecolor=c,
                 )
-                for i in range(len(colors))
+                for i, c in enumerate(colors)
             ]
             ax.legend(
                 proxy_handles,

@@ -70,7 +70,7 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
         map(lambda x: list(map(lambda x: x[0], x[:num_keywords])), word_counts)
     )
 
-    non_blank_topic_idxs = [i for i in range(len(topics)) if topics[i] != []]
+    non_blank_topic_idxs = [i for i, t in enumerate(topics) if t != []]
     topics = [topics[i] for i in non_blank_topic_idxs]
 
     return topics, non_blank_topic_idxs
@@ -193,9 +193,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
         keys_ordered = sorted([k for k in counts_dict.keys()])
 
         # Map to the range from 0 to the number of non-blank topics
-        counts_dict_mapped = {
-            i: counts_dict[keys_ordered[i]] for i in range(len(keys_ordered))
-        }
+        counts_dict_mapped = {i: counts_dict[k] for i, k in enumerate(keys_ordered)}
 
         # Derive the average assignment of the topics
         topic_averages = [
@@ -218,10 +216,10 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
 
     # Create selection indexes for each topic given its average coherence and how many keywords are wanted
     selection_indexes = [
-        list(range(int(math.floor(num_keywords * ordered_topic_averages[i]))))
-        if math.floor(num_keywords * ordered_topic_averages[i]) > 0
+        list(range(int(math.floor(num_keywords * a))))
+        if math.floor(num_keywords * a) > 0
         else [0]
-        for i in range(len(ordered_topic_averages))
+        for i, a in enumerate(ordered_topic_averages)
     ]
 
     total_indexes = sum([len(i) for i in selection_indexes])

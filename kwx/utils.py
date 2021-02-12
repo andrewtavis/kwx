@@ -278,13 +278,13 @@ def clean_and_tokenize_texts(
     bigrams = Phrases(
         sentences=tokenized_texts, min_count=3, threshold=5.0
     )  # minimum count for a bigram to be included is 3
-    for i in range(len(tokenized_texts)):
-        for token in bigrams[tokenized_texts[i]]:
+    for i, t in enumerate(tokenized_texts):
+        for token in bigrams[t]:
             if "_" in token:
                 # Token is a bigram, so add it to the tokens
-                tokenized_texts[i].insert(0, token)
+                t.insert(0, token)
 
-        tokens_with_bigrams.append(tokenized_texts[i])
+        tokens_with_bigrams.append(t)
 
     # Lemmatize or stem words (try the former first, then the latter)
     nlp = None
@@ -348,9 +348,7 @@ def clean_and_tokenize_texts(
         )
 
     # Derive those texts that still have valid words
-    non_empty_token_indexes = [
-        i for i in range(len(min_len_freq_tokens)) if min_len_freq_tokens[i] != []
-    ]
+    non_empty_token_indexes = [i for i, t in enumerate(min_len_freq_tokens) if t != []]
     text_corpus = [min_len_freq_tokens[i] for i in non_empty_token_indexes]
     clean_texts = [_clean_text_strings(s=texts[i]) for i in non_empty_token_indexes]
 
@@ -594,13 +592,11 @@ def organize_by_pos(outputs, output_language):
         ordered_outputs.append(other)
 
         outputs_dict = {}
-        for i in range(len(ordered_outputs)):
+        for i, o in enumerate(ordered_outputs):
             if i == 0:
-                outputs_dict["Nouns:"] = ordered_outputs[i]
+                outputs_dict["Nouns:"] = o
             if i == 1:
-                outputs_dict["Nouns:"] += ordered_outputs[
-                    i
-                ]  # proper nouns put in nouns
+                outputs_dict["Nouns:"] += o  # proper nouns put in nouns
             if i == 2:
                 outputs_dict["Adjectives:"] = ordered_outputs[i]
             if i == 3:
