@@ -22,7 +22,7 @@ dependencies:
   - botocore=1.12.67
   - bz2file=0.98
   - c-ares=1.17.1
-  - ca-certificates=2021.1.19
+  - ca-certificates=2020.12.5
   - cachetools=4.2.1
   - catalogue=1.0.0
   - certifi=2020.12.5
@@ -107,7 +107,7 @@ dependencies:
   - numpy=1.19.2
   - numpy-base=1.19.2
   - olefile=0.46
-  - openssl=1.1.1i
+  - openssl=1.1.1j
   - packaging=20.9
   - pandas=1.2.1
   - pandoc=2.11
@@ -186,6 +186,7 @@ dependencies:
   - webencodings=0.5.1
   - werkzeug=1.0.1
   - wheel=0.36.2
+  - wordcloud=1.8.1
   - wrapt=1.12.1
   - xlrd=2.0.1
   - xz=5.2.5
@@ -233,4 +234,3 @@ dependencies:
     - tokenizers==0.10.1
     - torch==1.7.1
     - transformers==4.3.2
-    - wordcloud==1.8.1
