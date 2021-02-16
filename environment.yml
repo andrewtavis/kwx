@@ -198,7 +198,6 @@ dependencies:
   - pip:
     - black==20.8b1
     - emoji==1.2.0
-    - en-core-web-sm==2.3.1
     - entrypoints==0.3
     - filelock==3.0.12
     - funcy==1.15
