@@ -1,5 +1,5 @@
 # This file may be used to create an environment using:
-# conda env create -f environment.yml
+# $ conda env create --file environment.yml
 name: kwx-dev
 channels:
   - anaconda
@@ -32,7 +32,7 @@ dependencies:
   - cmarkgfm=0.4.2
   - colorama=0.4.4
   - coverage=5.4
-  - cryptography=3.3.1
+  - cryptography>3.3.1
   - cycler=0.10.0
   - cymem=2.0.4
   - cython-blis=0.4.1

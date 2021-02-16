@@ -5,21 +5,21 @@
     :target: https://github.com/andrewtavis/kwx
 ============
 
-|rtd| |travis| |codecov| |pyversions| |pypi| |pypistatus| |license| |codestyle| |contributions| |coc|
+|rtd| |ci| |codecov| |pyversions| |pypi| |pypistatus| |license| |contributions| |coc| |codestyle|
 
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |travis| image:: https://img.shields.io/travis/com/andrewtavis/kwx.svg?logo=travis-ci
-    :target: https://www.travis-ci.com/github/andrewtavis/kwx)
+.. |ci| image:: https://img.shields.io/github/workflow/status/andrewtavis/kwx/CI?logo=github
+    :target: https://github.com/andrewtavis/kwx/actions?query=workflow%3ACI
 
 .. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg
     :target: https://codecov.io/gh/andrewtavis/kwx
 
-.. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python
+.. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998
     :target: https://pypi.org/project/kwx/
 
-.. |pypi| image:: https://badge.fury.io/py/kwx.svg
+.. |pypi| image:: https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE
     :target: https://pypi.org/project/kwx/
 
 .. |pypistatus| image:: https://img.shields.io/pypi/status/kwx.svg
@@ -28,14 +28,14 @@
 .. |license| image:: https://img.shields.io/github/license/andrewtavis/kwx.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt
 
-.. |codestyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-
 .. |contributions| image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md
 
-.. |coc| image:: https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg
+.. |coc| image:: https://img.shields.io/badge/coc-contributor%20convent-ff69b4.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md
+
+.. |codestyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
 
 Unsupervised BERT and LDA based keyword extraction in Python
 
