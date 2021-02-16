@@ -4,6 +4,7 @@ Fixtures
 """
 
 import pytest
+import pandas as pd
 from sentence_transformers import (
     SentenceTransformer,
 )  # required or the import within kwx.visuals will fail
@@ -38,21 +39,25 @@ from kwx.model import extract_kws
 from kwx.model import gen_files
 
 
-@pytest.fixture(
-    params=[
-        [
-            "This",
-            "is",
-            "a",
-            "miniature",
-            "corpus",
-            "that",
-            "has",
-            "exactly",
-            "ten",
-            "words",
-        ]
-    ]
-)
-def ten_word_corpus(request):
+texts = [
+    "@VirginAmerica SFO-PDX schedule is still MIA.",
+    "@VirginAmerica So excited for my first cross country flight LAX to MCO I've heard nothing but great things about Virgin America. #29DaysToGo",
+    "@VirginAmerica  I flew from NYC to SFO last week and couldn't fully sit in my seat due to two large gentleman on either side of me. HELP!",
+    "I ❤️ flying @VirginAmerica. ☺️👍",
+    "@VirginAmerica you know what would be amazingly awesome? BOS-FLL PLEASE!!!!!!! I want to fly with only you.",
+    "@VirginAmerica why are your first fares in May over three times more than other carriers when all seats are available to select???",
+    "@VirginAmerica I love this graphic. http://t.co/UT5GrRwAaA",
+    "@VirginAmerica I love the hipster innovation. You are a feel good brand.",
+    "@VirginAmerica will you be making BOS&gt;LAS non stop permanently anytime soon?",
+    "@VirginAmerica you guys messed up my seating.. I reserved seating with my friends and you guys gave my seat away ... 😡 I want free internet",
+]
+
+
+@pytest.fixture(params=[texts])
+def list_texts(request):
+    return request.param
+
+
+@pytest.fixture(params=[pd.DataFrame(texts, columns=["text"])])
+def df_texts(request):
     return request.param

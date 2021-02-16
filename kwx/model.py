@@ -246,7 +246,7 @@ def extract_kws(
     return_topics=False,
     ignore_words=None,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
     prompt_remove_words=True,
 ):
@@ -314,7 +314,7 @@ def extract_kws(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=1)
@@ -638,7 +638,7 @@ def gen_files(
     corpuses_to_compare=None,
     ignore_words=None,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
     prompt_remove_words=True,
     verbose=True,

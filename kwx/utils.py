@@ -150,7 +150,7 @@ def _clean_text_strings(s):
 
 def lemmatize(tokens, nlp=None):
     """
-    Lemmatizes tokens (allows for one line in each of the next try and except clauses)
+    Lemmatizes tokens
 
     Parameters
     ----------
@@ -181,7 +181,7 @@ def lemmatize(tokens, nlp=None):
 
 
 def clean_and_tokenize_texts(
-    texts, input_language=None, min_freq=2, min_word_len=4, sample_size=1
+    texts, input_language=None, min_freq=2, min_word_len=3, sample_size=1
 ):
     """
     Cleans and tokenizes a text body to prepare it for analysis
@@ -197,7 +197,7 @@ def clean_and_tokenize_texts(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=1)
@@ -374,7 +374,7 @@ def prepare_data(
     target_cols=None,
     input_language=None,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
 ):
     """
@@ -394,7 +394,7 @@ def prepare_data(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=1)
@@ -445,7 +445,7 @@ def _prepare_corpus_path(
     target_cols=None,
     input_language=None,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
 ):
     """
@@ -468,7 +468,7 @@ def _prepare_corpus_path(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=1)
@@ -632,6 +632,8 @@ def prompt_for_word_removal(ignore_words=None):
     """
     if ignore_words == None:
         ignore_words = []
+    if type(ignore_words) == str:
+        ignore_words = [ignore_words]
 
     ignore_words = [w.replace("'", "") for w in ignore_words]
 
