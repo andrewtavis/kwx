@@ -5,15 +5,15 @@
 --------------------------------------
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![travis](https://img.shields.io/travis/com/andrewtavis/kwx.svg?logo=travis-ci)](https://www.travis-ci.com/github/andrewtavis/kwx)
+[![ci](https://img.shields.io/github/workflow/status/andrewtavis/kwx/CI?logo=github)](https://github.com/andrewtavis/kwx/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
-[![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python)](https://pypi.org/project/kwx/)
-[![pypi](https://img.shields.io/pypi/v/kwx.svg)](https://pypi.org/project/kwx/)
+[![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
+[![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)
 [![pypistatus](https://img.shields.io/pypi/status/kwx.svg)](https://pypi.org/project/kwx/)
 [![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE.text)
-[![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md)
-[![coc](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md)
+[![coc](https://img.shields.io/badge/coc-contributor%20convent-ff69b4.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md)
+[![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 ### Unsupervised BERT and LDA based keyword extraction in Python
