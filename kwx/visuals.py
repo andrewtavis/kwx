@@ -102,7 +102,7 @@ def graph_topic_num_evals(
     num_keywords=10,
     topic_nums_to_compare=None,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
     metrics=True,
     fig_size=(20, 10),
@@ -156,7 +156,7 @@ def graph_topic_num_evals(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=None: sampling for non-BERT techniques)
@@ -393,7 +393,7 @@ def gen_word_cloud(
     input_language=None,
     ignore_words=None,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
     height=500,
     save_file=False,
@@ -415,7 +415,7 @@ def gen_word_cloud(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=None: sampling for non-BERT techniques)
@@ -490,7 +490,7 @@ def pyLDAvis_topics(
     input_language=None,
     num_topics=10,
     min_freq=2,
-    min_word_len=4,
+    min_word_len=3,
     sample_size=1,
     save_file=False,
     display_ipython=False,
@@ -528,7 +528,7 @@ def pyLDAvis_topics(
         min_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=4)
+        min_word_len : int (default=3)
             The smallest allowable length of a word
 
         sample_size : float (default=None: sampling for non-BERT techniques)
