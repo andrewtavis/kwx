@@ -235,7 +235,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
 
 
 def extract_kws(
-    method="lda_bert",
+    method="lda",
     text_corpus=None,
     clean_texts=None,
     input_language=None,
@@ -255,7 +255,7 @@ def extract_kws(
 
     Parameters
     ----------
-        method : str (default=lda_bert)
+        method : str (default=lda)
             The modelling method
 
             Options:
@@ -329,7 +329,7 @@ def extract_kws(
 
             - A list of togs that should be used to present the publisher
 
-            - A list of lists where sub_lists are the keywords best assosciated with the data entry
+            - A list of lists where sub_lists are the keywords best associated with the data entry
     """
     input_language = input_language.lower()
     method = method.lower()
@@ -341,6 +341,11 @@ def extract_kws(
     ), "The value for the 'method' argument is invalid. Please choose one of {}.".format(
         valid_methods
     )
+
+    if method.lower() == "tfidf":
+        assert (
+            corpuses_to_compare != None
+        ), "TFIDF requires another text corpus to be passed to the `corpuses_to_compare` argument."
 
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
@@ -667,7 +672,7 @@ def gen_files(
 
             utils.prompt_for_word_removal
 
-        incl_most_freq : bool (defualt=True)
+        incl_most_freq : bool (default=True)
             Whether to include the most frequent words in the output
 
         org_by_pos : bool (default=True)
