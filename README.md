@@ -223,4 +223,5 @@ plt.show()
 - Including more options to fine tune the cleaning process in [kwx.utils](https://github.com/andrewtavis/kwx/blob/main/kwx/utils.py)
 - Updates to [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/kwx/languages.py) as lemmatization and other linguistic package dependencies evolve
 - Creating, improving and sharing [examples](https://github.com/andrewtavis/kwx/tree/main/examples)
+- Improving [tests](https://github.com/andrewtavis/kwx/tree/main/tests) for greater [code coverage](https://codecov.io/gh/andrewtavis/kwx)
 - Updating and refining the [documentation](https://kwx.readthedocs.io/en/latest/)

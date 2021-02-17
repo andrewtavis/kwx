@@ -169,6 +169,21 @@ def df_texts(request):
 @pytest.fixture(
     params=[
         utils.clean_and_tokenize_texts(
+            texts=texts,
+            input_language="english",
+            min_freq=2,
+            min_word_len=3,
+            sample_size=1,
+        )[0]
+    ]
+)
+def short_text_corpus(request):
+    return request.param
+
+
+@pytest.fixture(
+    params=[
+        utils.clean_and_tokenize_texts(
             texts=texts_long,
             input_language="english",
             min_freq=2,
@@ -177,5 +192,5 @@ def df_texts(request):
         )[0]
     ]
 )
-def text_corpus(request):
+def long_text_corpus(request):
     return request.param
