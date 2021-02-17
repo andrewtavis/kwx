@@ -456,30 +456,8 @@ def gen_word_cloud(
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
 
-    if save_file == True:
-        plt.savefig(
-            "word_cloud_{}.png".format(time.strftime("%Y%m%d-%H%M%S")),
-            bbox_inches="tight",
-            dpi=300,
-        )
-    elif type(save_file) == str:  # a save path has been provided
-        if save_file[-4:] == ".zip":
-            with zipfile.ZipFile(save_file, mode="a") as zf:
-                plt.plot([0, 0])
-                buf = io.BytesIO()
-                plt.savefig(buf, bbox_inches="tight", dpi=300)
-                plt.close()
-                zf.writestr(zinfo_or_arcname="word_cloud.png", data=buf.getvalue())
-                zf.close()
-        else:
-            if os.path.exists(save_file):
-                plt.savefig(save_file + "/word_cloud.png", bbox_inches="tight", dpi=300)
-            else:
-                plt.savefig(
-                    "word_cloud_{}.png".format(time.strftime("%Y%m%d-%H%M%S")),
-                    bbox_inches="tight",
-                    dpi=300,
-                )
+    # Save file if directed to
+    save_vis(vis=plt, save_file=save_file, file_name="word_cloud")
 
     plt.show()
 

@@ -1,3 +1,19 @@
+### kwx 0.1.0 (Feb 17, 2021)
+
+First stable release of kwx
+
+Additions include:
+
+- Full documentation of the package
+
+- Virtual environment files
+
+- Bug fixes
+
+- Extensive testing of all modules with GH Actions and Codecov
+
+- Code of conduct and contribution guidelines
+
 ### kwx 0.0.2.2 (Jan 31, 2021)
 
 The minimum viable product of kwx:
