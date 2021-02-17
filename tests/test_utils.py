@@ -190,3 +190,45 @@ def test_prompt_for_word_removal(monkeypatch):
         "ignore",
         "also",
     ]
+
+
+def test__prepare_corpus_path(short_text_corpus, df_texts):
+    df_texts.to_csv(path_or_buf="tests/tmp_file.csv", columns=["text"])
+    result = [
+        ["virginamerica", "sfo"],
+        ["virginamerica"],
+        ["virginamerica", "fly", "sfo", "seat"],
+        ["fly", "virginamerica"],
+        ["virginamerica", "fly"],
+        ["virginamerica", "seat"],
+        ["virginamerica", "love"],
+        ["virginamerica", "love"],
+        ["virginamerica"],
+        ["virginamerica", "seat", "seat", "seat"],
+    ]
+
+    assert (
+        utils._prepare_corpus_path(
+            text_corpus="tests/tmp_file.csv",
+            target_cols="text",
+            input_language="english",
+            min_freq=2,
+            min_word_len=3,
+            sample_size=1,
+        )[0]
+        == result
+    )
+
+    os.remove("tests/tmp_file.csv")
+
+    assert (
+        utils._prepare_corpus_path(
+            text_corpus=short_text_corpus,
+            clean_texts=None,
+            input_language="english",
+            min_freq=2,
+            min_word_len=3,
+            sample_size=1,
+        )[0]
+        == result
+    )

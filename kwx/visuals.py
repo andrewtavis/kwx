@@ -708,6 +708,8 @@ def t_sne(
             "An invalid value has been passed to the 'dimension' argument - choose from 2d, 3d, or both."
         )
 
+    light_grey_tup = (242 / 256, 242 / 256, 242 / 256)
+
     if tsne_2 is not None:
         tsne_results_2 = tsne_2.fit_transform(df_topic_coherences.iloc[:, :num_topics])
 
@@ -770,7 +772,6 @@ def t_sne(
             alpha=0.3,
         )
 
-        light_grey_tup = (242 / 256, 242 / 256, 242 / 256)
         ax1.set_facecolor(light_grey_tup)
         ax1.axes.set_title("t-SNE 2-Dimensional Representation", fontsize=25)
         ax1.set_xlabel("tsne-d1", fontsize=20)
