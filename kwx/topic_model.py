@@ -55,7 +55,7 @@ class TopicModel:
         self.cluster_model = None
         self.lda_model = None
         self.vec = {}
-        self.gamma = 15  # parameter for reletive importance of LDA
+        self.gamma = 15  # parameter for relative importance of LDA
         self.method = method.lower()
         self.autoencoder = None
         self.id = method + "_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")

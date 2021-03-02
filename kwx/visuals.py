@@ -168,7 +168,7 @@ def graph_topic_num_evals(
             Options:
                 stability: model stability based on Jaccard similarity
 
-                coherence: how much the words assosciated with model topics co-occur
+                coherence: how much the words associated with model topics co-occur
 
         fig_size : tuple (default=(20,10))
             The size of the figure
@@ -283,13 +283,13 @@ def graph_topic_num_evals(
         if "stability" in metrics:
             for j in range(0, len(topic_nums_to_compare) - 1):
                 jaccard_sims = []
-                for t1, topic1 in enumerate(
+                for t1, topic1 in enumerate(  # pylint: disable=unused-variable
                     topics_dict[topic_nums_to_compare[j]]
-                ):  # pylint: disable=unused-variable
+                ):
                     sims = []
-                    for t2, topic2 in enumerate(
+                    for t2, topic2 in enumerate(  # pylint: disable=unused-variable
                         topics_dict[topic_nums_to_compare[j + 1]]
-                    ):  # pylint: disable=unused-variable
+                    ):
                         sims.append(jaccard_similarity(topic1, topic2))
 
                     jaccard_sims.append(sims)

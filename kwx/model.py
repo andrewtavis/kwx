@@ -396,7 +396,7 @@ def extract_kws(
             if type(corpuses_to_compare) == str:
                 try:
                     os.path.exists(corpuses_to_compare)  # a path has been provided
-                    corpuses_to_compare = utils.prepare_text_data(
+                    corpuses_to_compare = utils.prepare_data(
                         data=corpuses_to_compare,
                         input_language=input_language,
                         min_freq=min_freq,
@@ -412,7 +412,7 @@ def extract_kws(
                     corpus_paths = [c for c in corpuses_to_compare]
                     for c in corpus_paths:
                         corpuses_to_compare.append(
-                            utils.prepare_text_data(
+                            utils.prepare_data(
                                 data=c,
                                 input_language=input_language,
                                 min_freq=min_freq,
@@ -444,9 +444,9 @@ def extract_kws(
             tfidf_vectorizer = TfidfVectorizer(
                 use_idf=True, smooth_idf=True, sublinear_tf=True
             )
-            model = tfidf_vectorizer.fit_transform(
+            model = tfidf_vectorizer.fit_transform(  # pylint: disable=unused-variable
                 comparative_string_corpus
-            )  # pylint: disable=unused-variable
+            )
             corpus_scored = tfidf_vectorizer.transform(comparative_string_corpus)
             terms = tfidf_vectorizer.get_feature_names()
             scores = corpus_scored.toarray().flatten().tolist()

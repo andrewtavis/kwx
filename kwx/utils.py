@@ -167,8 +167,8 @@ def lemmatize(tokens, nlp=None):
     allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
 
     lemmatized_tokens = []
-    for tokens in tokens:
-        combined_tokens = _combine_tokens_to_str(texts=tokens)
+    for t in tokens:
+        combined_tokens = _combine_tokens_to_str(texts=t)
 
         lem_tokens = nlp(combined_tokens)
         lemmed_tokens = [
