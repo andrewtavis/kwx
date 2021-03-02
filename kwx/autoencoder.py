@@ -11,6 +11,10 @@ Contents:
 """
 
 from sklearn.model_selection import train_test_split
+
+import warnings
+
+warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
 import keras
 from keras.layers import Input, Dense
 from keras.models import Model

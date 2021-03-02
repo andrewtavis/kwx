@@ -26,6 +26,9 @@ import pandas as pd
 from gensim.models import CoherenceModel
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+import warnings
+
+warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
 from sentence_transformers import SentenceTransformer
 
 from kwx import utils, languages, topic_model, visuals
