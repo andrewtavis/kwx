@@ -53,7 +53,7 @@ Although not as statistically strong as the following machine learning models, L
 
 ### BERT
 
-[Bidirectional Encoder Representations from Transformers](https://github.com/google-research/bert) derives representations of words based running nlp models over open source Wikipedia data. These representations are then able to be leveraged to derive corpus topics.
+[Bidirectional Encoder Representations from Transformers](https://github.com/google-research/bert) derives representations of words based on nlp models ran over open source Wikipedia data. These representations are then leveraged to derive corpus topics.
 
 ### LDA with BERT embeddings
 
