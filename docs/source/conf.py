@@ -167,7 +167,7 @@ texinfo_documents = [
         "kwx Documentation",
         author,
         "kwx",
-        "Unsupervised BERT and LDA based keyword extraction in Python",
+        "Multilingual BERT and LDA based keyword extraction in Python",
         "Miscellaneous",
     )
 ]

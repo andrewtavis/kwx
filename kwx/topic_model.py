@@ -15,7 +15,7 @@ from datetime import datetime
 import numpy as np
 
 from gensim import corpora
-from gensim.models import LdaModel
+from gensim.models.ldamulticore import LdaMulticore
 from sklearn.cluster import KMeans
 
 from kwx.autoencoder import Autoencoder
@@ -89,13 +89,12 @@ class TopicModel:
 
         if method == "lda":
             if not self.lda_model:
-                self.lda_model = LdaModel(
+                self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,
                     id2word=self.dirichlet_dict,
                     chunksize=len(self.bow_corpus),
                     passes=20,  # increase to run model more iterations
-                    alpha="auto",
                     random_state=None,
                 )
 
@@ -193,13 +192,12 @@ class TopicModel:
 
         if method == "lda":
             if not self.lda_model:
-                self.lda_model = LdaModel(
+                self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,
                     id2word=self.dirichlet_dict,
                     chunksize=len(self.bow_corpus),
                     passes=20,  # increase to run model more iterations
-                    alpha="auto",
                     random_state=None,
                 )
 

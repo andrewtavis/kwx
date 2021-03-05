@@ -26,7 +26,7 @@ setup_args = dict(
         "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
     ],
-    description="Unsupervised BERT and LDA based keyword extraction in Python",
+    description="Multilingual BERT and LDA based keyword extraction in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_namespace_packages(),
