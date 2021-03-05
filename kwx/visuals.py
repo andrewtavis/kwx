@@ -34,7 +34,7 @@ import pyLDAvis
 import pyLDAvis.gensim
 from wordcloud import WordCloud
 
-from gensim.models import LdaModel
+from gensim.models.ldamulticore import LdaMulticore
 from gensim import corpora
 from sklearn.manifold import TSNE
 from sentence_transformers import SentenceTransformer
@@ -631,14 +631,12 @@ def t_sne(
     dirichlet_dict = corpora.Dictionary(text_corpus)
     bow_corpus = [dirichlet_dict.doc2bow(text) for text in text_corpus]
 
-    dirichlet_model = LdaModel(
+    dirichlet_model = LdaMulticore(
         corpus=bow_corpus,
         id2word=dirichlet_dict,
         num_topics=num_topics,
-        update_every=1,
         chunksize=len(bow_corpus),
         passes=10,
-        alpha="auto",
         random_state=42,
     )  # set for testing
 
