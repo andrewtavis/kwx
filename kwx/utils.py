@@ -141,8 +141,6 @@ def _clean_text_strings(s):
     s = re.sub(r"\(.*?\)", ". ", s)
     s = re.sub(r"\W+?\.", ".", s)
     s = re.sub(r"(\.|\?|!)(\w)", r"\1 \2", s)
-    s = re.sub(r" ing ", " ", s)
-    s = re.sub(r"product received for free[.| ]", " ", s)
     s = re.sub(r"(.{2,}?)\1{1,}", r"\1", s)
 
     return s.strip()
@@ -301,7 +299,7 @@ def clean_and_tokenize_texts(
             pass
 
     if nlp == None:
-        # Lemmatization failed, so try stemmiing
+        # Lemmatization failed, so try stemming
         stemmer = None
         if input_language in SnowballStemmer.languages:
             stemmer = SnowballStemmer(input_language)
