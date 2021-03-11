@@ -24,7 +24,7 @@ copyright = "2020-2021, kwx developers (BSD License)"
 author = "kwx developers"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.3"
+release = "0.1.4"
 
 
 # -- General configuration ---------------------------------------------------
@@ -167,7 +167,7 @@ texinfo_documents = [
         "kwx Documentation",
         author,
         "kwx",
-        "Multilingual BERT and LDA based keyword extraction in Python",
+        "BERT, LDA, and TFIDF based keyword extraction in Python",
         "Miscellaneous",
     )
 ]

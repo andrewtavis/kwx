@@ -16,7 +16,7 @@
 [![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![colab](https://img.shields.io/badge/%20-Open%20in%20Colab-097ABB.svg?logo=google-colab&color=097ABB&labelColor=525252)](https://colab.research.google.com/github/andrewtavis/kwx)
 
-### Multilingual BERT and LDA based keyword extraction in Python
+### BERT, LDA, and TFIDF based keyword extraction in Python
 
 [//]: # "The '-' after the section links is needed to make them work on GH (because of ↩s)"
 **Jump to:**<a id="jumpto"></a> [Models](#models-) • [Usage](#usage-) • [Visuals](#visuals-) • [To-Do](#to-do-)

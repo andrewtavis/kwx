@@ -40,7 +40,7 @@
 .. |colab| image:: https://img.shields.io/badge/%20-Open%20in%20Colab-097ABB.svg?logo=google-colab&color=097ABB&labelColor=525252
     :target: https://colab.research.google.com/github/andrewtavis/kwx
 
-Multilingual BERT and LDA based keyword extraction in Python
+BERT, LDA, and TFIDF based keyword extraction in Python
 
 Installation
 ------------
