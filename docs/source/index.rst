@@ -31,7 +31,7 @@
 .. |contributions| image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md
 
-.. |coc| image:: https://img.shields.io/badge/coc-contributor%20convent-ff69b4.svg
+.. |coc| image:: https://img.shields.io/badge/coc-Contributor%20Covenant-ff69b4.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md
 
 .. |codestyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
