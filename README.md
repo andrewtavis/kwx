@@ -53,7 +53,7 @@ Although not as statistically strong as the following machine learning models, L
 
 ### BERT
 
-[Bidirectional Encoder Representations from Transformers](https://github.com/google-research/bert) derives representations of words based on nlp models ran over open source Wikipedia data. These representations are then leveraged to derive corpus topics.
+[Bidirectional Encoder Representations from Transformers](https://github.com/google-research/bert) derives representations of words based on nlp models ran over open-source Wikipedia data. These representations are then leveraged to derive corpus topics.
 
 ### LDA with BERT embeddings
 
@@ -78,19 +78,25 @@ num_keywords = 15
 num_topics = 10
 ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
-# Arguments from examples.kw_extraction
 text_corpus = prepare_data(
-    data='df-or-csv/xlsx-path',
-    target_cols='cols-where-texts-are',
+    data='df_or_csv_xlsx_path',
+    target_cols='cols_where_texts_are',
     input_language=input_language,
-    min_freq=2,  # remove infrequent words
-    min_word_len=3,  # remove small words
+    min_freq=2,
+    min_word_len=3,
     sample_size=1,  # sample size (for testing)
 )[0]
 
+# Remove n-grams for BERT training
+# Clean texts without n-grams has been found to be better than raw texts for BERT
+# Retain n-grams for LDA and TFIDF
+corpus_no_ngrams = [
+    " ".join([t for t in text.split(" ") if "_" not in t]) for text in text_corpus
+]
+
 bert_kws = extract_kws(
-    method='BERT', # 'LDA', 'BERT', or 'LDA_BERT'
-    text_corpus=text_corpus,
+    method='BERT', # 'BERT', 'LDA_BERT', 'LDA', 'TFIDF', 'frequency'
+    text_corpus=corpus_no_ngrams,
     input_language=input_language,
     output_language=None,  # allows the output to be translated
     num_keywords=num_keywords,
