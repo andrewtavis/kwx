@@ -88,7 +88,7 @@ text_corpus = prepare_data(
 )[0]
 
 # Remove n-grams for BERT training
-# Clean texts without n-grams has been found to be better than raw texts for BERT
+# Clean texts without n-grams have been found to be better than raw texts for BERT
 # Retain n-grams for LDA and TFIDF
 corpus_no_ngrams = [
     " ".join([t for t in text.split(" ") if "_" not in t]) for text in text_corpus
