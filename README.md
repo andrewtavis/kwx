@@ -84,8 +84,8 @@ ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
 # kwx.utils.clean() can be used on a list of lists
 text_corpus = prepare_data(
-    data='df_or_csv_xlsx_path',
-    target_cols='cols_where_texts_are',
+    data="df_or_csv_xlsx_path",
+    target_cols="cols_where_texts_are",
     input_language=input_language,
     min_token_freq=0,  # for BERT
     min_token_len=0,  # for BERT
@@ -107,7 +107,7 @@ corpus_no_ngrams = [
 # We can pass keywords for sentence_transformers.SentenceTransformer.encode,
 # gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer
 bert_kws = extract_kws(
-    method='BERT', # 'BERT', 'LDA_BERT', 'LDA', 'TFIDF', 'frequency'
+    method="BERT", # "BERT", "LDA_BERT", "LDA", "TFIDF", "frequency"
     bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus=corpus_no_ngrams,  # automatically tokenized if using LDA
     input_language=input_language,
@@ -142,7 +142,7 @@ The model will be re-ran until all words known to be unreasonable are removed fo
 
 # Visuals [`↩`](#jumpto)
 
-[kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/kwx/visuals.py) includes functions for both presenting and analyzing the results of keyword extraction.
+[kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/kwx/visuals.py) includes the following functions for presenting and analyzing the results of keyword extraction:
 
 ### Topic Number Evaluation
 
