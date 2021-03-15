@@ -72,9 +72,10 @@ Keyword extraction can be useful to analyze surveys, tweets and other kinds of s
 
 The following outlines using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
 
+### Text Cleaning
+
 ```python
 from kwx.utils import prepare_data
-from kwx.model import extract_kws
 
 input_language = "english" # see kwx.languages for options
 num_keywords = 15
@@ -91,6 +92,12 @@ text_corpus = prepare_data(
     remove_stopwords=False,  # for BERT
     verbose=True,
 )
+```
+
+### Keyword Extraction
+
+```python
+from kwx.model import extract_kws
 
 # Remove n-grams for BERT training
 corpus_no_ngrams = [
