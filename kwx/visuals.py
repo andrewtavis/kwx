@@ -12,12 +12,13 @@ Contents:
     t_sne
 """
 
-import os
-import math
-import time
-import zipfile
+import inspect
 import io
-import importlib
+import math
+import os
+import time
+import warnings
+import zipfile
 
 import numpy as np
 import pandas as pd
@@ -37,9 +38,11 @@ from wordcloud import WordCloud
 from gensim.models.ldamulticore import LdaMulticore
 from gensim import corpora
 from sklearn.manifold import TSNE
+
+warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 from sentence_transformers import SentenceTransformer
 
-from kwx import utils, languages, model, topic_model
+from kwx import utils, model, topic_model
 
 
 def save_vis(vis, save_file, file_name):
@@ -96,19 +99,16 @@ def save_vis(vis, save_file, file_name):
 
 def graph_topic_num_evals(
     method=["lda", "lda_bert"],
+    bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus=None,
-    clean_texts=None,
-    input_language=None,
     num_keywords=10,
     topic_nums_to_compare=None,
-    min_freq=2,
-    min_word_len=3,
-    sample_size=1,
     metrics=True,
     fig_size=(20, 10),
     save_file=False,
     return_ideal_metrics=False,
     verbose=True,
+    **kwargs,
 ):
     """
     Graphs metrics for the given models over the given number of topics
@@ -133,18 +133,11 @@ def graph_topic_num_evals(
 
                     - The combination of LDA and BERT via an autoencoder
 
+        bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
+            The BERT model to use
+
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
-
-            Note 1: generated using prepare_text_data
-
-            Note 2: if a str is provided, then the data will be loaded from a path
-
-        clean_texts : list
-            Text strings that are formatted for cluster models
-
-        input_language : str (default=None)
-            The spoken language in which the text is found
 
         num_keywords : int (default=10)
             The number of keywords that should be extracted
@@ -152,12 +145,6 @@ def graph_topic_num_evals(
         topic_nums_to_compare : list (default=None)
             The number of topics to compare metrics over
             Note: None selects all numbers from 1 to num_keywords
-
-        min_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus
-
-        min_word_len : int (default=3)
-            The smallest allowable length of a word
 
         sample_size : float (default=None: sampling for non-BERT techniques)
             The size of a sample for BERT models
@@ -182,6 +169,9 @@ def graph_topic_num_evals(
         verbose : bool (default=True)
             Whether to show a tqdm progress bar for the query
 
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore
+
     Returns
     -------
         ax : matplotlib axis
@@ -198,20 +188,6 @@ def graph_topic_num_evals(
         method = [method]
 
     method = [m.lower() for m in method]
-
-    input_language = input_language.lower()
-
-    if input_language in languages.lem_abbr_dict().keys():
-        input_language = languages.lem_abbr_dict()[input_language]
-
-    text_corpus, clean_texts = utils._prepare_corpus_path(
-        text_corpus=text_corpus,
-        clean_texts=clean_texts,
-        input_language=input_language,
-        min_freq=min_freq,
-        min_word_len=min_word_len,
-        sample_size=sample_size,
-    )
 
     def jaccard_similarity(topic_1, topic_2):
         """
@@ -249,23 +225,21 @@ def graph_topic_num_evals(
         # If topic numbers are given, then add one more for comparison
         topic_nums_to_compare = topic_nums_to_compare + [topic_nums_to_compare[-1] + 1]
 
-    bert_model = None
-    if "bert" in method or "lda_bert" in method:
-        # Multilingual BERT model trained on the top 100+ Wikipedias for semantic textual similarity
-        bert_model = SentenceTransformer("xlm-r-bert-base-nli-stsb-mean-tokens")
-
     ideal_topic_num_dict = {}
     for m in method:
         topics_dict = {}
         stability_dict = {}
         coherence_dict = {}
 
-        disable = not verbose
-        for t_n in tqdm(topic_nums_to_compare, desc=f"{m}-topics", disable=disable,):
+        bert_model = None
+        if m == "bert" or m == "lda_bert":
+            bert_model = SentenceTransformer(bert_st_model)
+
+        for t_n in tqdm(
+            topic_nums_to_compare, desc=f"{m}-topics", disable=not verbose,
+        ):
             tm = topic_model.TopicModel(num_topics=t_n, method=m, bert_model=bert_model)
-            tm.fit(
-                texts=clean_texts, text_corpus=text_corpus, method=m, m_clustering=None
-            )
+            tm.fit(text_corpus=text_corpus, method=m, m_clustering=None, **kwargs)
 
             # Assign topics given the current number t_n
             topics_dict[t_n] = model._order_and_subset_by_coherence(
@@ -389,14 +363,7 @@ def graph_topic_num_evals(
 
 
 def gen_word_cloud(
-    text_corpus,
-    input_language=None,
-    ignore_words=None,
-    min_freq=2,
-    min_word_len=3,
-    sample_size=1,
-    height=500,
-    save_file=False,
+    text_corpus, ignore_words=None, height=500, save_file=False,
 ):
     """
     Generates a word cloud for a group of words
@@ -406,20 +373,8 @@ def gen_word_cloud(
         text_corpus : list or list of lists
             The text_corpus that should be plotted
 
-        input_language : str (default=None)
-            The spoken language in which the text is found
-
         ignore_words : str or list (default=None)
-            Words that should be removed (such as the name of the publisher)
-
-        min_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus
-
-        min_word_len : int (default=3)
-            The smallest allowable length of a word
-
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
+            Words that should be removed
 
         height : int (default=500)
             The height of the resulting figure
@@ -433,17 +388,8 @@ def gen_word_cloud(
         plt.savefig or plt.show : pyplot methods
             A word cloud based on the occurrences of words in a list without removed words
     """
-    text_corpus = utils._prepare_corpus_path(
-        text_corpus=text_corpus,
-        clean_texts=None,
-        input_language=input_language,
-        min_freq=min_freq,
-        min_word_len=min_word_len,
-        sample_size=sample_size,
-    )[0]
-
-    display_string = utils._combine_tokens_to_str(
-        texts=text_corpus, ignore_words=ignore_words
+    flat_words = utils._combine_texts_to_str(
+        text_corpus=text_corpus, ignore_words=ignore_words
     )
 
     width = int(
@@ -451,7 +397,7 @@ def gen_word_cloud(
     )  # width is the height multiplied by the golden ratio
     wordcloud = WordCloud(
         width=width, height=height, random_state=None, max_font_size=100
-    ).generate(display_string)
+    ).generate(flat_words)
     plt.figure(figsize=(10, 10))
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
@@ -465,13 +411,10 @@ def gen_word_cloud(
 def pyLDAvis_topics(
     method="lda",
     text_corpus=None,
-    input_language=None,
     num_topics=10,
-    min_freq=2,
-    min_word_len=3,
-    sample_size=1,
     save_file=False,
     display_ipython=False,
+    **kwargs,
 ):
     """
     Returns the outputs of an LDA model plotted using pyLDAvis
@@ -493,24 +436,8 @@ def pyLDAvis_topics(
         text_corpus : list, list of lists, or str
             The text corpus over which analysis should be done
 
-            Note 1: generated using prepare_text_data
-
-            Note 2: if a str is provided, then the data will be loaded from a path
-
-        input_language : str (default=None)
-            The spoken language in which the text is found
-
         num_topics : int (default=10)
             The number of categories for LDA and BERT based approaches
-
-        min_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus
-
-        min_word_len : int (default=3)
-            The smallest allowable length of a word
-
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
 
         save_file : bool or str (default=False)
             Whether to save the HTML file to the current working directory or a path in which to save it
@@ -518,28 +445,21 @@ def pyLDAvis_topics(
         display_ipython : bool (default=False)
             Whether iPython's display function should be used if in that working environment
 
+        verbose : bool (default=True)
+            Whether to show a tqdm progress bar for the query
+
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore
+
     Returns
     -------
         pyLDAvis.save_html or pyLDAvis.show : pyLDAvis methods
             A visualization of the topics and their main keywords via pyLDAvis
     """
     method = method.lower()
-    input_language = input_language.lower()
-
-    if input_language in languages.lem_abbr_dict().keys():
-        input_language = languages.lem_abbr_dict()[input_language]
-
-    text_corpus, clean_texts = utils._prepare_corpus_path(
-        text_corpus=text_corpus,
-        clean_texts=None,
-        input_language=input_language,
-        min_freq=min_freq,
-        min_word_len=min_word_len,
-        sample_size=sample_size,
-    )
 
     tm = topic_model.TopicModel(num_topics=num_topics, method=method)
-    tm.fit(texts=clean_texts, text_corpus=text_corpus, method=method, m_clustering=None)
+    tm.fit(text_corpus=text_corpus, method=method, m_clustering=None, **kwargs)
 
     def in_ipython():
         """
@@ -594,6 +514,7 @@ def t_sne(
     remove_3d_outliers=False,
     fig_size=(20, 10),
     save_file=False,
+    **kwargs,
 ):
     """
     Returns the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding)
@@ -623,22 +544,25 @@ def t_sne(
         save_file : bool or str (default=False)
             Whether to save the figure as a png or a path in which to save it
 
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore or sklearn.manifold.TSNE
+
     Returns
     -------
         fig : matplotlib.pyplot.figure
             A t-SNE lower dimensional representation of an LDA model's topics and their constituent members
     """
-    dirichlet_dict = corpora.Dictionary(text_corpus)
-    bow_corpus = [dirichlet_dict.doc2bow(text) for text in text_corpus]
+    token_corpus = [t.split(" ") for t in text_corpus]
+    dirichlet_dict = corpora.Dictionary(token_corpus)
+    bow_corpus = [dirichlet_dict.doc2bow(text) for text in token_corpus]
+
+    lda_kwargs = {
+        k: v for k, v in kwargs.items() if k in inspect.getfullargspec(LdaMulticore)[0]
+    }
 
     dirichlet_model = LdaMulticore(
-        corpus=bow_corpus,
-        id2word=dirichlet_dict,
-        num_topics=num_topics,
-        chunksize=len(bow_corpus),
-        passes=10,
-        random_state=42,
-    )  # set for testing
+        corpus=bow_corpus, id2word=dirichlet_dict, num_topics=num_topics, **lda_kwargs
+    )
 
     df_topic_coherences = pd.DataFrame(
         columns=["topic_{}".format(i) for i in range(num_topics)]
@@ -672,13 +596,18 @@ def t_sne(
 
     tsne_2 = None
     tsne_3 = None
+    tsne_kwargs = {
+        k: v for k, v in kwargs.items() if k in inspect.getfullargspec(TSNE)[0]
+    }
     if dimension == "both":
-        tsne_2 = TSNE(n_components=2, perplexity=40, n_iter=300)
-        tsne_3 = TSNE(n_components=3, perplexity=40, n_iter=300)
+        tsne_2 = TSNE(n_components=2, **tsne_kwargs)
+        tsne_3 = TSNE(n_components=3, **tsne_kwargs)
+
     elif dimension == "2d":
-        tsne_2 = TSNE(n_components=2, perplexity=40, n_iter=300)
+        tsne_2 = TSNE(n_components=2, **tsne_kwargs)
+
     elif dimension == "3d":
-        tsne_3 = TSNE(n_components=3, perplexity=40, n_iter=300)
+        tsne_3 = TSNE(n_components=3, **tsne_kwargs)
     else:
         ValueError(
             "An invalid value has been passed to the 'dimension' argument - choose from 2d, 3d, or both."

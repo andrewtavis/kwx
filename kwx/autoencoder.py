@@ -10,11 +10,16 @@ Contents:
         fit
 """
 
-from sklearn.model_selection import train_test_split
-
+import logging
+import os
 import warnings
 
+logging.disable(logging.WARNING)
 warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
+from sklearn.model_selection import train_test_split
+
 import keras
 from keras.layers import Input, Dense
 from keras.models import Model
@@ -72,10 +77,13 @@ class Autoencoder:
         input_vec = Input(shape=(input_dim,))
         encoded = Dense(units=self.latent_dim, activation=self.activation)(input_vec)
         decoded = Dense(units=input_dim, activation=self.activation)(encoded)
+
         self.autoencoder = Model(input_vec, decoded)
         self.encoder = Model(input_vec, encoded)
+
         encoded_input = Input(shape=(self.latent_dim,))
         decoder_layer = self.autoencoder.layers[-1]
+
         self.decoder = Model(encoded_input, decoder_layer(encoded_input))
         self.autoencoder.compile(optimizer="adam", loss=keras.losses.mean_squared_error)
 
@@ -95,6 +103,7 @@ class Autoencoder:
         """
         if not self.autoencoder:
             self._compile(X.shape[1])
+
         X_train, X_test = train_test_split(X)
         self.his = self.autoencoder.fit(
             X_train,

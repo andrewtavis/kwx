@@ -5,7 +5,7 @@
     :target: https://github.com/andrewtavis/kwx
 ============
 
-|rtd| |ci| |codecov| |pyversions| |pypi| |pypistatus| |license| |contributions| |coc| |codestyle| |colab|
+|rtd| |ci| |codecov| |pyversions| |pypi| |pypistatus| |license| |coc| |codestyle| |colab|
 
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
@@ -27,9 +27,6 @@
 
 .. |license| image:: https://img.shields.io/github/license/andrewtavis/kwx.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt
-
-.. |contributions| image:: https://img.shields.io/badge/contributions-welcome-brightgreen.svg
-    :target: https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md
 
 .. |coc| image:: https://img.shields.io/badge/coc-Contributor%20Covenant-ff69b4.svg
     :target: https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md

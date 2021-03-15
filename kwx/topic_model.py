@@ -12,6 +12,15 @@ Contents:
 """
 
 from datetime import datetime
+import inspect
+import logging
+import os
+import warnings
+
+logging.disable(logging.WARNING)
+warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 import numpy as np
 
 from gensim import corpora
@@ -60,20 +69,20 @@ class TopicModel:
         self.autoencoder = None
         self.id = method + "_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
-    def _vectorize(self, texts, text_corpus, method=None):
+    def _vectorize(self, text_corpus, method=None, **kwargs):
         """
         Get vector representations from selected methods
 
         Parameters
         ----------
-            texts : list
-                Text strings that are formatted for cluster models
-
             text_corpus : list, list of lists, or str
                 The text corpus over which analysis should be done
 
             method : str
                 The modeling technique to use
+
+            **kwargs : keyword arguments
+                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore
 
         Returns
         -------
@@ -84,18 +93,22 @@ class TopicModel:
             method = self.method
 
         self.text_corpus = text_corpus
-        self.dirichlet_dict = corpora.Dictionary(text_corpus)
-        self.bow_corpus = [self.dirichlet_dict.doc2bow(text) for text in text_corpus]
+        token_corpus = [t.split(" ") for t in text_corpus]
+        self.dirichlet_dict = corpora.Dictionary(token_corpus)
+        self.bow_corpus = [self.dirichlet_dict.doc2bow(text) for text in token_corpus]
 
         if method == "lda":
             if not self.lda_model:
+                kwargs = {
+                    k: v
+                    for k, v in kwargs.items()
+                    if k in inspect.getfullargspec(LdaMulticore)[0]
+                }
                 self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,
                     id2word=self.dirichlet_dict,
-                    chunksize=len(self.bow_corpus),
-                    passes=20,  # increase to run model more iterations
-                    random_state=None,
+                    **kwargs,
                 )
 
             def get_vec_lda(model, bow_corpus, num_topics):
@@ -131,21 +144,23 @@ class TopicModel:
             return vec
 
         elif method == "bert":
-            model = self.bert_model
-            vec = np.array(model.encode(texts, show_progress_bar=False))
+            kwargs = {
+                k: v
+                for k, v in kwargs.items()
+                if k in inspect.getfullargspec(self.bert_model.encode)[0]
+            }
+            vec = np.array(self.bert_model.encode(sentences=self.text_corpus, **kwargs))
 
             return vec
 
         elif method == "lda_bert":
-            vec_lda = self._vectorize(
-                texts=texts, text_corpus=text_corpus, method="lda"
-            )
-            vec_bert = self._vectorize(
-                texts=texts, text_corpus=text_corpus, method="bert"
-            )
+            vec_lda = self._vectorize(text_corpus=text_corpus, method="lda")
+            vec_bert = self._vectorize(text_corpus=text_corpus, method="bert")
             vec_bert = vec_bert[: len(vec_lda)]  # Fix if BERT vector larger than LDA's
+
             vec_lda_bert = np.c_[vec_lda * self.gamma, vec_bert]
             self.vec["LDA_BERT_FULL"] = vec_lda_bert
+
             if not self.autoencoder:
                 self.autoencoder = Autoencoder()
                 self.autoencoder.fit(vec_lda_bert)
@@ -154,15 +169,12 @@ class TopicModel:
 
             return vec
 
-    def fit(self, texts, text_corpus, method=None, m_clustering=None):
+    def fit(self, text_corpus, method=None, m_clustering=None, **kwargs):
         """
         Fit the topic model for selected method given the preprocessed data
 
         Parameters
         ----------
-            texts : list
-                Text strings that are formatted for cluster models
-
             text_corpus : list, list of lists, or str
                 The text corpus over which analysis should be done
 
@@ -171,6 +183,9 @@ class TopicModel:
 
             m_clustering : sklearn.cluster.object
                 The method that should be used to cluster
+
+            **kwargs : keyword arguments
+                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore
 
         Returns
         -------
@@ -185,25 +200,29 @@ class TopicModel:
 
         self.text_corpus = text_corpus
         if not self.dirichlet_dict:
-            self.dirichlet_dict = corpora.Dictionary(text_corpus)
+            token_corpus = [t.split(" ") for t in text_corpus]
+            self.dirichlet_dict = corpora.Dictionary(token_corpus)
             self.bow_corpus = [
-                self.dirichlet_dict.doc2bow(text) for text in text_corpus
+                self.dirichlet_dict.doc2bow(text) for text in token_corpus
             ]
 
         if method == "lda":
             if not self.lda_model:
+                kwargs = {
+                    k: v
+                    for k, v in kwargs.items()
+                    if k in inspect.getfullargspec(LdaMulticore)[0]
+                }
                 self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,
                     id2word=self.dirichlet_dict,
-                    chunksize=len(self.bow_corpus),
-                    passes=20,  # increase to run model more iterations
-                    random_state=None,
+                    **kwargs,
                 )
 
         else:
             self.cluster_model = m_clustering(self.num_topics)
             self.vec[method] = self._vectorize(
-                texts=texts, text_corpus=self.text_corpus, method=method
+                text_corpus=self.text_corpus, method=method, **kwargs,
             )
             self.cluster_model.fit(self.vec[method])

@@ -11,9 +11,10 @@ from sentence_transformers import (
 
 from kwx import utils
 from kwx.utils import load_data
-from kwx.utils import _combine_tokens_to_str
-from kwx.utils import _clean_text_strings
-from kwx.utils import clean_and_tokenize_texts
+from kwx.utils import _combine_texts_to_str
+from kwx.utils import _remove_unwanted
+from kwx.utils import _lemmatize
+from kwx.utils import clean
 from kwx.utils import prepare_data
 from kwx.utils import _prepare_corpus_path
 from kwx.utils import translate_output
@@ -36,6 +37,7 @@ from kwx.visuals import t_sne
 from kwx.model import get_topic_words
 from kwx.model import get_coherence
 from kwx.model import _order_and_subset_by_coherence
+from kwx.model import _select_kws
 from kwx.model import extract_kws
 from kwx.model import gen_files
 
@@ -168,13 +170,19 @@ def df_texts(request):
 
 @pytest.fixture(
     params=[
-        utils.clean_and_tokenize_texts(
+        utils.clean(
             texts=texts,
             input_language="english",
-            min_freq=2,
-            min_word_len=3,
+            min_token_freq=2,
+            min_token_len=3,
+            min_tokens=0,
+            max_token_index=-1,
+            min_ngram_count=3,
+            remove_stopwords=True,
+            ignore_words=None,
             sample_size=1,
-        )[0]
+            verbose=True,
+        )
     ]
 )
 def short_text_corpus(request):
@@ -183,13 +191,19 @@ def short_text_corpus(request):
 
 @pytest.fixture(
     params=[
-        utils.clean_and_tokenize_texts(
+        utils.clean(
             texts=texts_long,
             input_language="english",
-            min_freq=2,
-            min_word_len=3,
+            min_token_freq=2,
+            min_token_len=3,
+            min_tokens=0,
+            max_token_index=-1,
+            min_ngram_count=3,
+            remove_stopwords=True,
+            ignore_words=None,
             sample_size=1,
-        )[0]
+            verbose=True,
+        )
     ]
 )
 def long_text_corpus(request):
