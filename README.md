@@ -58,7 +58,7 @@ kwx uses [sentence-transformers](https://github.com/UKPLab/sentence-transformers
 
 Although not as statistically strong as the following machine learning models, LDA provides quick results that are suitable for many applications.
 
-### LDA with BERT embeddings
+### LDA with BERT Embeddings
 
 The combination of LDA with BERT via [kwx.autoencoder](https://github.com/andrewtavis/kwx/blob/main/kwx/autoencoder.py).
 
@@ -68,7 +68,7 @@ The user can also choose to simply query the most common words from a text corpu
 
 # Usage [`↩`](#jumpto)
 
-Keyword extraction can be useful to analyze surveys, tweets and other kinds of social media posts, research papers, and further classes of texts. [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
+Keyword extraction can be useful to analyze surveys, tweets and other kinds of social media posts, research papers, and further classes of texts. [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
 The following outlines using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
 
@@ -208,7 +208,7 @@ pyLDAvis_topics(
 
 ### Word Cloud
 
-Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples.kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
+Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
 
 ```python
 from kwx.visuals import gen_word_cloud
