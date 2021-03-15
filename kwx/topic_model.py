@@ -7,8 +7,7 @@ The unsupervised learning topic model for keyword extraction
 Contents:
     TopicModel Class:
         _vectorize,
-        fit,
-        predict
+        fit
 """
 
 from datetime import datetime
