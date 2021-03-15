@@ -1,3 +1,19 @@
+### kwx 0.1.5 (March 15, 2021)
+
+Changes include:
+
+- Keyword extraction and selection are now disjointed so that modeling doesn't occur again to get new keywords
+
+- Keyword extraction and cleaning are now fully disjointed processes
+
+- kwargs for sentence-transformers BERT, LDA, and TFIDF can now be passed
+
+- The cleaning process is verbose and uses multiprocessing
+
+- The user has greater control over the cleaning process
+
+- Reformatting of the code to make the process more clear
+
 ### kwx 0.1.0 (Feb 17, 2021)
 
 First stable release of kwx

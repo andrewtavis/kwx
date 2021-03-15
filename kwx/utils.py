@@ -6,9 +6,10 @@ Utility functions for data loading, cleaning, output formatting, and user intera
 
 Contents:
     load_data,
-    _combine_tokens_to_str,
-    _clean_text_strings,
-    clean_and_tokenize_texts,
+    _combine_texts_to_str,
+    _remove_unwanted,
+    _lemmatize,
+    clean,
     prepare_data,
     _prepare_corpus_path,
     translate_output,
@@ -16,25 +17,22 @@ Contents:
     prompt_for_word_removal
 """
 
-import os
-import re
-import string
-import random
 from collections import defaultdict
 import importlib
-
-# Make sure xlrd is installed for pandas
-xlrd_spec = importlib.util.find_spec("xlrd")
-if xlrd_spec == None:
-    os.system("pip install xlrd")
+import gc
+from multiprocessing import Pool
+import os
+import random
+import re
+import string
 
 import pandas as pd
+from tqdm.auto import tqdm
 
 from nltk.stem.snowball import SnowballStemmer
 import spacy
-
-from googletrans import Translator
 from stopwordsiso import stopwords
+from googletrans import Translator
 import emoji
 
 from gensim.models import Phrases
@@ -65,7 +63,7 @@ def load_data(data, target_cols=None):
         elif data[-len("csv") :] == "csv":
             df_texts = pd.read_csv(filepath_or_buffer=data)
         else:
-            ValueError("Strings passed should be csv or xlsx files.")
+            ValueError("Strings passed should be paths to csv or xlsx files.")
 
     elif type(data) == pd.DataFrame:
         df_texts = data
@@ -85,13 +83,13 @@ def load_data(data, target_cols=None):
     return df_texts
 
 
-def _combine_tokens_to_str(texts, ignore_words=None):
+def _combine_texts_to_str(text_corpus, ignore_words=None):
     """
-    Combines the texts into one string
+    Combines texts into one string
 
     Parameters
     ----------
-        texts : str or list
+        text_corpus : str or list
             The texts to be combined
 
         ignore_words : str or list
@@ -102,84 +100,125 @@ def _combine_tokens_to_str(texts, ignore_words=None):
         texts_str : str
             A string of the full text with unwanted words removed
     """
-    if type(texts[0]) == list:
-        flat_words = [word for sublist in texts for word in sublist]
-    else:
-        flat_words = texts
-
     if type(ignore_words) == str:
-        ignore_words = [ignore_words]
+        words_to_ignore = [ignore_words]
+    elif type(ignore_words) == list:
+        words_to_ignore = ignore_words
     elif ignore_words == None:
-        ignore_words = []
+        words_to_ignore = []
+    else:
+        words_to_ignore = []
 
-    flat_words = [word for word in flat_words if word not in ignore_words]
+    if type(text_corpus[0]) == list:
+        flat_words = [text for sublist in text_corpus for text in sublist]
+        flat_words = [
+            token
+            for subtext in flat_words
+            for token in subtext.split(" ")
+            if token not in words_to_ignore
+        ]
+
+    else:
+        flat_words = [
+            token
+            for subtext in text_corpus
+            for token in subtext.split(" ")
+            if token not in words_to_ignore
+        ]
+
     texts_str = " ".join([word for word in flat_words])
 
     return texts_str
 
 
-def _clean_text_strings(s):
+def _remove_unwanted(args):
     """
-    Cleans the string of a text body to prepare it for BERT analysis
+    Lower cases tokens and removes numbers and possibly names
 
     Parameters
     ----------
-        s : str
-            The combined texts to be cleaned
+        args : list of tuples
+            The following arguments zipped
+
+        text : list
+            The text to clean
+
+        words_to_ignore : str or list
+            Strings that should be removed from the text body
+
+        stop_words : str or list
+            Stopwords for the given language
 
     Returns
     -------
-        s : str
-            The texts formatted for analysis
+        text_words_removed : list
+            The text without unwanted tokens
     """
-    s = re.sub(r"([a-z])([A-Z])", r"\1\. \2", s)
-    s = s.lower()
-    s = re.sub(r"&gt|&lt", " ", s)
-    s = re.sub(r"([a-z])\1{2,}", r"\1", s)
-    s = re.sub(r"([\W+])\1{1,}", r"\1", s)
-    s = re.sub(r"\*|\W\*|\*\W", ". ", s)
-    s = re.sub(r"\(.*?\)", ". ", s)
-    s = re.sub(r"\W+?\.", ".", s)
-    s = re.sub(r"(\.|\?|!)(\w)", r"\1 \2", s)
-    s = re.sub(r"(.{2,}?)\1{1,}", r"\1", s)
+    text, words_to_ignore, stop_words = args
 
-    return s.strip()
+    text_words_removed = [
+        token.lower()
+        for token in text
+        if token not in words_to_ignore and token not in stop_words
+    ]
+
+    return text_words_removed
 
 
-def lemmatize(tokens, nlp=None):
+def _lemmatize(tokens, nlp=None, verbose=True):
     """
     Lemmatizes tokens
 
     Parameters
     ----------
         tokens : list or list of lists
+            Tokens to be lemmatized
 
         nlp : spacy.load object
             A spacy language model
 
+        verbose : bool (default=True)
+            Whether to show a tqdm progress bar for the query
+
     Returns
     -------
-        lemmatized_tokens : list or list of lists
+        base_tokens : list or list of lists
             Tokens that have been lemmatized for nlp analysis
     """
     allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
 
-    lemmatized_tokens = []
-    for t in tokens:
-        combined_tokens = _combine_tokens_to_str(texts=t)
+    base_tokens = []
+    for t in tqdm(
+        tokens,
+        total=len(tokens),
+        desc="Texts lemmatized",
+        unit="texts",
+        disable=not verbose,
+    ):
+        combined_texts = _combine_texts_to_str(text_corpus=t)
 
-        lem_tokens = nlp(combined_tokens)
+        lem_tokens = nlp(combined_texts)
         lemmed_tokens = [
             token.lemma_ for token in lem_tokens if token.pos_ in allowed_pos_tags
         ]
 
-        lemmatized_tokens.append(lemmed_tokens)
+        base_tokens.append(lemmed_tokens)
 
-    return lemmatized_tokens
+    return base_tokens
 
 
-def clean_and_tokenize_texts(
-    texts, input_language=None, min_freq=2, min_word_len=3, sample_size=1
+def clean(
+    texts,
+    input_language=None,
+    min_token_freq=2,
+    min_token_len=3,
+    min_tokens=0,
+    max_token_index=-1,
+    min_ngram_count=3,
+    remove_stopwords=True,
+    ignore_words=None,
+    sample_size=1,
+    verbose=True,
 ):
     """
     Cleans and tokenizes a text body to prepare it for analysis
@@ -192,19 +231,37 @@ def clean_and_tokenize_texts(
         input_language : str (default=None)
             The English name of the language in which the texts are found
 
-        min_freq : int (default=2)
+        min_token_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=3)
+        min_token_len : int (default=3)
             The smallest allowable length of a word
+
+        min_tokens : int (default=0)
+            The minimum allowable length of a tokenized text
+
+        max_token_index : int (default=-1)
+            The maximum allowable length of a tokenized text
+
+        min_ngram_count : int (default=5)
+            The minimum occurrences for an n-gram to be included
+
+        remove_stopwords : bool (default=True)
+            Whether to remove stopwords
+
+        ignore_words : str or list
+            Strings that should be removed from the text body
 
         sample_size : float (default=1)
             The amount of data to be randomly sampled
 
+        verbose : bool (default=True)
+            Whether to show a tqdm progress bar for the query
+
     Returns
     -------
-        text_corpus, clean_texts, selection_idxs : list or list of lists, list, list
-            The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
+        text_corpus : list or list of lists
+            The texts formatted for analysis
     """
     input_language = input_language.lower()
 
@@ -215,6 +272,28 @@ def clean_and_tokenize_texts(
     if type(texts) == str:
         texts = [texts]
 
+    if type(ignore_words) == str:
+        words_to_ignore = [ignore_words]
+    elif ignore_words == None:
+        words_to_ignore = []
+    else:
+        words_to_ignore = ignore_words
+
+    stop_words = []
+    if remove_stopwords:
+        if stopwords(input_language) != set():  # the input language has stopwords
+            stop_words = stopwords(input_language)
+
+        # Stemming and normal stopwords are still full language names
+        elif input_language in languages.stem_abbr_dict().keys():
+            stop_words = stopwords(languages.stem_abbr_dict()[input_language])
+
+        elif input_language in languages.sw_abbr_dict().keys():
+            stop_words = stopwords(languages.sw_abbr_dict()[input_language])
+
+    pbar = tqdm(
+        desc="Cleaning steps complete", total=7, unit="step", disable=not verbose
+    )
     # Remove spaces that are greater that one in length
     texts_no_large_spaces = []
     for r in texts:
@@ -238,63 +317,101 @@ def clean_and_tokenize_texts(
 
         texts_no_random_punctuation.append(r)
 
-    # Remove punctuation
     texts_no_punctuation = []
     for r in texts_no_random_punctuation:
         texts_no_punctuation.append(
             r.translate(str.maketrans("", "", string.punctuation + "–" + "’"))
         )
 
-    # Remove emojis
+    gc.collect()
+    pbar.update()
+
     texts_no_emojis = []
     for response in texts_no_punctuation:
         texts_no_emojis.append(emoji.get_emoji_regexp().sub(r"", response))
 
-    # Remove stopwords and tokenize
-    if stopwords(input_language) != set():  # the input language has stopwords
-        stop_words = stopwords(input_language)
-    # Stemming and normal stopwords are still full language names
-    elif input_language in languages.stem_abbr_dict().keys():
-        stop_words = stopwords(languages.stem_abbr_dict()[input_language])
-    elif input_language in languages.sw_abbr_dict().keys():
-        stop_words = stopwords(languages.sw_abbr_dict()[input_language])
-    else:
-        stop_words = []
-
     tokenized_texts = [
-        [
-            word
-            for word in text.lower().split()
-            if word not in stop_words and not word.isnumeric()
-        ]
+        [token for token in text.lower().split() if not token.isnumeric()]
         for text in texts_no_emojis
     ]
     tokenized_texts = [t for t in tokenized_texts if t != []]
 
-    # Add bigrams (first_second word combinations that appear often together)
-    tokens_with_bigrams = []
-    bigrams = Phrases(
-        sentences=tokenized_texts, min_count=3, threshold=5.0
-    )  # minimum count for a bigram to be included is 3
-    for i, t in enumerate(tokenized_texts):
-        for token in bigrams[t]:
-            if "_" in token:
-                # Token is a bigram, so add it to the tokens
-                t.insert(0, token)
+    gc.collect()
+    pbar.update()
 
-        tokens_with_bigrams.append(t)
+    bigrams = Phrases(
+        sentences=tokenized_texts,
+        min_count=min_ngram_count,
+        threshold=5.0,
+        common_terms=stop_words,
+    )  # half the normal threshold
+    trigrams = Phrases(
+        sentences=bigrams[tokenized_texts],
+        min_count=min_ngram_count,
+        threshold=5.0,
+        common_terms=stop_words,
+    )
+
+    tokens_with_ngrams = []
+    for text in tqdm(
+        tokenized_texts,
+        total=len(tokenized_texts),
+        desc="n-grams generated",
+        unit="texts",
+        disable=not verbose,
+    ):
+        for token in bigrams[text]:
+            if token.count("_") == 1:
+                # Token is a bigram, so add it to the tokens
+                text.insert(0, token)
+
+        for token in trigrams[bigrams[text]]:
+            if token.count("_") == 2:
+                # Token is a trigram, so add it to the tokens
+                text.insert(0, token)
+
+        tokens_with_ngrams.append(text)
+
+    gc.collect()
+    pbar.update()
+
+    args = zip(
+        tokens_with_ngrams,
+        [words_to_ignore] * len(tokens_with_ngrams),
+        [stop_words] * len(tokens_with_ngrams),
+    )
+
+    num_cores = os.cpu_count()
+    if __name__ == "kwx.utils":
+        with Pool(processes=num_cores) as pool:
+            tokens_remove_unwanted = list(
+                tqdm(
+                    pool.imap(_remove_unwanted, args),
+                    total=len(tokens_with_ngrams),
+                    desc="Unwanted words removed",
+                    unit="texts",
+                    disable=not verbose,
+                )
+            )
+
+    gc.collect()
+    pbar.update()
 
     # Lemmatize or stem words (try the former first, then the latter)
     nlp = None
     try:
         nlp = spacy.load(input_language)
-        lemmatized_tokens = lemmatize(tokens=tokens_with_bigrams, nlp=nlp)
+        base_tokens = _lemmatize(
+            tokens=tokens_remove_unwanted, nlp=nlp, verbose=verbose
+        )
 
     except OSError:
         try:
             os.system("python -m spacy download {}".format(input_language))
             nlp = spacy.load(input_language)
-            lemmatized_tokens = lemmatize(tokens=tokens_with_bigrams, nlp=nlp)
+            base_tokens = _lemmatize(
+                tokens=tokens_remove_unwanted, nlp=nlp, verbose=verbose
+            )
         except:
             pass
 
@@ -315,40 +432,58 @@ def clean_and_tokenize_texts(
 
         if stemmer != None:
             # Stemming instead of lemmatization
-            lemmatized_tokens = []  # still call it lemmatized for consistency
-            for tokens in tokens_with_bigrams:
+            base_tokens = []  # still call it lemmatized for consistency
+            for tokens in tqdm(
+                tokens_remove_unwanted,
+                total=len(tokens_remove_unwanted),
+                desc="Texts stemmed",
+                unit="texts",
+                disable=not verbose,
+            ):
                 stemmed_tokens = [stemmer.stem(t) for t in tokens]
-                lemmatized_tokens.append(stemmed_tokens)
+                base_tokens.append(stemmed_tokens)
 
         else:
             # We cannot lemmatize or stem
-            lemmatized_tokens = tokens_with_bigrams
+            base_tokens = tokens_remove_unwanted
+
+    gc.collect()
+    pbar.update()
 
     # Remove words that don't appear enough or are too small
     token_frequencies = defaultdict(int)
-    for tokens in lemmatized_tokens:
+    for tokens in base_tokens:
         for t in list(set(tokens)):
             token_frequencies[t] += 1
 
-    if min_word_len == None or min_word_len == False:
-        min_word_len = 0
-    if min_freq == None or min_freq == False:
-        min_freq = 0
+    if min_token_len == None or min_token_len == False:
+        min_token_len = 0
+    if min_token_freq == None or min_token_freq == False:
+        min_token_freq = 0
+
+    assert (
+        type(min_token_len) == int
+    ), "The 'min_token_len' argument must be an integer if used"
+    assert (
+        type(min_token_freq) == int
+    ), "The 'min_token_freq' argument must be an integer if used"
 
     min_len_freq_tokens = []
-    for tokens in lemmatized_tokens:
+    for tokens in base_tokens:
         min_len_freq_tokens.append(
             [
                 t
                 for t in tokens
-                if len(t) >= min_word_len and token_frequencies[t] >= min_freq
+                if len(t) >= min_token_len and token_frequencies[t] >= min_token_freq
             ]
         )
+
+    gc.collect()
+    pbar.update()
 
     # Derive those texts that still have valid words
     non_empty_token_indexes = [i for i, t in enumerate(min_len_freq_tokens) if t != []]
     text_corpus = [min_len_freq_tokens[i] for i in non_empty_token_indexes]
-    clean_texts = [_clean_text_strings(s=texts[i]) for i in non_empty_token_indexes]
 
     # Sample words, if necessary
     if sample_size != 1:
@@ -361,22 +496,32 @@ def clean_and_tokenize_texts(
     else:
         selected_idxs = list(range(len(text_corpus)))
 
-    text_corpus = [text_corpus[i] for i in selected_idxs]
-    clean_texts = [clean_texts[i] for i in selected_idxs]
+    text_corpus = [
+        _combine_texts_to_str(text_corpus=text_corpus[i]) for i in selected_idxs
+    ]
 
-    return text_corpus, clean_texts, selected_idxs
+    gc.collect()
+    pbar.update()
+
+    return text_corpus
 
 
 def prepare_data(
     data=None,
     target_cols=None,
     input_language=None,
-    min_freq=2,
-    min_word_len=3,
+    min_token_freq=2,
+    min_token_len=3,
+    min_tokens=0,
+    max_token_index=-1,
+    min_ngram_count=3,
+    remove_stopwords=True,
+    ignore_words=None,
     sample_size=1,
+    verbose=True,
 ):
     """
-    Prepares input data for analysis
+    Prepares input data for analysis from a pandas.DataFrame or path
 
     Parameters
     ----------
@@ -389,14 +534,32 @@ def prepare_data(
         input_language : str (default=None)
             The English name of the language in which the texts are found
 
-        min_freq : int (default=2)
+        min_token_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=3)
+        min_token_len : int (default=3)
             The smallest allowable length of a word
+
+        min_tokens : int (default=0)
+            The minimum allowable length of a tokenized text
+
+        max_token_index : int (default=-1)
+            The maximum allowable length of a tokenized text
+
+        min_ngram_count : int (default=5)
+            The minimum occurrences for an n-gram to be included
+
+        remove_stopwords : bool (default=True)
+            Whether to remove stopwords
+
+        ignore_words : str or list
+            Strings that should be removed from the text body
 
         sample_size : float (default=1)
             The amount of data to be randomly sampled
+
+        verbose : bool (default=True)
+            Whether to show a tqdm progress bar for the query
 
     Returns
     -------
@@ -416,7 +579,6 @@ def prepare_data(
 
     # Select columns from which texts should come
     raw_texts = []
-
     for i in df_texts.index:
         text = ""
         for c in target_cols:
@@ -426,15 +588,21 @@ def prepare_data(
         text = text[1:]  # remove first blank space
         raw_texts.append(text)
 
-    text_corpus, clean_texts, selected_idxs = clean_and_tokenize_texts(
+    text_corpus = clean(
         texts=raw_texts,
         input_language=input_language,
-        min_freq=min_freq,
-        min_word_len=min_word_len,
+        min_token_freq=min_token_freq,
+        min_token_len=min_token_len,
+        min_tokens=min_tokens,
+        max_token_index=max_token_index,
+        min_ngram_count=min_ngram_count,
+        remove_stopwords=remove_stopwords,
+        ignore_words=ignore_words,
         sample_size=sample_size,
+        verbose=verbose,
     )
 
-    return text_corpus, clean_texts, selected_idxs
+    return text_corpus
 
 
 def _prepare_corpus_path(
@@ -442,9 +610,15 @@ def _prepare_corpus_path(
     clean_texts=None,
     target_cols=None,
     input_language=None,
-    min_freq=2,
-    min_word_len=3,
+    min_token_freq=2,
+    min_token_len=3,
+    min_tokens=0,
+    max_token_index=-1,
+    min_ngram_count=3,
+    remove_stopwords=True,
+    ignore_words=None,
     sample_size=1,
+    verbose=True,
 ):
     """
     Checks a text corpus to see if it's a path, and prepares the data if so
@@ -463,14 +637,32 @@ def _prepare_corpus_path(
         input_language : str (default=None)
             The English name of the language in which the texts are found
 
-        min_freq : int (default=2)
+        min_token_freq : int (default=2)
             The minimum allowable frequency of a word inside the text corpus
 
-        min_word_len : int (default=3)
+        min_token_len : int (default=3)
             The smallest allowable length of a word
+
+        min_tokens : int (default=0)
+            The minimum allowable length of a tokenized text
+
+        max_token_index : int (default=-1)
+            The maximum allowable length of a tokenized text
+
+        min_ngram_count : int (default=5)
+            The minimum occurrences for an n-gram to be included
+
+        remove_stopwords : bool (default=True)
+            Whether to remove stopwords
+
+        ignore_words : str or list
+            Strings that should be removed from the text body
 
         sample_size : float (default=1)
             The amount of data to be randomly sampled
+
+        verbose : bool (default=True)
+            Whether to show a tqdm progress bar for the query
 
     Returns
     -------
@@ -480,31 +672,27 @@ def _prepare_corpus_path(
     if type(text_corpus) == str:
         try:
             os.path.exists(text_corpus)  # a path has been provided
-            text_corpus, clean_texts = prepare_data(
+            text_corpus = prepare_data(
                 data=text_corpus,
                 target_cols=target_cols,
                 input_language=input_language,
-                min_freq=min_freq,
-                min_word_len=min_word_len,
+                min_token_freq=min_token_freq,
+                min_token_len=min_token_len,
+                min_tokens=min_tokens,
+                max_token_index=max_token_index,
+                min_ngram_count=min_ngram_count,
+                remove_stopwords=remove_stopwords,
+                ignore_words=ignore_words,
                 sample_size=sample_size,
-            )[:2]
+                verbose=verbose,
+            )
 
-            return text_corpus, clean_texts
+            return text_corpus
 
         except:
             pass
 
-    if clean_texts != None:
-        return text_corpus, clean_texts
-
-    else:
-        return (
-            text_corpus,
-            [
-                _clean_text_strings(_combine_tokens_to_str(texts=t_c))
-                for t_c in text_corpus
-            ],
-        )
+    return text_corpus
 
 
 def translate_output(outputs, input_language, output_language):
@@ -614,13 +802,13 @@ def organize_by_pos(outputs, output_language):
         return outputs
 
 
-def prompt_for_word_removal(ignore_words=None):
+def prompt_for_word_removal(words_to_ignore=None):
     """
     Prompts the user for words that should be ignored in kewword extraction
 
     Parameters
     ----------
-        ignore_words : str or list
+        words_to_ignore : str or list
             Words that should not be included in the output
 
     Returns
@@ -628,12 +816,10 @@ def prompt_for_word_removal(ignore_words=None):
         ignore words, words_added : list, bool
             A new list of words to ignore and a boolean indicating if words have been added
     """
-    if ignore_words == None:
-        ignore_words = []
-    if type(ignore_words) == str:
-        ignore_words = [ignore_words]
+    if type(words_to_ignore) == str:
+        words_to_ignore = [words_to_ignore]
 
-    ignore_words = [w.replace("'", "") for w in ignore_words]
+    words_to_ignore = [w.replace("'", "") for w in words_to_ignore]
 
     words_added = False  # whether to run the models again
     more_words = True
@@ -652,7 +838,7 @@ def prompt_for_word_removal(ignore_words=None):
             elif type(new_words_to_ignore) == str:
                 new_words_to_ignore = [new_words_to_ignore]
 
-            ignore_words += new_words_to_ignore
+            words_to_ignore += new_words_to_ignore
             words_added = True  # we need to run the models again
             more_words = False
 
@@ -662,4 +848,4 @@ def prompt_for_word_removal(ignore_words=None):
         else:
             print("Invalid input")
 
-    return ignore_words, words_added
+    return words_to_ignore, words_added

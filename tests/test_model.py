@@ -115,6 +115,7 @@ def test_gen_files(monkeypatch, long_text_corpus):
         incl_most_freq=True,
         org_by_pos=True,
         incl_visuals=True,
+        save_dir="text_corpus_kws.zip",
         zip_results=True,
     )
 

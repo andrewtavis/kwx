@@ -6,9 +6,10 @@ The :py:mod:`utils` module provides needed functions for data loading, cleaning,
 **Functions**
 
 * :py:func:`kwx.utils.load_data`
-* :py:func:`kwx.utils._combine_tokens_to_str`
-* :py:func:`kwx.utils._clean_text_strings`
-* :py:func:`kwx.utils.clean_and_tokenize_texts`
+* :py:func:`kwx.utils._combine_texts_to_str`
+* :py:func:`kwx.utils._remove_unwanted`
+* :py:func:`kwx.utils._lemmatize`
+* :py:func:`kwx.utils.clean`
 * :py:func:`kwx.utils.prepare_data`
 * :py:func:`kwx.utils._prepare_corpus_path`
 * :py:func:`kwx.utils.translate_output`
@@ -16,9 +17,10 @@ The :py:mod:`utils` module provides needed functions for data loading, cleaning,
 * :py:func:`kwx.utils.prompt_for_word_removal`
 
 .. autofunction:: kwx.utils.load_data
-.. autofunction:: kwx.utils._combine_tokens_to_str
-.. autofunction:: kwx.utils._clean_text_strings
-.. autofunction:: kwx.utils.clean_and_tokenize_texts
+.. autofunction:: kwx.utils._combine_texts_to_str
+.. autofunction:: kwx.utils._remove_unwanted
+.. autofunction:: kwx.utils._lemmatize
+.. autofunction:: kwx.utils.clean
 .. autofunction:: kwx.utils.prepare_data
 .. autofunction:: kwx.utils._prepare_corpus_path
 .. autofunction:: kwx.utils.translate_output
