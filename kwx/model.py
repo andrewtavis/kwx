@@ -822,8 +822,6 @@ def gen_files(
         return_kw_args=True,
     )
 
-    print(model_kw_args)
-
     most_freq_kw = _select_kws(
         method="frequency",
         kw_args=most_freq_kw_args,
