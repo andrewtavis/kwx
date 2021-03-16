@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/andrewtavis/kwx"><img src="https://github.com/andrewtavis/kwx/blob/main/resources/kwx_logo_transparent.png" width=431 height=215></a>
+  <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/kwx_logo_transparent.png" width=431 height=215></a>
 </div>
 
 --------------------------------------
