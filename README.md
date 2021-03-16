@@ -56,7 +56,7 @@ kwx uses [sentence-transformers](https://github.com/UKPLab/sentence-transformers
 
 [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) is a generative statistical model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. In the case of kwx, documents or text entries are posited to be a mixture of a given number of topics, and the presence of each word in a text body comes from its relation to these derived topics.
 
-Although not as statistically strong as the following machine learning models, LDA provides quick results that are suitable for many applications.
+Although not as computationally robust as the some machine learning models, LDA provides quick results that are suitable for many applications. Specifically for keyword extraction, in most settings the results are similar those of BERT in a fraction of the time.
 
 ### LDA with BERT Embeddings
 
