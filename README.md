@@ -25,7 +25,7 @@ For a thorough overview of the process and techniques see the [Google slides](ht
 
 # Installation via PyPi
 
-kwx can be downloaded from pypi via pip or sourced directly from this repository:
+kwx can be downloaded from pypi via PyPI or sourced directly from this repository:
 
 ```bash
 pip install kwx
