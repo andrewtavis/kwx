@@ -10,7 +10,7 @@ with open("README.md", "r") as fh:
 
 setup_args = dict(
     name="kwx",
-    version="0.1.6",
+    version="0.1.7",
     author="Andrew Tavis McAllister",
     author_email="andrew.t.mcallister@gmail.com",
     classifiers=[
