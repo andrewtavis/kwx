@@ -17,7 +17,12 @@ Contents:
     prompt_for_word_removal
 """
 
-from collections import defaultdict
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    from collections import defaultdict
+
 import importlib
 import gc
 from multiprocessing import Pool
@@ -35,7 +40,9 @@ from stopwordsiso import stopwords
 from googletrans import Translator
 import emoji
 
-from gensim.models import Phrases
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=UserWarning)
+    from gensim.models import Phrases
 
 from kwx import languages
 

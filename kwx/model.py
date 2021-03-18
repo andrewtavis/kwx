@@ -13,14 +13,18 @@ Contents:
     gen_files
 """
 
-from collections import Counter
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    from collections import Counter
+
 import importlib
 import inspect
 import math
 import os
 import re
 import time
-import warnings
 import zipfile
 
 import numpy as np

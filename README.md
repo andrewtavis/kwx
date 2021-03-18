@@ -116,6 +116,7 @@ bert_kws = extract_kws(
     corpuses_to_compare=None,  # for TFIDF
     ignore_words=ignore_words,
     prompt_remove_words=True,  # check words with user
+    show_progress_bar=True,
     batch_size=32,
 )
 ```
