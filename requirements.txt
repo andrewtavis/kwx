@@ -1,5 +1,5 @@
 absl-py==0.11.0
-aiohttp==3.7.3
+aiohttp==3.7.4
 alabaster==0.7.12
 appdirs==1.4.4
 appnope==0.1.2
@@ -34,7 +34,6 @@ decorator==4.4.2
 defusedxml==0.7.1
 docutils==0.16
 emoji==1.2.0
-en-core-web-sm==2.3.1
 entrypoints==0.3
 filelock==3.0.12
 funcy==1.15
