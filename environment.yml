@@ -174,7 +174,7 @@ dependencies:
   - srsly=1.0.5
   - statsmodels=0.12.2
   - tensorboard=1.14.0
-  - tensorflow=1.14.0
+  - tensorflow==2.4.0
   - tensorflow-base=1.14.0
   - tensorflow-estimator=1.14.0
   - termcolor=1.1.0
