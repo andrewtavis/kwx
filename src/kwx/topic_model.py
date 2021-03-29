@@ -2,7 +2,7 @@
 topic_model
 -----------
 
-The unsupervised learning topic model for keyword extraction
+The unsupervised learning topic model for keyword extraction.
 
 Contents:
     TopicModel Class:
@@ -10,44 +10,41 @@ Contents:
         fit
 """
 
-from datetime import datetime
 import inspect
 import logging
 import os
 import warnings
+from datetime import datetime
 
 logging.disable(logging.WARNING)
 warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 import numpy as np
-
 from gensim import corpora
 from gensim.models.ldamulticore import LdaMulticore
 from sklearn.cluster import KMeans
 
-from kwx.autoencoder import Autoencoder
-
 
 class TopicModel:
     """
-    The topic model class to fit and predict given an unsupervised learning technique
+    The topic model class to fit and predict given an unsupervised learning technique.
     """
 
-    def __init__(self, num_topics=10, method="lda_bert", bert_model=None):
+    def __init__(self, num_topics=10, method="lda", bert_model=None):
         """
         Parameters
         ----------
             num_topics : int (default=10)
                 The number of categories for LDA and BERT based approaches
 
-            method : str (default=lda_bert)
+            method : str (default=lda)
                 The modelling method
 
             bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
                 A sentence transformer model
         """
-        modeling_methods = ["lda", "bert", "lda_bert"]
+        modeling_methods = ["lda", "bert"]
         if method not in modeling_methods:
             ValueError(
                 "The indicated method is invalid. Please choose from {}.".format(
@@ -65,12 +62,11 @@ class TopicModel:
         self.vec = {}
         self.gamma = 15  # parameter for relative importance of LDA
         self.method = method.lower()
-        self.autoencoder = None
         self.id = method + "_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
     def _vectorize(self, text_corpus, method=None, **kwargs):
         """
-        Get vector representations from selected methods
+        Get vector representations from selected methods.
 
         Parameters
         ----------
@@ -88,7 +84,7 @@ class TopicModel:
             vec : np.array
                 An array of text vectorizations
         """
-        if method == None:
+        if method is None:
             method = self.method
 
         self.text_corpus = text_corpus
@@ -112,7 +108,7 @@ class TopicModel:
 
             def get_vec_lda(model, bow_corpus, num_topics):
                 """
-                Get the LDA vector representation
+                Get the LDA vector representation.
 
                 Parameters
                 ----------
@@ -152,25 +148,9 @@ class TopicModel:
 
             return vec
 
-        elif method == "lda_bert":
-            vec_lda = self._vectorize(text_corpus=text_corpus, method="lda")
-            vec_bert = self._vectorize(text_corpus=text_corpus, method="bert")
-            vec_bert = vec_bert[: len(vec_lda)]  # Fix if BERT vector larger than LDA's
-
-            vec_lda_bert = np.c_[vec_lda * self.gamma, vec_bert]
-            self.vec["LDA_BERT_FULL"] = vec_lda_bert
-
-            if not self.autoencoder:
-                self.autoencoder = Autoencoder()
-                self.autoencoder.fit(vec_lda_bert)
-
-            vec = self.autoencoder.encoder.predict(vec_lda_bert)
-
-            return vec
-
     def fit(self, text_corpus, method=None, m_clustering=None, **kwargs):
         """
-        Fit the topic model for selected method given the preprocessed data
+        Fit the topic model for selected method given the preprocessed data.
 
         Parameters
         ----------
@@ -191,10 +171,10 @@ class TopicModel:
             self : LDA or cluster model
                 A fitted model
         """
-        if method == None:
+        if method is None:
             method = self.method
 
-        if m_clustering == None:
+        if m_clustering is None:
             m_clustering = KMeans
 
         self.text_corpus = text_corpus

@@ -2,7 +2,7 @@
 utils
 -----
 
-Utility functions for data loading, cleaning, output formatting, and user interaction
+Utility functions for data loading, cleaning, output formatting, and user interaction.
 
 Contents:
     load_data,
@@ -23,22 +23,19 @@ with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     from collections import defaultdict
 
-import importlib
 import gc
-from multiprocessing import Pool
 import os
 import random
-import re
 import string
+from multiprocessing import Pool
 
-import pandas as pd
-from tqdm.auto import tqdm
-
-from nltk.stem.snowball import SnowballStemmer
-import spacy
-from stopwordsiso import stopwords
-from googletrans import Translator
 import emoji
+import pandas as pd
+import spacy
+from googletrans import Translator
+from nltk.stem.snowball import SnowballStemmer
+from stopwordsiso import stopwords
+from tqdm.auto import tqdm
 
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore", category=UserWarning)
@@ -49,7 +46,7 @@ from kwx import languages
 
 def load_data(data, target_cols=None):
     """
-    Loads data from a path and formats it into a pandas df
+    Loads data from a path and formats it into a pandas df.
 
     Parameters
     ----------
@@ -64,7 +61,7 @@ def load_data(data, target_cols=None):
         df_texts : pd.DataFrame
             The texts as a df
     """
-    if type(data) == str:
+    if isinstance(data, str):
         if data[-len("xlsx") :] == "xlsx":
             df_texts = pd.read_excel(io=data)
         elif data[-len("csv") :] == "csv":
@@ -72,7 +69,7 @@ def load_data(data, target_cols=None):
         else:
             ValueError("Strings passed should be paths to csv or xlsx files.")
 
-    elif type(data) == pd.DataFrame:
+    elif isinstance(data, pd.DataFrame):
         df_texts = data
 
     else:
@@ -80,9 +77,9 @@ def load_data(data, target_cols=None):
             "The 'data' argument should be either the name of a csv/xlsx file a pandas dataframe."
         )
 
-    if target_cols == None:
+    if target_cols is None:
         target_cols = df_texts.columns
-    elif type(target_cols) == str:
+    elif isinstance(target_cols, str):
         target_cols = [target_cols]
 
     df_texts = df_texts[target_cols]
@@ -92,7 +89,7 @@ def load_data(data, target_cols=None):
 
 def _combine_texts_to_str(text_corpus, ignore_words=None):
     """
-    Combines texts into one string
+    Combines texts into one string.
 
     Parameters
     ----------
@@ -107,16 +104,14 @@ def _combine_texts_to_str(text_corpus, ignore_words=None):
         texts_str : str
             A string of the full text with unwanted words removed
     """
-    if type(ignore_words) == str:
+    if isinstance(ignore_words, str):
         words_to_ignore = [ignore_words]
-    elif type(ignore_words) == list:
+    elif isinstance(ignore_words, list):
         words_to_ignore = ignore_words
-    elif ignore_words == None:
-        words_to_ignore = []
     else:
         words_to_ignore = []
 
-    if type(text_corpus[0]) == list:
+    if isinstance(text_corpus[0], list):
         flat_words = [text for sublist in text_corpus for text in sublist]
         flat_words = [
             token
@@ -133,14 +128,12 @@ def _combine_texts_to_str(text_corpus, ignore_words=None):
             if token not in words_to_ignore
         ]
 
-    texts_str = " ".join([word for word in flat_words])
-
-    return texts_str
+    return " ".join(flat_words)
 
 
 def _remove_unwanted(args):
     """
-    Lower cases tokens and removes numbers and possibly names
+    Lower cases tokens and removes numbers and possibly names.
 
     Parameters
     ----------
@@ -163,18 +156,16 @@ def _remove_unwanted(args):
     """
     text, words_to_ignore, stop_words = args
 
-    text_words_removed = [
+    return [
         token.lower()
         for token in text
         if token not in words_to_ignore and token not in stop_words
     ]
 
-    return text_words_removed
-
 
 def _lemmatize(tokens, nlp=None, verbose=True):
     """
-    Lemmatizes tokens
+    Lemmatizes tokens.
 
     Parameters
     ----------
@@ -228,7 +219,7 @@ def clean(
     verbose=True,
 ):
     """
-    Cleans and tokenizes a text body to prepare it for analysis
+    Cleans and tokenizes a text body to prepare it for analysis.
 
     Parameters
     ----------
@@ -276,12 +267,12 @@ def clean(
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
-    if type(texts) == str:
+    if isinstance(texts, str):
         texts = [texts]
 
-    if type(ignore_words) == str:
+    if isinstance(ignore_words, str):
         words_to_ignore = [ignore_words]
-    elif ignore_words == None:
+    elif ignore_words is None:
         words_to_ignore = []
     else:
         words_to_ignore = ignore_words
@@ -324,18 +315,17 @@ def clean(
 
         texts_no_random_punctuation.append(r)
 
-    texts_no_punctuation = []
-    for r in texts_no_random_punctuation:
-        texts_no_punctuation.append(
-            r.translate(str.maketrans("", "", string.punctuation + "–" + "’"))
-        )
+    texts_no_punctuation = [
+        r.translate(str.maketrans("", "", string.punctuation + "–" + "’"))
+        for r in texts_no_random_punctuation
+    ]
 
     gc.collect()
     pbar.update()
 
-    texts_no_emojis = []
-    for response in texts_no_punctuation:
-        texts_no_emojis.append(emoji.get_emoji_regexp().sub(r"", response))
+    texts_no_emojis = [
+        emoji.get_emoji_regexp().sub(r"", response) for response in texts_no_punctuation
+    ]
 
     tokenized_texts = [
         [token for token in text.lower().split() if not token.isnumeric()]
@@ -419,10 +409,10 @@ def clean(
             base_tokens = _lemmatize(
                 tokens=tokens_remove_unwanted, nlp=nlp, verbose=verbose
             )
-        except:
-            pass
+        except OSError:
+            nlp = None
 
-    if nlp == None:
+    if nlp is None:
         # Lemmatization failed, so try stemming
         stemmer = None
         if input_language in SnowballStemmer.languages:
@@ -437,7 +427,11 @@ def clean(
         elif input_language == "sv":
             stemmer = SnowballStemmer("swedish")
 
-        if stemmer != None:
+        if stemmer is None:
+            # We cannot lemmatize or stem
+            base_tokens = tokens_remove_unwanted
+
+        else:
             # Stemming instead of lemmatization
             base_tokens = []  # still call it lemmatized for consistency
             for tokens in tqdm(
@@ -450,10 +444,6 @@ def clean(
                 stemmed_tokens = [stemmer.stem(t) for t in tokens]
                 base_tokens.append(stemmed_tokens)
 
-        else:
-            # We cannot lemmatize or stem
-            base_tokens = tokens_remove_unwanted
-
     gc.collect()
     pbar.update()
 
@@ -463,27 +453,26 @@ def clean(
         for t in list(set(tokens)):
             token_frequencies[t] += 1
 
-    if min_token_len == None or min_token_len == False:
+    if min_token_len is None or min_token_len == False:
         min_token_len = 0
-    if min_token_freq == None or min_token_freq == False:
+    if min_token_freq is None or min_token_freq == False:
         min_token_freq = 0
 
-    assert (
-        type(min_token_len) == int
+    assert isinstance(
+        min_token_len, int
     ), "The 'min_token_len' argument must be an integer if used"
-    assert (
-        type(min_token_freq) == int
+    assert isinstance(
+        min_token_freq, int
     ), "The 'min_token_freq' argument must be an integer if used"
 
-    min_len_freq_tokens = []
-    for tokens in base_tokens:
-        min_len_freq_tokens.append(
-            [
-                t
-                for t in tokens
-                if len(t) >= min_token_len and token_frequencies[t] >= min_token_freq
-            ]
-        )
+    min_len_freq_tokens = [
+        [
+            t
+            for t in tokens
+            if len(t) >= min_token_len and token_frequencies[t] >= min_token_freq
+        ]
+        for tokens in base_tokens
+    ]
 
     gc.collect()
     pbar.update()
@@ -493,16 +482,16 @@ def clean(
     text_corpus = [min_len_freq_tokens[i] for i in non_empty_token_indexes]
 
     # Sample words, if necessary
-    if sample_size != 1:
+    if sample_size == 1:
+        selected_idxs = list(range(len(text_corpus)))
+
+    else:
         selected_idxs = [
             i
             for i in random.choices(
                 range(len(text_corpus)), k=int(sample_size * len(text_corpus))
             )
         ]
-    else:
-        selected_idxs = list(range(len(text_corpus)))
-
     text_corpus = [
         _combine_texts_to_str(text_corpus=text_corpus[i]) for i in selected_idxs
     ]
@@ -528,7 +517,7 @@ def prepare_data(
     verbose=True,
 ):
     """
-    Prepares input data for analysis from a pandas.DataFrame or path
+    Prepares input data for analysis from a pandas.DataFrame or path.
 
     Parameters
     ----------
@@ -579,7 +568,7 @@ def prepare_data(
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
-    if type(target_cols) == str:
+    if isinstance(target_cols, str):
         target_cols = [target_cols]
 
     df_texts = load_data(data)
@@ -587,15 +576,16 @@ def prepare_data(
     # Select columns from which texts should come
     raw_texts = []
     for i in df_texts.index:
-        text = ""
-        for c in target_cols:
-            if type(df_texts.loc[i, c]) == str:
-                text += " " + df_texts.loc[i, c]
+        text = "".join(
+            " " + df_texts.loc[i, c]
+            for c in target_cols
+            if isinstance(df_texts.loc[i, c], str)
+        )
 
         text = text[1:]  # remove first blank space
         raw_texts.append(text)
 
-    text_corpus = clean(
+    return clean(
         texts=raw_texts,
         input_language=input_language,
         min_token_freq=min_token_freq,
@@ -608,8 +598,6 @@ def prepare_data(
         sample_size=sample_size,
         verbose=verbose,
     )
-
-    return text_corpus
 
 
 def _prepare_corpus_path(
@@ -628,7 +616,7 @@ def _prepare_corpus_path(
     verbose=True,
 ):
     """
-    Checks a text corpus to see if it's a path, and prepares the data if so
+    Checks a text corpus to see if it's a path, and prepares the data if so.
 
     Parameters
     ----------
@@ -676,7 +664,7 @@ def _prepare_corpus_path(
         text_corpus : list or list of lists
             A prepared text corpus for the data in the given path
     """
-    if type(text_corpus) == str:
+    if isinstance(text_corpus, str):
         try:
             os.path.exists(text_corpus)  # a path has been provided
             text_corpus = prepare_data(
@@ -704,7 +692,7 @@ def _prepare_corpus_path(
 
 def translate_output(outputs, input_language, output_language):
     """
-    Translates model outputs using https://github.com/ssut/py-googletrans
+    Translates model outputs using https://github.com/ssut/py-googletrans.
 
     Parameters
     ----------
@@ -724,19 +712,18 @@ def translate_output(outputs, input_language, output_language):
     """
     translator = Translator()
 
-    if type(outputs[0]) == list:
-        translated_outputs = []
-        for sub_output in outputs:
-            translated_outputs.append(
-                [
-                    translator.translate(
-                        text=o, src=input_language, dest=output_language
-                    ).text
-                    for o in sub_output
-                ]
-            )
+    if isinstance(outputs[0], list):
+        translated_outputs = [
+            [
+                translator.translate(
+                    text=o, src=input_language, dest=output_language
+                ).text
+                for o in sub_output
+            ]
+            for sub_output in outputs
+        ]
 
-    elif type(outputs[0]) == str:
+    elif isinstance(outputs[0], str):
         translated_outputs = [
             translator.translate(text=o, src=input_language, dest=output_language).text
             for o in outputs
@@ -747,9 +734,7 @@ def translate_output(outputs, input_language, output_language):
 
 def organize_by_pos(outputs, output_language):
     """
-    Orders a keyword output by the part of speech of the words
-
-    Order is: nouns, adjectives, adverbs and verbs
+    Orders a keyword output by the part of speech of the words.
 
     Parameters
     ----------
@@ -811,7 +796,7 @@ def organize_by_pos(outputs, output_language):
 
 def prompt_for_word_removal(words_to_ignore=None):
     """
-    Prompts the user for words that should be ignored in kewword extraction
+    Prompts the user for words that should be ignored in kewword extraction.
 
     Parameters
     ----------
@@ -823,26 +808,27 @@ def prompt_for_word_removal(words_to_ignore=None):
         ignore words, words_added : list, bool
             A new list of words to ignore and a boolean indicating if words have been added
     """
-    if type(words_to_ignore) == str:
+    if isinstance(words_to_ignore, str):
         words_to_ignore = [words_to_ignore]
 
     words_to_ignore = [w.replace("'", "") for w in words_to_ignore]
 
     words_added = False  # whether to run the models again
     more_words = True
-    while more_words != False:
+    while more_words:
         more_words = input("\nAre there words that should be removed [y/n]? ")
         if more_words == "y":
             new_words_to_ignore = input("Type or copy word(s) to be removed: ")
             # Remove commas if the user has used them to separate words, as well as apostraphes
             new_words_to_ignore = [
-                char for char in new_words_to_ignore if char != "," and char != "'"
+                char for char in new_words_to_ignore if char not in [",", "'"]
             ]
-            new_words_to_ignore = "".join([word for word in new_words_to_ignore])
+
+            new_words_to_ignore = "".join(new_words_to_ignore)
 
             if " " in new_words_to_ignore:
                 new_words_to_ignore = new_words_to_ignore.split(" ")
-            elif type(new_words_to_ignore) == str:
+            elif isinstance(new_words_to_ignore, str):
                 new_words_to_ignore = [new_words_to_ignore]
 
             words_to_ignore += new_words_to_ignore

@@ -4,11 +4,10 @@ Visuals Tests
 """
 
 import os
-from pytest_cov.embed import cleanup_on_sigterm
 
 import matplotlib.pyplot as plt
-
 from kwx import visuals
+from pytest_cov.embed import cleanup_on_sigterm
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 cleanup_on_sigterm()
@@ -17,7 +16,7 @@ cleanup_on_sigterm()
 def test_graph_topic_num_evals(monkeypatch, long_text_corpus):
     monkeypatch.setattr(plt, "show", lambda: None)
     visuals.graph_topic_num_evals(
-        method=["lda", "lda_bert", "bert"],
+        method=["lda", "bert"],
         text_corpus=long_text_corpus,
         num_keywords=10,
         topic_nums_to_compare=[9, 10],
@@ -28,19 +27,17 @@ def test_graph_topic_num_evals(monkeypatch, long_text_corpus):
 
 
 def test_return_ideal_metrics(long_text_corpus):
-    assert (
-        type(
-            visuals.graph_topic_num_evals(
-                method=["lda"],
-                text_corpus=long_text_corpus,
-                num_keywords=10,
-                topic_nums_to_compare=[9, 10],
-                save_file=False,
-                return_ideal_metrics=True,
-                verbose=False,
-            )[1]
-        )
-        == int
+    assert isinstance(
+        visuals.graph_topic_num_evals(
+            method=["lda"],
+            text_corpus=long_text_corpus,
+            num_keywords=10,
+            topic_nums_to_compare=[9, 10],
+            save_file=False,
+            return_ideal_metrics=True,
+            verbose=False,
+        )[1],
+        int,
     )
 
 

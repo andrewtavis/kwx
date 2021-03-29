@@ -2,7 +2,7 @@
 visuals
 -------
 
-Functions for keyword and topic visualization
+Functions for keyword and topic visualization.
 
 Contents:
     save_vis,
@@ -20,34 +20,31 @@ import time
 import warnings
 import zipfile
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from tqdm.auto import tqdm
-from IPython import get_ipython
-from IPython.display import display
-
-import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
-import seaborn as sns
-from mpl_toolkits.mplot3d import Axes3D
-
 import pyLDAvis
 import pyLDAvis.gensim
-from wordcloud import WordCloud
-
-from gensim.models.ldamulticore import LdaMulticore
+import seaborn as sns
 from gensim import corpora
+from gensim.models.ldamulticore import LdaMulticore
+from IPython import get_ipython
+from IPython.display import display
+from matplotlib.lines import Line2D
+from mpl_toolkits.mplot3d import Axes3D
 from sklearn.manifold import TSNE
+from tqdm.auto import tqdm
+from wordcloud import WordCloud
 
 warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 from sentence_transformers import SentenceTransformer
 
-from kwx import utils, model, topic_model
+from kwx import model, topic_model, utils
 
 
 def save_vis(vis, save_file, file_name):
     """
-    Saves a visualization file in the local or given directory if directed
+    Saves a visualization file in the local or given directory if directed.
 
     Parameters
     ----------
@@ -73,7 +70,7 @@ def save_vis(vis, save_file, file_name):
             dpi=300,
         )
 
-    elif type(save_file) == str:  # a save path has been provided
+    elif isinstance(save_file, str):  # a save path has been provided
         if save_file[-4:] == ".zip":
             with zipfile.ZipFile(save_file, mode="a") as zf:
                 vis.plot([0, 0])
@@ -98,7 +95,7 @@ def save_vis(vis, save_file, file_name):
 
 
 def graph_topic_num_evals(
-    method=["lda", "lda_bert"],
+    method=["lda", "bert"],
     bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus=None,
     num_keywords=10,
@@ -111,11 +108,11 @@ def graph_topic_num_evals(
     **kwargs,
 ):
     """
-    Graphs metrics for the given models over the given number of topics
+    Graphs metrics for the given models over the given number of topics.
 
     Parameters
     ----------
-        method : str (default=lda_bert)
+        method : str (default=["lda", "bert"])
             The modelling method
 
             Options:
@@ -128,10 +125,6 @@ def graph_topic_num_evals(
 
                     - Words are classified via Google Neural Networks
                     - Word classifications are then used to derive topics
-
-                LDA_BERT: Latent Dirichlet Allocation with BERT embeddigs
-
-                    - The combination of LDA and BERT via an autoencoder
 
         bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
             The BERT model to use
@@ -184,14 +177,14 @@ def graph_topic_num_evals(
     if metrics == True:
         metrics = ["stability", "coherence"]
 
-    if type(method) == str:
+    if isinstance(method, str):
         method = [method]
 
     method = [m.lower() for m in method]
 
     def jaccard_similarity(topic_1, topic_2):
         """
-        Derives the Jaccard similarity of two topics
+        Derives the Jaccard similarity of two topics.
 
         Notes
         -----
@@ -219,7 +212,7 @@ def graph_topic_num_evals(
     metric_vals = []  # add metric values so that figure y-axis can be scaled
 
     # Initialize the topics numbers that models should be run for
-    if topic_nums_to_compare == None:
+    if topic_nums_to_compare is None:
         topic_nums_to_compare = list(range(num_keywords + 2))[1:]
     else:
         # If topic numbers are given, then add one more for comparison
@@ -232,7 +225,7 @@ def graph_topic_num_evals(
         coherence_dict = {}
 
         bert_model = None
-        if m == "bert" or m == "lda_bert":
+        if m == "bert":
             bert_model = SentenceTransformer(bert_st_model)
 
         for t_n in tqdm(
@@ -243,7 +236,7 @@ def graph_topic_num_evals(
 
             # Assign topics given the current number t_n
             topics_dict[t_n] = model._order_and_subset_by_coherence(
-                model=tm, num_topics=t_n, num_keywords=num_keywords
+                tm=tm, num_topics=t_n, num_keywords=num_keywords
             )[0]
 
             coherence_dict[t_n] = model.get_coherence(
@@ -366,7 +359,7 @@ def gen_word_cloud(
     text_corpus, ignore_words=None, height=500, save_file=False,
 ):
     """
-    Generates a word cloud for a group of words
+    Generates a word cloud for a group of words.
 
     Parameters
     ----------
@@ -417,7 +410,7 @@ def pyLDAvis_topics(
     **kwargs,
 ):
     """
-    Returns the outputs of an LDA model plotted using pyLDAvis
+    Returns the outputs of an LDA model plotted using pyLDAvis.
 
     Parameters
     ----------
@@ -463,7 +456,7 @@ def pyLDAvis_topics(
 
     def in_ipython():
         """
-        Allows for direct display in a Jupyter notebook
+        Allows for direct display in a Jupyter notebook.
         """
         try:
             shell = get_ipython().__class__.__name__
@@ -482,7 +475,7 @@ def pyLDAvis_topics(
         pyLDAvis.save_html(
             vis, "lda_topics_{}.html".format(time.strftime("%Y%m%d-%H%M%S"))
         )
-    elif type(save_file) == str:
+    elif isinstance(save_file, str):
         if save_file[-4:] == ".zip":
             pyLDAvis.save_html(vis, "lda_topics.html")
             with zipfile.ZipFile(save_file, mode="a") as zf:
@@ -517,11 +510,11 @@ def t_sne(
     **kwargs,
 ):
     """
-    Returns the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding)
+    Returns the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding).
 
     Notes
     -----
-    t-SNE reduces the dimensionality of a space such that similar points will be closer and dissimilar points farther
+        t-SNE reduces the dimensionality of a space such that similar points will be closer and dissimilar points farther.
 
     Parameters
     ----------

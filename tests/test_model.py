@@ -6,7 +6,10 @@ Model Tests
 import os
 from io import StringIO
 
+import numpy as np
 from kwx import model
+
+np.random.seed(42)
 
 
 def test_extract_frequent_kws(long_text_corpus):
@@ -17,8 +20,18 @@ def test_extract_frequent_kws(long_text_corpus):
         num_keywords=10,
         prompt_remove_words=False,
     )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
+    assert kws == [
+        "virginamerica",
+        "flight",
+        "tco",
+        "carrieunderwood",
+        "ladygaga",
+        "fly",
+        "virginamerica_ladygaga",
+        "virginamerica_ladygaga_carrieunderwood",
+        "seat",
+        "lax",
+    ]
 
 
 def test_translate_kw_output(long_text_corpus):
@@ -30,8 +43,18 @@ def test_translate_kw_output(long_text_corpus):
         num_keywords=10,
         prompt_remove_words=False,
     )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
+    assert kws == [
+        "VirginAmerica.",
+        "Flug",
+        "tco.",
+        "Carrie underwood",
+        "Lady Gaga",
+        "Fliege",
+        "virginamerica_ladygaga.",
+        "virginamerica_ladygaga_carrieunderwood.",
+        "Sitz",
+        "lax",
+    ]
 
 
 def test_extract_TFIDF_kws(long_text_corpus):
@@ -43,8 +66,18 @@ def test_extract_TFIDF_kws(long_text_corpus):
         num_keywords=10,
         prompt_remove_words=False,
     )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
+    assert kws == [
+        "virginamerica",
+        "flight",
+        "tco",
+        "carrieunderwood",
+        "ladygaga",
+        "fly",
+        "virginamerica_ladygaga_carrieunderwood",
+        "virginamerica_ladygaga",
+        "seat",
+        "time",
+    ]
 
 
 def test_extract_LDA_kws(long_text_corpus):
@@ -56,12 +89,22 @@ def test_extract_LDA_kws(long_text_corpus):
         num_topics=10,
         prompt_remove_words=False,
     )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
+    assert kws == [
+        "virginamerica",
+        "customer",
+        "flight",
+        "tco",
+        "airline",
+        "trip",
+        "fly",
+        "carrieunderwood",
+        "bag",
+        "week",
+    ]
 
 
 def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
-    monkeypatch.setattr("sys.stdin", StringIO("y\nword\nn\n"))
+    monkeypatch.setattr("sys.stdin", StringIO("y\nvirginamerica\nn\n"))
 
     kws = model.extract_kws(
         method="lda",
@@ -71,8 +114,18 @@ def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
         num_topics=10,
         prompt_remove_words=True,
     )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
+    assert kws == [
+        "flight",
+        "time",
+        "seat",
+        "traveler",
+        "lax",
+        "fly",
+        "ladygaga",
+        "virginamerica_ladygaga",
+        "carrieunderwood",
+        "virginamerica_ladygaga_carrieunderwood",
+    ]
 
 
 def test_extract_BERT_kws(long_text_corpus):
@@ -84,25 +137,22 @@ def test_extract_BERT_kws(long_text_corpus):
         num_topics=10,
         prompt_remove_words=False,
     )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
-
-
-def test_extract_lda_BERT_kws(long_text_corpus):
-    kws = model.extract_kws(
-        method="lda_bert",
-        text_corpus=long_text_corpus,
-        input_language="english",
-        num_keywords=10,
-        num_topics=10,
-        prompt_remove_words=False,
-    )
-    assert len(kws) == 10
-    assert type(kws[0]) == str
+    assert kws == [
+        "virginamerica",
+        "bad",
+        "hawaii",
+        "seat",
+        "flight",
+        "carrieunderwood",
+        "fly",
+        "tco",
+        "time",
+        "account",
+    ]
 
 
 def test_gen_files(monkeypatch, long_text_corpus):
-    monkeypatch.setattr("sys.stdin", StringIO("y\nword\nn\n"))
+    monkeypatch.setattr("sys.stdin", StringIO("y\nrandom_word\nn\n"))
 
     model.gen_files(
         method="lda",
