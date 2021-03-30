@@ -2,8 +2,10 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
-from setuptools import find_packages
+
 import os
+
+from setuptools import find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -12,7 +14,7 @@ setup_args = dict(
     name="kwx",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    version="0.1.7.3",
+    version="0.1.7.4",
     author="Andrew Tavis McAllister",
     author_email="andrew.t.mcallister@gmail.com",
     classifiers=[
