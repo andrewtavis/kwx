@@ -1,3 +1,15 @@
+### kwx 0.1.7.3 (March 30, 2021)
+
+Changes include:
+
+- Switching over to an src structure
+- Removing the lda_bert method because its dependencies were causing breaks
+- Code quality is now checked with Codacy
+- Extensive code formatting to improve quality and style
+- Bug fixes and a more explicit use of exceptions
+- More extensive contributing guidelines
+- Tests now use random seeds and are thus more robust
+
 ### kwx 0.1.5 (March 15, 2021)
 
 Changes include:
@@ -30,6 +42,7 @@ The minimum viable product of kwx:
   - TFIDF words unique to one corpus when compared to others
   - Latent Dirichlet Allocation
   - Bidirectional Encoder Representations from Transformers
+  - An autoencoder application of LDA and BERT combined
 - Users are able to tell the model to remove certain words to fine tune results
 - Support is offered for a universal cleaning process in all major languages
 - Visualization techniques to display keywords and topics are included
