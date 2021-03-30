@@ -4,9 +4,9 @@ Utilities Tests
 """
 
 import os
-import spacy
 from io import StringIO
 
+import spacy
 from kwx import utils
 
 

@@ -40,7 +40,8 @@ jobs:
       run: |
         eval "$(conda shell.bash hook)"
         conda activate kwx-dev
-        pytest --cov=kwx tests --cov-report=xml
+        export PYTHONPATH="./src"
+        pytest --cov=src tests --cov-report=xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:

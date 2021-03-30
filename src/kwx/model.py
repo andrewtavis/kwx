@@ -2,7 +2,7 @@
 model
 -----
 
-Functions for modeling text corpuses and extracting keywords
+Functions for modeling text corpuses and extracting keywords.
 
 Contents:
     get_topic_words,
@@ -20,16 +20,12 @@ with warnings.catch_warnings():
     from collections import Counter
 
 import importlib
-import inspect
 import math
 import os
-import re
 import time
 import zipfile
 
 import numpy as np
-import pandas as pd
-
 from gensim.models import CoherenceModel
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -41,7 +37,7 @@ from kwx import languages, topic_model, utils, visuals
 
 def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
     """
-    Get top words within each topic for cluster models
+    Get top words within each topic for cluster models.
 
     Parameters
     ----------
@@ -62,12 +58,12 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
         topics, non_blank_topic_idxs : list and list
             Topic keywords and indexes of those that are not empty lists
     """
-    if num_topics == None:
+    if num_topics is None:
         num_topics = len(np.unique(labels))
     topics = ["" for _ in range(num_topics)]
 
     for i, c in enumerate(text_corpus):
-        topics[labels[i]] += " " + " ".join(c)
+        topics[labels[i]] += " " + "".join(c)
 
     # Count the words that appear for a given topic label
     word_counts = list(map(lambda x: Counter(x.split()).items(), topics))
@@ -87,7 +83,7 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
 
 def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c_v"):
     """
-    Gets model coherence from gensim.models.coherencemodel
+    Gets model coherence from gensim.models.coherencemodel.
 
     Parameters
     ----------
@@ -124,7 +120,7 @@ def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c
 
     else:
         topic_words = get_topic_words(
-            text_corpus=token_corpus,
+            text_corpus=text_corpus,
             labels=model.cluster_model.labels_,
             num_topics=num_topics,
             num_keywords=num_keywords,
@@ -138,18 +134,16 @@ def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c
             coherence=measure,
         )
 
-    coherence = cm.get_coherence()
-
-    return coherence
+    return cm.get_coherence()
 
 
-def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
+def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
     """
-    Orders topics based on their average coherence across the text corpus
+    Orders topics based on their average coherence across the text corpus.
 
     Parameters
     ----------
-        model : kwx.topic_model.TopicModel
+        tm : kwx.topic_model.TopicModel
             A model trained on the given text corpus
 
         num_topics : int (default=10)
@@ -164,14 +158,14 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
             Topics words ordered by average coherence and indexes by which they should be selected
     """
     # Derive average topics across texts for a given method
-    if model.method == "lda":
-        shown_topics = model.lda_model.show_topics(
+    if tm.method == "lda":
+        shown_topics = tm.lda_model.show_topics(
             num_topics=num_topics, num_words=num_keywords, formatted=False
         )
 
         topic_words = [[word[0] for word in topic[1]] for topic in shown_topics]
-        topic_corpus = model.lda_model.__getitem__(
-            bow=model.bow_corpus, eps=0
+        topic_corpus = tm.lda_model.__getitem__(
+            bow=tm.bow_corpus, eps=0
         )  # cutoff probability to 0
 
         topics_per_response = [response for response in topic_corpus]
@@ -182,27 +176,27 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
         topic_averages = [
             (
                 t,
-                sum([t_c[1] for t_c in flat_topic_coherences if t_c[0] == t])
-                / len(model.bow_corpus),
+                sum(t_c[1] for t_c in flat_topic_coherences if t_c[0] == t)
+                / len(tm.bow_corpus),
             )
             for t in range(num_topics)
         ]
 
-    elif model.method == "bert" or model.method == "lda_bert":
+    elif tm.method == "bert":
         # The topics in cluster models are not guranteed to be the size of num_keywords
         topic_words, non_blank_topic_idxs = get_topic_words(
-            text_corpus=model.text_corpus,
-            labels=model.cluster_model.labels_,
+            text_corpus=tm.text_corpus,
+            labels=tm.cluster_model.labels_,
             num_topics=num_topics,
             num_keywords=num_keywords,
         )
 
         # Create a dictionary of the assignment counts for the topics
-        counts_dict = dict(Counter(model.cluster_model.labels_))
+        counts_dict = dict(Counter(tm.cluster_model.labels_))
         counts_dict = {
             k: v for k, v in counts_dict.items() if k in non_blank_topic_idxs
         }
-        keys_ordered = sorted([k for k in counts_dict.keys()])
+        keys_ordered = sorted([k for k in counts_dict])
 
         # Map to the range from 0 to the number of non-blank topics
         counts_dict_mapped = {i: counts_dict[k] for i, k in enumerate(keys_ordered)}
@@ -210,7 +204,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
         # Derive the average assignment of the topics
         topic_averages = [
             (k, counts_dict_mapped[k] / sum(counts_dict_mapped.values()))
-            for k in counts_dict_mapped.keys()
+            for k in counts_dict_mapped
         ]
 
     # Order ids by the average coherence across the texts
@@ -234,7 +228,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
         for i, a in enumerate(ordered_topic_averages)
     ]
 
-    total_indexes = sum([len(i) for i in selection_indexes])
+    total_indexes = sum(len(i) for i in selection_indexes)
     s_i = 0
     while total_indexes < num_keywords:
         selection_indexes[s_i] = selection_indexes[s_i] + [
@@ -248,7 +242,7 @@ def _order_and_subset_by_coherence(model, num_topics=10, num_keywords=10):
 
 def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
     """
-    Selects keywords from a group of extracted keywords
+    Selects keywords from a group of extracted keywords.
 
     Parameters
     ----------
@@ -273,10 +267,6 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
                     - Words are classified via Google Neural Networks
                     - Word classifications are then used to derive topics
 
-                LDA_BERT: Latent Dirichlet Allocation with BERT embeddigs
-
-                    - The combination of LDA and BERT via an autoencoder
-
         kw_args : dict (default=None)
             A dictionary of keywords and metrics through which to order them as values
 
@@ -291,7 +281,7 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
         keywords : list
             Selected keywords from those extracted
     """
-    if method == "frequency" or method == "tfidf":
+    if method in ["frequency", "tfidf"]:
         kw_dict = {
             k: v
             for k, v in sorted(kw_args.items(), key=lambda item: item[1])[::-1]
@@ -300,7 +290,7 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
 
         keywords = list(kw_dict.keys())[:n]
 
-    elif method == "lda" or method == "bert" or method == "lda_bert":
+    elif method in ["lda", "bert"]:
         ordered_topic_words, selection_indexes = kw_args
 
         # Reverse all selection variables so that low level words come from strong topics
@@ -369,7 +359,7 @@ def extract_kws(
     **kwargs,
 ):
     """
-    Extracts keywords given data, metadata, and model parameter inputs
+    Extracts keywords given data, metadata, and model parameter inputs.
 
     Parameters
     ----------
@@ -393,10 +383,6 @@ def extract_kws(
 
                     - Words are classified via Google Neural Networks
                     - Word classifications are then used to derive topics
-
-                LDA_BERT: Latent Dirichlet Allocation with BERT embeddigs
-
-                    - The combination of LDA and BERT via an autoencoder
 
         bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
             The BERT model to use
@@ -439,7 +425,7 @@ def extract_kws(
     input_language = input_language.lower()
     method = method.lower()
 
-    valid_methods = ["frequency", "tfidf", "lda", "bert", "lda_bert"]
+    valid_methods = ["frequency", "tfidf", "lda", "bert"]
 
     assert method in valid_methods, (
         "The value for the 'method' argument is invalid. Please choose one of "
@@ -452,21 +438,21 @@ def extract_kws(
             corpuses_to_compare != None
         ), "TFIDF requires another text corpus to be passed to the `corpuses_to_compare` argument."
 
-    if input_language in languages.lem_abbr_dict().keys():
+    if input_language in languages.lem_abbr_dict():
         input_language = languages.lem_abbr_dict()[input_language]
 
-    if output_language == None:
+    if output_language is None:
         output_language = input_language
     else:
         output_language = output_language.lower()
-        if output_language in languages.lem_abbr_dict().keys():
+        if output_language in languages.lem_abbr_dict():
             output_language = languages.lem_abbr_dict()[output_language]
 
     if ignore_words is not None:
-        if type(ignore_words) == str:
+        if isinstance(ignore_words, str):
             words_to_ignore = [ignore_words]
 
-        elif type(ignore_words) == list:
+        elif isinstance(ignore_words, list):
             words_to_ignore = ignore_words
 
     else:
@@ -490,7 +476,7 @@ def extract_kws(
             )
 
         elif method == "tfidf":  # Term Frequency Inverse Document Frequency
-            if type(corpuses_to_compare[0]) == str:  # only one corpus to compare
+            if isinstance(corpuses_to_compare[0], str):  # only one corpus to compare
                 corpuses_to_compare = [corpuses_to_compare]
 
             # Combine the main corpus and those to compare
@@ -540,9 +526,9 @@ def extract_kws(
             if len(keywords) > len(frequent_words):
                 keywords = keywords[: len(frequent_words)]
 
-    elif method == "lda" or method == "bert" or method == "lda_bert":
+    elif method in ["lda", "bert"]:
         bert_model = None
-        if method == "bert" or method == "lda_bert":
+        if method == "bert":
             bert_model = SentenceTransformer(bert_st_model)
 
         tm = topic_model.TopicModel(
@@ -551,7 +537,7 @@ def extract_kws(
         tm.fit(text_corpus=text_corpus, method=method, m_clustering=None)
 
         ordered_topic_words, selection_indexes = _order_and_subset_by_coherence(
-            model=tm, num_topics=num_topics, num_keywords=num_keywords
+            tm=tm, num_topics=num_topics, num_keywords=num_keywords
         )
 
         if return_topics:
@@ -642,7 +628,7 @@ def extract_kws(
 
 
 def gen_files(
-    method=["lda", "lda_bert"],
+    method=["lda", "bert"],
     text_corpus=None,
     input_language=None,
     output_language=None,
@@ -660,7 +646,7 @@ def gen_files(
     zip_results=True,
 ):
     """
-    Generates a directory or zip file of all keyword analysis elements
+    Generates a directory or zip file of all keyword analysis elements.
 
     Parameters
     ----------
@@ -699,11 +685,11 @@ def gen_files(
     -------
         A directory or zip file in the current working or save_dir directory
     """
-    if type(method) == list:
+    if isinstance(method, list):
         if len(method) == 1:
             method = method[0]
 
-    if save_dir == None:
+    if save_dir is None:
         save_dir = f'keyword_extraction_{time.strftime("%Y%m%d-%H%M%S")}'
 
     if zip_results:
@@ -726,10 +712,10 @@ def gen_files(
     pyLDAvis_dest = False
     t_sne_dest = False
 
-    if type(incl_visuals) == str:
+    if isinstance(incl_visuals, str):
         incl_visuals = [incl_visuals]
 
-    if type(incl_visuals) == list:
+    if isinstance(incl_visuals, list):
         if "topic_num_evals" in incl_visuals:
             topic_num_evals_dest = save_dir
 
@@ -749,22 +735,22 @@ def gen_files(
             pyLDAvis_dest = save_dir
             t_sne_dest = save_dir
 
-    if input_language in languages.lem_abbr_dict().keys():
+    if input_language in languages.lem_abbr_dict():
         input_language = languages.lem_abbr_dict()[input_language]
 
-    if output_language == None:
+    if output_language is None:
         output_language = input_language
 
     else:
         output_language = output_language.lower()
-        if output_language in languages.lem_abbr_dict().keys():
+        if output_language in languages.lem_abbr_dict():
             output_language = languages.lem_abbr_dict()[output_language]
 
     if ignore_words is not None:
-        if type(ignore_words) == str:
+        if isinstance(ignore_words, str):
             words_to_ignore = [ignore_words]
 
-        elif type(ignore_words) == list:
+        elif isinstance(ignore_words, list):
             words_to_ignore = ignore_words
 
     else:
@@ -921,14 +907,14 @@ def gen_files(
 
     def add_to_zip_str(input_obj, new_char):
         """
-        Adds characters to a string that will be zipped
+        Adds characters to a string that will be zipped.
         """
         input_obj += new_char
         return input_obj
 
     def add_to_txt_file(input_obj, new_char):
         """
-        Adds characters to a string that will be zipped
+        Adds characters to a string that will be zipped.
         """
         input_obj.write(new_char)
         return input_obj
@@ -943,7 +929,7 @@ def gen_files(
         input_obj = open(txt_file, "w")
 
     for model_key, model_val in keywords_dict.items():
-        if type(keywords_dict[model_key]) == dict:
+        if isinstance(keywords_dict[model_key], dict):
             input_obj = edit_fxn(input_obj=input_obj, new_char=str(model_key))
             input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
@@ -963,7 +949,7 @@ def gen_files(
                 input_obj = edit_fxn(input_obj=input_obj, new_char="=" * len(model_key))
                 input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
-        elif type(keywords_dict[model_key]) == list:
+        elif isinstance(keywords_dict[model_key], list):
             input_obj = edit_fxn(input_obj=input_obj, new_char=str(model_key))
             input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 

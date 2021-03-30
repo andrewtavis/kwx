@@ -17,15 +17,19 @@
 
 ### BERT, LDA, and TFIDF based keyword extraction in Python
 
-**Contents:**<a id="contents"></a> [Models](#models) • [Usage](#usage) • [Visuals](#visuals) • [To-Do](#to-do)
-
 **kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert) and [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/kwx/languages.py) for the various degrees of language support). A unique focus is allowing users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
 
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
-# Installation via PyPi
+# **Contents**<a id="contents"></a>
+- [Models](#models)
+- [Usage](#usage)
+- [Visuals](#visuals)
+- [To-Do](#to-do)
 
-kwx can be downloaded from pypi via PyPI or sourced directly from this repository:
+# Installation
+
+kwx can be downloaded from PyPI via pip or sourced directly from this repository:
 
 ```bash
 pip install kwx
@@ -56,10 +60,6 @@ kwx uses [sentence-transformers](https://github.com/UKPLab/sentence-transformers
 [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) is a generative statistical model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. In the case of kwx, documents or text entries are posited to be a mixture of a given number of topics, and the presence of each word in a text body comes from its relation to these derived topics.
 
 Although not as computationally robust as some machine learning models, LDA provides quick results that are suitable for many applications. Specifically for keyword extraction, in most settings the results are similar to those of BERT in a fraction of the time.
-
-### LDA with BERT Embeddings
-
-The combination of LDA with BERT via [kwx.autoencoder](https://github.com/andrewtavis/kwx/blob/main/kwx/autoencoder.py).
 
 ### Other Methods
 
@@ -106,7 +106,7 @@ corpus_no_ngrams = [
 # We can pass keywords for sentence_transformers.SentenceTransformer.encode,
 # gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer
 bert_kws = extract_kws(
-    method="BERT", # "BERT", "LDA_BERT", "LDA", "TFIDF", "frequency"
+    method="BERT", # "BERT", "LDA", "TFIDF", "frequency"
     bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus=corpus_no_ngrams,  # automatically tokenized if using LDA
     input_language=input_language,
@@ -153,7 +153,7 @@ from kwx.visuals import graph_topic_num_evals
 import matplotlib.pyplot as plt
 
 graph_topic_num_evals(
-    method=["lda", "bert", "lda_bert"],
+    method=["lda", "bert"],
     text_corpus=text_corpus,
     num_keywords=num_keywords,
     topic_nums_to_compare=list(range(5, 15)),
@@ -228,10 +228,18 @@ gen_word_cloud(
 
 # To-Do [`↩`](#contents) <a id="to-do"></a>
 
+Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
+
 - Including more methods to extract keywords
+
 - Allowing key phrase extraction
+
 - Adding t-SNE and pyLDAvis style visualizations for BERT models
+
 - Updates to [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/kwx/languages.py) as lemmatization and other linguistic package dependencies evolve
+
 - Creating, improving and sharing [examples](https://github.com/andrewtavis/kwx/tree/main/examples)
+
 - Improving [tests](https://github.com/andrewtavis/kwx/tree/main/tests) for greater [code coverage](https://codecov.io/gh/andrewtavis/kwx)
+
 - Updating and refining the [documentation](https://kwx.readthedocs.io/en/latest/)
