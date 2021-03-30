@@ -684,8 +684,8 @@ def _prepare_corpus_path(
 
             return text_corpus
 
-        except:
-            pass
+        except OSError:
+            return text_corpus
 
     return text_corpus
 

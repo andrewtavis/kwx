@@ -5,7 +5,7 @@
     :target: https://github.com/andrewtavis/kwx
 ============
 
-|rtd| |ci| |codecov| |pyversions| |pypi| |pypistatus| |license| |coc| |codestyle| |colab|
+|rtd| |ci| |codecov| |quality| |pyversions| |pypi| |pypistatus| |license| |coc| |codestyle| |colab|
 
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
@@ -15,6 +15,9 @@
 
 .. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg
     :target: https://codecov.io/gh/andrewtavis/kwx
+
+.. |quality| image:: https://img.shields.io/codacy/grade/25f1aa66a591458ab407f712c02af17c?logo=codacy
+    :target: https://app.codacy.com/gh/andrewtavis/kwx/dashboard
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998
     :target: https://pypi.org/project/kwx/
