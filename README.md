@@ -11,7 +11,7 @@
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)
 [![pypistatus](https://img.shields.io/pypi/status/kwx.svg)](https://pypi.org/project/kwx/)
-[![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE.text)
+[![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt)
 [![coc](https://img.shields.io/badge/coc-Contributor%20Covenant-ff69b4.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md)
 [![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![colab](https://img.shields.io/badge/%20-Open%20in%20Colab-097ABB.svg?logo=google-colab&color=097ABB&labelColor=525252)](https://colab.research.google.com/github/andrewtavis/kwx)
