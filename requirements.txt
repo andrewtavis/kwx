@@ -1,5 +1,5 @@
 absl-py==0.11.0
-aiohttp==3.7.3
+aiohttp==3.7.4
 alabaster==0.7.12
 appdirs==1.4.4
 appnope==0.1.2
@@ -40,7 +40,7 @@ filelock==3.0.12
 flatbuffers==1.12
 funcy==1.15
 future==0.18.2
-gast==0.3.3
+gast==0.4.0
 gensim==3.8.0
 google-api-core==1.22.2
 google-auth==1.24.0
