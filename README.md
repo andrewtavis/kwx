@@ -231,7 +231,7 @@ gen_word_cloud(
 
 Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
 
-- Including more methods to extract keywords
+- Including more methods to extract keywords [(see issue)](https://github.com/andrewtavis/kwx/issues/17)
 
 - Allowing key phrase extraction
 
