@@ -18,7 +18,7 @@
 
 ### BERT, LDA, and TFIDF based keyword extraction in Python
 
-**kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert) and [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) for the various degrees of language support).Our unique focus is to allow the users to decide which words to not include in outputs, thereby allowing them to use their own intuitions to fine tune the modeling process.
+**kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert) and [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) for the various degrees of language support). A unique focus is allowing users to decide which words to not include in outputs, thereby guaranteeing sensible results that are in line with user intuitions.
 
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
@@ -139,7 +139,7 @@ The new BERT keywords are:
 Are there words that should be removed [y/n]? n
 ```
 
-The model will be re-run until all words known to be unreasonable are removed for a suitable output. [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
+The model will be rerun until all words known to be unreasonable are removed for a suitable output. [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
 
 # Visuals [`↩`](#contents) <a id="visuals"></a>
 
