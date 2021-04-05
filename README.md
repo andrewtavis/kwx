@@ -233,7 +233,7 @@ Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob
 
 - Including more methods to extract keywords [(see issue)](https://github.com/andrewtavis/kwx/issues/17)
 
-- Allowing key phrase extraction [(see issues)](https://github.com/andrewtavis/kwx/issues/)
+- Adding key phrase extraction as an option [(see issues)](https://github.com/andrewtavis/kwx/issues/)
 
 - Adding t-SNE and pyLDAvis style visualizations for BERT models
 
