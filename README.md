@@ -231,7 +231,7 @@ gen_word_cloud(
 
 Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
 
-- Creating concise [requirements.txt](https://github.com/andrewtavis/kwx/blob/main/requirements.txt) and [environment.yml](https://github.com/andrewtavis/kwx/blob/main/environment.yml) files [(see issue)](https://github.com/andrewtavis/kwx/issues/27)
+- Creating concise [requirements.txt](https://github.com/andrewtavis/kwx/blob/main/requirements.txt) and [environment.yml](https://github.com/andrewtavis/kwx/blob/main/environment.yml) files [(see issue)](https://github.com/andrewtavis/kwx/issues/23)
 
 - Including more methods to extract keywords [(see issue)](https://github.com/andrewtavis/kwx/issues/17)
 
