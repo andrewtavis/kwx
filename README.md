@@ -23,12 +23,13 @@
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
 # **Contents**<a id="contents"></a>
+- [Installation](#installation)
 - [Models](#models)
 - [Usage](#usage)
 - [Visuals](#visuals)
 - [To-Do](#to-do)
 
-# Installation
+# Installation [`↩`](#contents) <a id="installation"></a>
 
 kwx can be downloaded from PyPI via pip or sourced directly from this repository:
 
