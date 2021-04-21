@@ -1,6 +1,7 @@
 black==20.8b1
 certifi==2020.12.5
 defusedxml==0.7.1
+emoji==1.2.0
 gensim==3.8.0
 matplotlib==3.3.2
 nltk==3.5

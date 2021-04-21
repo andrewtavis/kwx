@@ -61,6 +61,7 @@ else:
         "IPython",
         "sentence-transformers",
         "tqdm",
+        "defusedxml",
     ]
 
 if __name__ == "__main__":

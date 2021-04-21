@@ -20,6 +20,7 @@ dependencies:
   - spacy=2.3.5
   - tqdm=4.56.0
   - pip:
+    - emoji==1.2.0
     - sentence-transformers==0.4.1.2
     - stopwordsiso==0.6.1
     - tensorflow==2.4.1
