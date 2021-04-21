@@ -34,27 +34,27 @@ def test_extract_frequent_kws(long_text_corpus):
     ]
 
 
-def test_translate_kw_output(long_text_corpus):
-    kws = model.extract_kws(
-        method="frequency",
-        text_corpus=long_text_corpus,
-        input_language="english",
-        output_language="german",
-        num_keywords=10,
-        prompt_remove_words=False,
-    )
-    assert kws == [
-        "VirginAmerica.",
-        "Flug",
-        "tco.",
-        "Carrie underwood",
-        "Lady Gaga",
-        "Fliege",
-        "virginamerica_ladygaga.",
-        "virginamerica_ladygaga_carrieunderwood.",
-        "Sitz",
-        "lax",
-    ]
+# def test_translate_kw_output(long_text_corpus):
+#     kws = model.extract_kws(
+#         method="frequency",
+#         text_corpus=long_text_corpus,
+#         input_language="english",
+#         output_language="german",
+#         num_keywords=10,
+#         prompt_remove_words=False,
+#     )
+#     assert kws == [
+#         "VirginAmerica.",
+#         "Flug",
+#         "tco.",
+#         "Carrie underwood",
+#         "Lady Gaga",
+#         "Fliege",
+#         "virginamerica_ladygaga.",
+#         "virginamerica_ladygaga_carrieunderwood.",
+#         "Sitz",
+#         "lax",
+#     ]
 
 
 def test_extract_TFIDF_kws(long_text_corpus):
