@@ -68,6 +68,7 @@ autodoc_mock_imports = [
     "IPython",
     "sentence_transformers",
     "tqdm",
+    "defusedxml",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
