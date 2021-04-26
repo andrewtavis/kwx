@@ -24,7 +24,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pyLDAvis
-import pyLDAvis.gensim
+
+try:
+    import pyLDAvis.gensim_models as pyLDAvis_gensim
+except ImportError:
+    import pyLDAvis.gensim as pyLDAvis_gensim
+
 import seaborn as sns
 from gensim import corpora
 from gensim.models.ldamulticore import LdaMulticore
@@ -469,7 +474,7 @@ def pyLDAvis_topics(
         except NameError:
             return False  # Probably standard Python interpreter
 
-    vis = pyLDAvis.gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
+    vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
 
     if save_file == True:
         pyLDAvis.save_html(
