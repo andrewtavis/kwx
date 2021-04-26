@@ -200,8 +200,13 @@ class TopicModel:
                 )
 
         else:
+            if len(self.text_corpus) < self.num_topics:
+                raise ValueError(
+                    "`num_topics` cannot be larger than the size of `text_corpus` - consider lowering the desired number of topics"
+                )
+
             self.cluster_model = m_clustering(self.num_topics)
             self.vec[method] = self._vectorize(
                 text_corpus=self.text_corpus, method=method, **kwargs,
             )
-            self.cluster_model.fit(self.vec[method])
+            self.cluster_model.fit(X=self.vec[method])
