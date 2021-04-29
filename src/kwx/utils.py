@@ -30,6 +30,7 @@ import string
 from multiprocessing import Pool
 
 import emoji
+import gensim
 import pandas as pd
 import spacy
 from googletrans import Translator
@@ -336,18 +337,34 @@ def clean(
     gc.collect()
     pbar.update()
 
-    bigrams = Phrases(
-        sentences=tokenized_texts,
-        min_count=min_ngram_count,
-        threshold=5.0,
-        common_terms=stop_words,
-    )  # half the normal threshold
-    trigrams = Phrases(
-        sentences=bigrams[tokenized_texts],
-        min_count=min_ngram_count,
-        threshold=5.0,
-        common_terms=stop_words,
-    )
+    # Add bigrams and trigrams
+    # Half the normal threshold
+    if gensim.__version__[0] == "4":
+        bigrams = Phrases(
+            sentences=tokenized_texts,
+            min_count=min_ngram_count,
+            threshold=5.0,
+            connector_words=stop_words,
+        )
+        trigrams = Phrases(
+            sentences=bigrams[tokenized_texts],
+            min_count=min_ngram_count,
+            threshold=5.0,
+            connector_words=stop_words,
+        )
+    else:
+        bigrams = Phrases(  # pylint: disable=unexpected-keyword-arg
+            sentences=tokenized_texts,
+            min_count=min_ngram_count,
+            threshold=5.0,
+            common_terms=stop_words,
+        )
+        trigrams = Phrases(  # pylint: disable=unexpected-keyword-arg
+            sentences=bigrams[tokenized_texts],
+            min_count=min_ngram_count,
+            threshold=5.0,
+            common_terms=stop_words,
+        )
 
     tokens_with_ngrams = []
     for text in tqdm(

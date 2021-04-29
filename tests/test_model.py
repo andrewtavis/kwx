@@ -6,6 +6,7 @@ Model Tests
 import os
 from io import StringIO
 
+import gensim
 import numpy as np
 from kwx import model
 
@@ -80,52 +81,104 @@ def test_extract_TFIDF_kws(long_text_corpus):
     ]
 
 
-def test_extract_LDA_kws(long_text_corpus):
-    kws = model.extract_kws(
-        method="lda",
-        text_corpus=long_text_corpus,
-        input_language="english",
-        num_keywords=10,
-        num_topics=10,
-        prompt_remove_words=False,
-    )
-    assert kws == [
-        "virginamerica",
-        "customer",
-        "flight",
-        "tco",
-        "airline",
-        "trip",
-        "fly",
-        "carrieunderwood",
-        "bag",
-        "week",
-    ]
+if gensim.__version__[0] == "4":
+
+    def test_extract_LDA_kws(long_text_corpus):
+        kws = model.extract_kws(
+            method="lda",
+            text_corpus=long_text_corpus,
+            input_language="english",
+            num_keywords=10,
+            num_topics=10,
+            prompt_remove_words=False,
+        )
+        print(kws)
+        assert kws == [
+            "virginamerica",
+            "tco",
+            "love",
+            "flight",
+            "airline",
+            "trip",
+            "fly",
+            "change",
+            "carrieunderwood",
+            "week",
+        ]
+
+    def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
+        monkeypatch.setattr("sys.stdin", StringIO("y\nvirginamerica\nn\n"))
+
+        kws = model.extract_kws(
+            method="lda",
+            text_corpus=long_text_corpus,
+            input_language="english",
+            num_keywords=10,
+            num_topics=10,
+            prompt_remove_words=True,
+        )
+        print(kws)
+        assert kws == [
+            "flight",
+            "reservation",
+            "online",
+            "change",
+            "check",
+            "lax",
+            "ladygaga",
+            "virginamerica_ladygaga",
+            "carrieunderwood",
+            "virginamerica_ladygaga_carrieunderwood",
+        ]
 
 
-def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
-    monkeypatch.setattr("sys.stdin", StringIO("y\nvirginamerica\nn\n"))
+else:
 
-    kws = model.extract_kws(
-        method="lda",
-        text_corpus=long_text_corpus,
-        input_language="english",
-        num_keywords=10,
-        num_topics=10,
-        prompt_remove_words=True,
-    )
-    assert kws == [
-        "flight",
-        "time",
-        "seat",
-        "traveler",
-        "lax",
-        "fly",
-        "ladygaga",
-        "virginamerica_ladygaga",
-        "carrieunderwood",
-        "virginamerica_ladygaga_carrieunderwood",
-    ]
+    def test_extract_LDA_kws(long_text_corpus):
+        kws = model.extract_kws(
+            method="lda",
+            text_corpus=long_text_corpus,
+            input_language="english",
+            num_keywords=10,
+            num_topics=10,
+            prompt_remove_words=False,
+        )
+        assert kws == [
+            "virginamerica",
+            "customer",
+            "flight",
+            "tco",
+            "airline",
+            "trip",
+            "fly",
+            "carrieunderwood",
+            "bag",
+            "week",
+        ]
+
+    def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
+        monkeypatch.setattr("sys.stdin", StringIO("y\nvirginamerica\nn\n"))
+
+        kws = model.extract_kws(
+            method="lda",
+            text_corpus=long_text_corpus,
+            input_language="english",
+            num_keywords=10,
+            num_topics=10,
+            prompt_remove_words=True,
+        )
+        assert kws == [
+            "flight",
+            "time",
+            "seat",
+            "traveler",
+            "lax",
+            "fly",
+            "ladygaga",
+            "virginamerica_ladygaga",
+            "carrieunderwood",
+            "virginamerica_ladygaga_carrieunderwood",
+        ]
 
 
 def test_extract_BERT_kws(long_text_corpus):

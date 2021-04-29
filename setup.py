@@ -14,7 +14,7 @@ setup_args = dict(
     name="kwx",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    version="0.1.7.5",
+    version="0.1.8",
     author="Andrew Tavis McAllister",
     author_email="andrew.t.mcallister@gmail.com",
     classifiers=[
