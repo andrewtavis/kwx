@@ -2,7 +2,7 @@
   <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/kwx_logo_transparent.png" width=431 height=215></a>
 </div>
 
---------------------------------------
+---
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
 [![ci](https://img.shields.io/github/workflow/status/andrewtavis/kwx/CI?logo=github)](https://github.com/andrewtavis/kwx/actions?query=workflow%3ACI)
@@ -23,6 +23,7 @@
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
 # **Contents**<a id="contents"></a>
+
 - [Installation](#installation)
 - [Models](#models)
 - [Usage](#usage)
