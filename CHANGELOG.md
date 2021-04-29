@@ -1,3 +1,12 @@
+### kwx 0.1.8 (April 29, 2021)
+
+Changes include:
+
+- Support has been added for gensim 3.8.x and 4.x
+- Dependencies in requirement and environment files are now condensed
+- An alert for users when the corpus size is to small for the number of topics was added
+- An import error for pyLDAvis was fixed
+
 ### kwx 0.1.7.3 (March 30, 2021)
 
 Changes include:
