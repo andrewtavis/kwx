@@ -126,7 +126,7 @@ class TopicModel:
                 n_doc = len(bow_corpus)
                 vec_lda = np.zeros((n_doc, num_topics))
                 for i in range(n_doc):
-                    # Get the distribution for the i-th document in bow_corpus
+                    # Get the distribution for the i-th document in bow_corpus.
                     for topic, prob in model.get_document_topics(
                         bow=bow_corpus[i], minimum_probability=0
                     ):

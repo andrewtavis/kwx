@@ -264,7 +264,7 @@ def clean(
     """
     input_language = input_language.lower()
 
-    # Select abbreviation for the lemmatizer, if it's available
+    # Select abbreviation for the lemmatizer, if it's available.
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
@@ -283,7 +283,7 @@ def clean(
         if stopwords(input_language) != set():  # the input language has stopwords
             stop_words = stopwords(input_language)
 
-        # Stemming and normal stopwords are still full language names
+        # Stemming and normal stopwords are still full language names.
         elif input_language in languages.stem_abbr_dict().keys():
             stop_words = stopwords(languages.stem_abbr_dict()[input_language])
 
@@ -293,7 +293,7 @@ def clean(
     pbar = tqdm(
         desc="Cleaning steps complete", total=7, unit="step", disable=not verbose
     )
-    # Remove spaces that are greater that one in length
+    # Remove spaces that are greater that one in length.
     texts_no_large_spaces = []
     for r in texts:
         for i in range(
@@ -306,12 +306,12 @@ def clean(
         texts_no_large_spaces.append(r)
 
     texts_no_random_punctuation = []
-    # Prevent words from being combined when a user types word/word or word-word
+    # Prevent words from being combined when a user types word/word or word-word.
     for r in texts_no_large_spaces:
         r = r.replace("/", " ")
         r = r.replace("-", " ")
         if input_language == "fr":
-            # Get rid of the 'of' abbreviation for French
+            # Get rid of the 'of' abbreviation for French.
             r = r.replace("d'", "")
 
         texts_no_random_punctuation.append(r)
@@ -337,8 +337,8 @@ def clean(
     gc.collect()
     pbar.update()
 
-    # Add bigrams and trigrams
-    # Half the normal threshold
+    # Add bigrams and trigrams.
+    # Use half the normal threshold.
     if gensim.__version__[0] == "4":
         bigrams = Phrases(
             sentences=tokenized_texts,
@@ -376,12 +376,12 @@ def clean(
     ):
         for token in bigrams[text]:
             if token.count("_") == 1:
-                # Token is a bigram, so add it to the tokens
+                # Token is a bigram, so add it to the tokens.
                 text.insert(0, token)
 
         for token in trigrams[bigrams[text]]:
             if token.count("_") == 2:
-                # Token is a trigram, so add it to the tokens
+                # Token is a trigram, so add it to the tokens.
                 text.insert(0, token)
 
         tokens_with_ngrams.append(text)
@@ -411,7 +411,7 @@ def clean(
     gc.collect()
     pbar.update()
 
-    # Lemmatize or stem words (try the former first, then the latter)
+    # Lemmatize or stem words (try the former first, then the latter).
     nlp = None
     try:
         nlp = spacy.load(input_language)
@@ -430,11 +430,11 @@ def clean(
             nlp = None
 
     if nlp is None:
-        # Lemmatization failed, so try stemming
+        # Lemmatization failed, so try stemming.
         stemmer = None
         if input_language in SnowballStemmer.languages:
             stemmer = SnowballStemmer(input_language)
-        # Correct if the abbreviations were put in
+        # Correct if the abbreviations were put in.
         elif input_language == "ar":
             stemmer = SnowballStemmer("arabic")
         elif input_language == "fi":
@@ -445,12 +445,12 @@ def clean(
             stemmer = SnowballStemmer("swedish")
 
         if stemmer is None:
-            # We cannot lemmatize or stem
+            # We cannot lemmatize or stem.
             base_tokens = tokens_remove_unwanted
 
         else:
-            # Stemming instead of lemmatization
-            base_tokens = []  # still call it lemmatized for consistency
+            # Stemming instead of lemmatization.
+            base_tokens = []  # still call it lemmatized for consistency.
             for tokens in tqdm(
                 tokens_remove_unwanted,
                 total=len(tokens_remove_unwanted),
@@ -464,7 +464,7 @@ def clean(
     gc.collect()
     pbar.update()
 
-    # Remove words that don't appear enough or are too small
+    # Remove words that don't appear enough or are too small.
     token_frequencies = defaultdict(int)
     for tokens in base_tokens:
         for t in list(set(tokens)):
@@ -494,11 +494,11 @@ def clean(
     gc.collect()
     pbar.update()
 
-    # Derive those texts that still have valid words
+    # Derive those texts that still have valid words.
     non_empty_token_indexes = [i for i, t in enumerate(min_len_freq_tokens) if t != []]
     text_corpus = [min_len_freq_tokens[i] for i in non_empty_token_indexes]
 
-    # Sample words, if necessary
+    # Sample words, if necessary.
     if sample_size == 1:
         selected_idxs = list(range(len(text_corpus)))
 
@@ -581,7 +581,7 @@ def prepare_data(
     """
     input_language = input_language.lower()
 
-    # Select abbreviation for the lemmatizer, if it's available
+    # Select abbreviation for the lemmatizer, if it's available.
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
@@ -590,7 +590,7 @@ def prepare_data(
 
     df_texts = load_data(data)
 
-    # Select columns from which texts should come
+    # Select columns from which texts should come.
     raw_texts = []
     for i in df_texts.index:
         text = "".join(
@@ -771,11 +771,11 @@ def organize_by_pos(outputs, output_language):
 
     if (
         output_language in languages.lem_abbr_dict().values()
-    ):  # we can use spacy to detect parts of speech
+    ):  # we can use spacy to detect parts of speech.
         nlp = spacy.load(output_language)
         nlp_outputs = [nlp(o)[0] for o in outputs]
 
-        # Those parts of speech to be considered (others go to an 'Other' category)
+        # Those parts of speech to be considered (others go to an 'Other' category).
         pos_order = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
         ordered_outputs = [[o for o in nlp_outputs if o.pos_ == p] for p in pos_order]
         flat_ordered_outputs = [str(o) for sub in ordered_outputs for o in sub]
@@ -836,7 +836,8 @@ def prompt_for_word_removal(words_to_ignore=None):
         more_words = input("\nAre there words that should be removed [y/n]? ")
         if more_words == "y":
             new_words_to_ignore = input("Type or copy word(s) to be removed: ")
-            # Remove commas if the user has used them to separate words, as well as apostraphes
+            # Remove commas if the user has used them to separate words,
+            # as well as apostraphes.
             new_words_to_ignore = [
                 char for char in new_words_to_ignore if char not in [",", "'"]
             ]
