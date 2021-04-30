@@ -4,7 +4,7 @@ languages
 
 Module for organizing language dependencies for text cleaning.
 
-The following languages have been selected because their stopwords can be removed via https://github.com/stopwords-iso/stopwords-iso/tree/master/python
+The following languages have been selected because their stopwords can be removed via https://github.com/stopwords-iso/stopwords-iso/tree/master/python.
 
 Contents:
     lem_abbr_dict,

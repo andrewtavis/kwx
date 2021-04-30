@@ -198,7 +198,7 @@ def graph_topic_num_evals(
                 - J(A,B) = (A ∩ B)/(A ∪ B)
                 - Goal is low Jaccard scores for coverage of the diverse elements
         """
-        # Fix for cases where there are not enough texts for clustering models
+        # Fix for cases where there are not enough texts for clustering models.
         if topic_1 == [] and topic_2 != []:
             topic_1 = topic_2
         if topic_1 != [] and topic_2 == []:
@@ -216,11 +216,11 @@ def graph_topic_num_evals(
     plt.figure(figsize=fig_size)  # begin figure
     metric_vals = []  # add metric values so that figure y-axis can be scaled
 
-    # Initialize the topics numbers that models should be run for
+    # Initialize the topics numbers that models should be run for.
     if topic_nums_to_compare is None:
         topic_nums_to_compare = list(range(num_keywords + 2))[1:]
     else:
-        # If topic numbers are given, then add one more for comparison
+        # If topic numbers are given, then add one more for comparison.
         topic_nums_to_compare = topic_nums_to_compare + [topic_nums_to_compare[-1] + 1]
 
     ideal_topic_num_dict = {}
@@ -239,7 +239,7 @@ def graph_topic_num_evals(
             tm = topic_model.TopicModel(num_topics=t_n, method=m, bert_model=bert_model)
             tm.fit(text_corpus=text_corpus, method=m, m_clustering=None, **kwargs)
 
-            # Assign topics given the current number t_n
+            # Assign topics given the current number t_n.
             topics_dict[t_n] = model._order_and_subset_by_coherence(
                 tm=tm, num_topics=t_n, num_keywords=num_keywords
             )[0]
@@ -289,7 +289,8 @@ def graph_topic_num_evals(
                 label="{}: Topic Coherence".format(m.upper()),
             )
 
-        # If both metrics can be calculated, then an optimal number of topics can be derived
+        # If both metrics can be calculated, then an optimal number of
+        # topics can be derived.
         if "stability" in metrics and "coherence" in metrics:
             coh_sta_diffs = [
                 coherences[i] - mean_stabilities[i]
@@ -306,10 +307,10 @@ def graph_topic_num_evals(
 
             plot_model_ideal_topic_num = model_ideal_topic_num
             if plot_model_ideal_topic_num == topic_nums_to_compare[-1] - 1:
-                # Prevents the line from not appearing on the plot
+                # Prevents the line from not appearing on the plot.
                 plot_model_ideal_topic_num = plot_model_ideal_topic_num - 0.005
             elif plot_model_ideal_topic_num == topic_nums_to_compare[0]:
-                # Prevents the line from not appearing on the plot
+                # Prevents the line from not appearing on the plot.
                 plot_model_ideal_topic_num = plot_model_ideal_topic_num + 0.005
 
             ax.axvline(
@@ -322,7 +323,7 @@ def graph_topic_num_evals(
 
             ideal_topic_num_dict[m] = (model_ideal_topic_num, coh_sta_max)
 
-    # Set plot limits
+    # Set plot limits.
     y_max = max(metric_vals) + (0.10 * max(metric_vals))
     ax.set_ylim([0, y_max])
     ax.set_xlim([topic_nums_to_compare[0], topic_nums_to_compare[-1] - 1])
@@ -332,10 +333,11 @@ def graph_topic_num_evals(
     ax.set_xlabel("Number of Topics", fontsize=20)
     plt.legend(fontsize=20, ncol=len(method))
 
-    # Save file if directed to
+    # Save file if directed to.
     save_vis(vis=plt, save_file=save_file, file_name="topic_number_metrics")
 
-    # Return the ideal model and its topic number, as well as the best LDA topic number for pyLDAvis
+    # Return the ideal model and its topic number, as well as the best
+    # LDA topic number for pyLDAvis.
     if return_ideal_metrics:
         if "lda" in method:
             ideal_lda_num_topics = ideal_topic_num_dict["lda"][0]
@@ -400,7 +402,7 @@ def gen_word_cloud(
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
 
-    # Save file if directed to
+    # Save file if directed to.
     save_vis(vis=plt, save_file=save_file, file_name="word_cloud")
 
     plt.show()
@@ -586,10 +588,10 @@ def t_sne(
     )
 
     if num_topics > 10:
-        # cubehelix better for more than 10 colors
+        # cubehelix better for more than 10 colors.
         colors = sns.color_palette("cubehelix", num_topics)
     else:
-        # The default sns color palette
+        # The default sns color palette.
         colors = sns.color_palette("deep", num_topics)
 
     tsne_2 = None
@@ -649,7 +651,8 @@ def t_sne(
         )
 
         if remove_3d_outliers:
-            # Remove those rows with values that are more than three standard deviations from the column mean
+            # Remove those rows with values that are more than three standard
+            # deviations from the column mean.
             for col in ["tsne-3d-d1", "tsne-3d-d2", "tsne-3d-d3"]:
                 df_tsne_3 = df_tsne_3[
                     np.abs(df_tsne_3[col] - df_tsne_3[col].mean())
@@ -666,7 +669,7 @@ def t_sne(
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=fig_size)
 
     if tsne_2 is not None and tsne_3 is not None:
-        # Plot tsne_2, with tsne_3 being added later
+        # Plot tsne_2, with tsne_3 being added later.
         ax1 = sns.scatterplot(
             data=df_tsne_2,
             x="tsne-2d-d1",
@@ -689,7 +692,7 @@ def t_sne(
         )
 
     elif tsne_2 is not None:
-        # Plot just tsne_2
+        # Plot just tsne_2.
         ax = sns.scatterplot(
             data=df_tsne_2,
             x="tsne-2d-d1",
@@ -712,7 +715,7 @@ def t_sne(
         )
 
     if tsne_2 is not None and tsne_3 is not None:
-        # tsne_2 has been plotted, so add tsne_3
+        # tsne_2 has been plotted, so add tsne_3.
         ax2 = fig.add_subplot(121, projection="3d")
         ax2.scatter(
             xs=df_tsne_3["tsne-3d-d1"],
@@ -729,7 +732,7 @@ def t_sne(
         ax2.set_zlabel("tsne-d3", fontsize=20)
 
         with plt.rc_context({"lines.markeredgewidth": 0}):
-            # Add handles via blank lines and order their colors to match tsne_2
+            # Add handles via blank lines and order their colors to match tsne_2.
             proxy_handles = [
                 Line2D(
                     [0],
@@ -749,7 +752,7 @@ def t_sne(
             )
 
     elif tsne_3 is not None:
-        # Plot just tsne_3
+        # Plot just tsne_3.
         ax.axis("off")
         ax.set_facecolor("white")
         ax = fig.add_subplot(111, projection="3d")
@@ -768,7 +771,7 @@ def t_sne(
         ax.set_zlabel("tsne-d3", fontsize=20)
 
         with plt.rc_context({"lines.markeredgewidth": 0}):
-            # Add handles via blank lines
+            # Add handles via blank lines.
             proxy_handles = [
                 Line2D(
                     [0],
@@ -787,7 +790,7 @@ def t_sne(
                 facecolor=light_grey_tup,
             )
 
-    # Save file if directed to
+    # Save file if directed to.
     save_vis(vis=plt, save_file=save_file, file_name="t_sne")
 
     return fig

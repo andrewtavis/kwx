@@ -64,7 +64,7 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
     for i, c in enumerate(text_corpus):
         topics[labels[i]] += " " + "".join(c)
 
-    # Count the words that appear for a given topic label
+    # Count the words that appear for a given topic label.
     word_counts = list(map(lambda x: Counter(x.split()).items(), topics))
     word_counts = list(
         map(lambda x: sorted(x, key=lambda x: x[1], reverse=True), word_counts)
@@ -182,7 +182,7 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
         ]
 
     elif tm.method == "bert":
-        # The topics in cluster models are not guranteed to be the size of num_keywords
+        # The topics in cluster models are not guranteed to be the size of num_keywords.
         topic_words, non_blank_topic_idxs = get_topic_words(
             text_corpus=tm.text_corpus,
             labels=tm.cluster_model.labels_,
@@ -190,23 +190,23 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
             num_keywords=num_keywords,
         )
 
-        # Create a dictionary of the assignment counts for the topics
+        # Create a dictionary of the assignment counts for the topics.
         counts_dict = dict(Counter(tm.cluster_model.labels_))
         counts_dict = {
             k: v for k, v in counts_dict.items() if k in non_blank_topic_idxs
         }
         keys_ordered = sorted([k for k in counts_dict])
 
-        # Map to the range from 0 to the number of non-blank topics
+        # Map to the range from 0 to the number of non-blank topics.
         counts_dict_mapped = {i: counts_dict[k] for i, k in enumerate(keys_ordered)}
 
-        # Derive the average assignment of the topics
+        # Derive the average assignment of the topics.
         topic_averages = [
             (k, counts_dict_mapped[k] / sum(counts_dict_mapped.values()))
             for k in counts_dict_mapped
         ]
 
-    # Order ids by the average coherence across the texts
+    # Order ids by the average coherence across the texts.
     topic_ids_ordered = [
         tup[0] for tup in sorted(enumerate(topic_averages), key=lambda i: i[1][1])[::-1]
     ]
@@ -219,7 +219,8 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
         a / sum(ordered_topic_averages) for a in ordered_topic_averages
     ]  # normalize just in case
 
-    # Create selection indexes for each topic given its average coherence and how many keywords are wanted
+    # Create selection indexes for each topic given its average coherence
+    # and how many keywords are wanted.
     selection_indexes = [
         list(range(int(math.floor(num_keywords * a))))
         if math.floor(num_keywords * a) > 0
@@ -292,7 +293,7 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
     elif method in ["lda", "bert"]:
         ordered_topic_words, selection_indexes = kw_args
 
-        # Reverse all selection variables so that low level words come from strong topics
+        # Reverse all selection variables so that low level words come from strong topics.
         ordered_topic_words = ordered_topic_words[::-1]
         selection_indexes = selection_indexes[::-1]
 
@@ -312,7 +313,7 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
             keywords = set_ordered_topic_words
 
         else:
-            # Derive keywords from Dirichlet or cluster algorithms
+            # Derive keywords from Dirichlet or cluster algorithms.
             t_n = 0
             keywords = []
             while len(keywords) < n:
@@ -328,15 +329,16 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
                         sel_idxs.append(sel_idxs[-1] + 1)
 
                     if len(sel_idxs) >= len(ordered_topic_words[t_n]):
-                        # The indexes are now more than the keywords, so move to the next topic
+                        # The indexes are now more than the keywords, so move to
+                        # the next topic.
                         break
 
                 t_n += 1
                 if t_n == len(ordered_topic_words):
-                    # The last topic has been gone through, so return to the first
+                    # The last topic has been gone through, so return to the first.
                     t_n = 0
 
-        # Fix for if too many were selected
+        # Fix for if too many were selected.
         keywords = keywords[:n]
 
     return keywords
@@ -463,7 +465,7 @@ def extract_kws(
                 item for subtext in text_corpus for item in subtext.split()
             )
 
-            # Return for gen_files
+            # Return for gen_files.
             if return_kw_args:
                 return kw_args
 
@@ -478,7 +480,7 @@ def extract_kws(
             if isinstance(corpuses_to_compare[0], str):  # only one corpus to compare
                 corpuses_to_compare = [corpuses_to_compare]
 
-            # Combine the main corpus and those to compare
+            # Combine the main corpus and those to compare.
             comparative_corpus = [corpuses_to_compare]
             comparative_corpus.insert(0, text_corpus)
 
@@ -497,7 +499,7 @@ def extract_kws(
             scores = corpus_scored.toarray().flatten().tolist()
             kw_args = dict(zip(terms, scores))
 
-            # Return for gen_files
+            # Return for gen_files.
             if return_kw_args:
                 return kw_args
 
@@ -508,7 +510,7 @@ def extract_kws(
                 n=num_keywords,
             )
 
-            # Check that more words than the number that appear in the text is not given
+            # Check that more words than the number that appear in the text is not given.
             frequent_words = extract_kws(
                 method="frequency",
                 text_corpus=text_corpus,
@@ -552,7 +554,7 @@ def extract_kws(
         else:
             kw_args = (ordered_topic_words, selection_indexes)
 
-            # Return for gen_files
+            # Return for gen_files.
             if return_kw_args:
                 return kw_args
 
@@ -563,7 +565,8 @@ def extract_kws(
                 n=num_keywords,
             )
 
-            # If there are not enough words, then add non-included most frequent ones in order
+            # If there are not enough words, then add non-included most
+            # frequent ones in order.
             if len(keywords) < num_keywords:
                 frequent_words = extract_kws(
                     method="frequency",
@@ -583,7 +586,7 @@ def extract_kws(
                         keywords.append(word)
 
     if prompt_remove_words:
-        # Ask user if words should be ignored, and iterate until no more words should be
+        # Ask user if words should be ignored, and iterate until no more words should be.
         more_words_to_ignore = True
         first_iteration = True
         new_words_to_ignore = words_to_ignore  # initialize so that it can be added to
@@ -755,7 +758,7 @@ def gen_files(
     else:
         words_to_ignore = []
 
-    # Graph metrics and derive the best model and number of topics from them
+    # Graph metrics and derive the best model and number of topics from them.
     (
         best_method,
         model_ideal_topic_num,
@@ -796,7 +799,7 @@ def gen_files(
         return_kw_args=True,
     )
 
-    # Extract keywords based on the best topic model
+    # Extract keywords based on the best topic model.
     model_kw_args = extract_kws(
         method=best_method,
         text_corpus=text_corpus,
@@ -826,7 +829,8 @@ def gen_files(
     )
 
     if prompt_remove_words:
-        # Ask user if words should be ignored, and iterate until no more words should be
+        # Ask user if words should be ignored, and iterate until no
+        # more words should be.
         more_words_to_ignore = True
         first_iteration = True
         new_words_to_ignore = words_to_ignore  # initialize so that it can be added to
@@ -871,7 +875,7 @@ def gen_files(
                 more_words_to_ignore = False
 
     if word_cloud_dest != False:
-        # Make a word cloud that doesn't include the words that should be ignored
+        # Make a word cloud that doesn't include the words that should be ignored.
         visuals.gen_word_cloud(
             text_corpus=text_corpus,
             ignore_words=words_to_ignore,
@@ -891,7 +895,7 @@ def gen_files(
         )
 
     if org_by_pos:
-        # Organize words by part of speech and format them for a .txt file output
+        # Organize words by part of speech and format them for a .txt file output.
         most_freq_kw = utils.organize_by_pos(
             outputs=most_freq_kw, output_language=output_language
         )

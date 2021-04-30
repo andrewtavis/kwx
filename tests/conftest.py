@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 import pytest
 from kwx import utils
-from sentence_transformers import (
-    SentenceTransformer,
-)  # required or the import within kwx.visuals will fail
+
+# Required or the import within kwx.visuals will fail.
+from sentence_transformers import SentenceTransformer
 
 np.random.seed(42)
 
