@@ -24,7 +24,7 @@ def lem_abbr_dict():
     Returns
     -------
         lem_abbr_dict : dict
-            A dictionary with languages as keys and their abbreviations as items
+            A dictionary with languages as keys and their abbreviations as items.
     """
     return {
         "chinese": "zh",
@@ -56,7 +56,7 @@ def stem_abbr_dict():
     Returns
     -------
         stem_abbr_dict : dict
-            A dictionary with languages as keys and their abbreviations as items
+            A dictionary with languages as keys and their abbreviations as items.
     """
     return {
         "arabic": "ar",
@@ -77,7 +77,7 @@ def sw_abbr_dict():
     Returns
     -------
         sw_abbr_dict : dict
-            A dictionary with languages as keys and their abbreviations as items
+            A dictionary with languages as keys and their abbreviations as items.
     """
     return {
         "afrikaans": "af",

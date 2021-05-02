@@ -52,15 +52,15 @@ def load_data(data, target_cols=None):
     Parameters
     ----------
         data : pd.DataFrame or csv/xlsx path
-            The data in df or path form
+            The data in df or path form.
 
         target_cols : str or list (default=None)
-            The columns in the csv/xlsx or dataframe that contain the text data to be modeled
+            The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
     Returns
     -------
         df_texts : pd.DataFrame
-            The texts as a df
+            The texts as a df.
     """
     if isinstance(data, str):
         if data[-len("xlsx") :] == "xlsx":
@@ -95,15 +95,15 @@ def _combine_texts_to_str(text_corpus, ignore_words=None):
     Parameters
     ----------
         text_corpus : str or list
-            The texts to be combined
+            The texts to be combined.
 
         ignore_words : str or list
-            Strings that should be removed from the text body
+            Strings that should be removed from the text body.
 
     Returns
     -------
         texts_str : str
-            A string of the full text with unwanted words removed
+            A string of the full text with unwanted words removed.
     """
     if isinstance(ignore_words, str):
         words_to_ignore = [ignore_words]
@@ -139,21 +139,21 @@ def _remove_unwanted(args):
     Parameters
     ----------
         args : list of tuples
-            The following arguments zipped
+            The following arguments zipped.
 
         text : list
-            The text to clean
+            The text to clean.
 
         words_to_ignore : str or list
-            Strings that should be removed from the text body
+            Strings that should be removed from the text body.
 
         stop_words : str or list
-            Stopwords for the given language
+            Stopwords for the given language.
 
     Returns
     -------
         text_words_removed : list
-            The text without unwanted tokens
+            The text without unwanted tokens.
     """
     text, words_to_ignore, stop_words = args
 
@@ -171,18 +171,18 @@ def _lemmatize(tokens, nlp=None, verbose=True):
     Parameters
     ----------
         tokens : list or list of lists
-            Tokens to be lemmatized
+            Tokens to be lemmatized.
 
         nlp : spacy.load object
-            A spacy language model
+            A spacy language model.
 
         verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query
+            Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
         base_tokens : list or list of lists
-            Tokens that have been lemmatized for nlp analysis
+            Tokens that have been lemmatized for nlp analysis.
     """
     allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
 
@@ -225,42 +225,42 @@ def clean(
     Parameters
     ----------
         texts : str or list
-            The texts to be cleaned and tokenized
+            The texts to be cleaned and tokenized.
 
         input_language : str (default=None)
-            The English name of the language in which the texts are found
+            The English name of the language in which the texts are found.
 
         min_token_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus
+            The minimum allowable frequency of a word inside the text corpus.
 
         min_token_len : int (default=3)
-            The smallest allowable length of a word
+            The smallest allowable length of a word.
 
         min_tokens : int (default=0)
-            The minimum allowable length of a tokenized text
+            The minimum allowable length of a tokenized text.
 
         max_token_index : int (default=-1)
-            The maximum allowable length of a tokenized text
+            The maximum allowable length of a tokenized text.
 
         min_ngram_count : int (default=5)
-            The minimum occurrences for an n-gram to be included
+            The minimum occurrences for an n-gram to be included.
 
         remove_stopwords : bool (default=True)
-            Whether to remove stopwords
+            Whether to remove stopwords.
 
         ignore_words : str or list
-            Strings that should be removed from the text body
+            Strings that should be removed from the text body.
 
         sample_size : float (default=1)
-            The amount of data to be randomly sampled
+            The amount of data to be randomly sampled.
 
         verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query
+            Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
         text_corpus : list or list of lists
-            The texts formatted for analysis
+            The texts formatted for analysis.
     """
     input_language = input_language.lower()
 
@@ -539,45 +539,45 @@ def prepare_data(
     Parameters
     ----------
         data : pd.DataFrame or csv/xlsx path
-            The data in df or path form
+            The data in df or path form.
 
         target_cols : str or list (default=None)
-            The columns in the csv/xlsx or dataframe that contain the text data to be modeled
+            The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
         input_language : str (default=None)
-            The English name of the language in which the texts are found
+            The English name of the language in which the texts are found.
 
         min_token_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus
+            The minimum allowable frequency of a word inside the text corpus.
 
         min_token_len : int (default=3)
-            The smallest allowable length of a word
+            The smallest allowable length of a word.
 
         min_tokens : int (default=0)
-            The minimum allowable length of a tokenized text
+            The minimum allowable length of a tokenized text.
 
         max_token_index : int (default=-1)
-            The maximum allowable length of a tokenized text
+            The maximum allowable length of a tokenized text.
 
         min_ngram_count : int (default=5)
-            The minimum occurrences for an n-gram to be included
+            The minimum occurrences for an n-gram to be included.
 
         remove_stopwords : bool (default=True)
-            Whether to remove stopwords
+            Whether to remove stopwords.
 
         ignore_words : str or list
-            Strings that should be removed from the text body
+            Strings that should be removed from the text body.
 
         sample_size : float (default=1)
-            The amount of data to be randomly sampled
+            The amount of data to be randomly sampled.
 
         verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query
+            Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
         text_corpus, clean_texts, selected_idxs : list or list of lists, list, list
-            The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries
+            The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries.
     """
     input_language = input_language.lower()
 
@@ -638,48 +638,48 @@ def _prepare_corpus_path(
     Parameters
     ----------
         text_corpus : str or list or list of lists
-            A path or text corpus over which analysis should be done
+            A path or text corpus over which analysis should be done.
 
         clean_texts : str
-            The texts formatted for analysis as strings
+            The texts formatted for analysis as strings.
 
         target_cols : str or list (default=None)
-            The columns in the csv/xlsx or dataframe that contain the text data to be modeled
+            The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
         input_language : str (default=None)
-            The English name of the language in which the texts are found
+            The English name of the language in which the texts are found.
 
         min_token_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus
+            The minimum allowable frequency of a word inside the text corpus.
 
         min_token_len : int (default=3)
-            The smallest allowable length of a word
+            The smallest allowable length of a word.
 
         min_tokens : int (default=0)
-            The minimum allowable length of a tokenized text
+            The minimum allowable length of a tokenized text.
 
         max_token_index : int (default=-1)
-            The maximum allowable length of a tokenized text
+            The maximum allowable length of a tokenized text.
 
         min_ngram_count : int (default=5)
-            The minimum occurrences for an n-gram to be included
+            The minimum occurrences for an n-gram to be included.
 
         remove_stopwords : bool (default=True)
-            Whether to remove stopwords
+            Whether to remove stopwords.
 
         ignore_words : str or list
-            Strings that should be removed from the text body
+            Strings that should be removed from the text body.
 
         sample_size : float (default=1)
-            The amount of data to be randomly sampled
+            The amount of data to be randomly sampled.
 
         verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query
+            Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
         text_corpus : list or list of lists
-            A prepared text corpus for the data in the given path
+            A prepared text corpus for the data in the given path.
     """
     if isinstance(text_corpus, str):
         try:
@@ -714,18 +714,18 @@ def translate_output(outputs, input_language, output_language):
     Parameters
     ----------
         outputs : list
-            Output keywords of a model
+            Output keywords of a model.
 
         input_language : str
-            The English name of the language in which the texts are found
+            The English name of the language in which the texts are found.
 
         output_language
-            The English name of the desired language for outputs
+            The English name of the desired language for outputs.
 
     Returns
     -------
         translated_outputs : list
-            A list of keywords translated to the given output_language
+            A list of keywords translated to the given output_language.
     """
     translator = Translator()
 
@@ -756,15 +756,15 @@ def organize_by_pos(outputs, output_language):
     Parameters
     ----------
         outputs : list
-            The keywords that have been extracted
+            The keywords that have been extracted.
 
         output_language : str
-            The spoken language in which the results should be given
+            The spoken language in which the results should be given.
 
     Returns
     -------
         ordered_outputs : list
-            The given keywords ordered by their pos
+            The given keywords ordered by their pos.
     """
     if output_language in languages.lem_abbr_dict().keys():
         output_language = languages.lem_abbr_dict()[output_language]
@@ -818,12 +818,12 @@ def prompt_for_word_removal(words_to_ignore=None):
     Parameters
     ----------
         words_to_ignore : str or list
-            Words that should not be included in the output
+            Words that should not be included in the output.
 
     Returns
     -------
         ignore words, words_added : list, bool
-            A new list of words to ignore and a boolean indicating if words have been added
+            A new list of words to ignore and a boolean indicating if words have been added.
     """
     if isinstance(words_to_ignore, str):
         words_to_ignore = [words_to_ignore]

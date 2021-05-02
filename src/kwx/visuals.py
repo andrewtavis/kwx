@@ -54,19 +54,19 @@ def save_vis(vis, save_file, file_name):
     Parameters
     ----------
         vis : matplotlib.pyplot
-            The visualization to be saved
+            The visualization to be saved.
 
         save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it
+            Whether to save the figure as a png or a path in which to save it.
 
-            Note: directory paths can begin from the working directory
+            Note: directory paths can begin from the working directory.
 
         file_name : str
-            The name for the file
+            The name for the file.
 
     Returns
     -------
-        The file saved in the local or given directory if directed
+        The file saved in the local or given directory if directed.
     """
     if save_file == True:
         vis.savefig(
@@ -118,62 +118,63 @@ def graph_topic_num_evals(
     Parameters
     ----------
         method : str (default=["lda", "bert"])
-            The modelling method
+            The modelling method.
 
             Options:
                 LDA: Latent Dirichlet Allocation
 
-                    - Text data is classified into a given number of categories
-                    - These categories are then used to classify individual entries given the percent they fall into categories
+                    - Text data is classified into a given number of categories.
+                    - These categories are then used to classify individual entries given the percent they fall into categories.
 
                 BERT: Bidirectional Encoder Representations from Transformers
 
-                    - Words are classified via Google Neural Networks
-                    - Word classifications are then used to derive topics
+                    - Words are classified via Google Neural Networks.
+                    - Word classifications are then used to derive topics.
 
         bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
-            The BERT model to use
+            The BERT model to use.
 
         text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done
+            The text corpus over which analysis should be done.
 
         num_keywords : int (default=10)
-            The number of keywords that should be extracted
+            The number of keywords that should be extracted.
 
         topic_nums_to_compare : list (default=None)
-            The number of topics to compare metrics over
-            Note: None selects all numbers from 1 to num_keywords
+            The number of topics to compare metrics over.
+
+            Note: None selects all numbers from 1 to num_keywords.
 
         sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models
+            The size of a sample for BERT models.
 
         metrics : str or bool (default=True: all metrics)
-            The metrics to include
+            The metrics to include.
 
             Options:
-                stability: model stability based on Jaccard similarity
+                - stability: model stability based on Jaccard similarity.
 
-                coherence: how much the words associated with model topics co-occur
+                - coherence: how much the words associated with model topics co-occur.
 
         fig_size : tuple (default=(20,10))
-            The size of the figure
+            The size of the figure.
 
         save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it
+            Whether to save the figure as a png or a path in which to save it.
 
         return_ideal_metrics : bool (default=False)
-            Whether to return the ideal number of topics for the best model based on metrics
+            Whether to return the ideal number of topics for the best model based on metrics.
 
         verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query
+            Whether to show a tqdm progress bar for the query.
 
         **kwargs : keyword arguments
-            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore
+            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
     Returns
     -------
         ax : matplotlib axis
-            A graph of the given metrics for each of the given models based on each topic number
+            A graph of the given metrics for each of the given models based on each topic number.
     """
     assert (
         metrics == "stability" or metrics == "coherence" or metrics == True
@@ -194,9 +195,9 @@ def graph_topic_num_evals(
         Notes
         -----
             Jaccard similarity:
-                - A statistic used for comparing the similarity and diversity of sample sets
-                - J(A,B) = (A ∩ B)/(A ∪ B)
-                - Goal is low Jaccard scores for coverage of the diverse elements
+                - A statistic used for comparing the similarity and diversity of sample sets.
+                - J(A,B) = (A ∩ B)/(A ∪ B).
+                - Goal is low Jaccard scores for coverage of the diverse elements.
         """
         # Fix for cases where there are not enough texts for clustering models.
         if topic_1 == [] and topic_2 != []:
@@ -371,22 +372,22 @@ def gen_word_cloud(
     Parameters
     ----------
         text_corpus : list or list of lists
-            The text_corpus that should be plotted
+            The text_corpus that should be plotted.
 
         ignore_words : str or list (default=None)
-            Words that should be removed
+            Words that should be removed.
 
         height : int (default=500)
             The height of the resulting figure
-            Note: the width will be the golden ratio times the height
+            Note: the width will be the golden ratio times the height.
 
         save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it
+            Whether to save the figure as a png or a path in which to save it.
 
     Returns
     -------
         plt.savefig or plt.show : pyplot methods
-            A word cloud based on the occurrences of words in a list without removed words
+            A word cloud based on the occurrences of words in a list without removed words.
     """
     flat_words = utils._combine_texts_to_str(
         text_corpus=text_corpus, ignore_words=ignore_words
@@ -422,39 +423,37 @@ def pyLDAvis_topics(
     Parameters
     ----------
         method : str or list (default=LDA)
-            The modelling method or methods to compare
+            The modelling method or methods to compare.
 
             Option:
                 LDA: Latent Dirichlet Allocation
 
-                    - Text data is classified into a given number of categories
+                    - Text data is classified into a given number of categories.
 
-                    - These categories are then used to classify individual entries given the percent they fall into categories
-
-                Hierarchical Dirichlet process could also be added, but was not shown to be effective
+                    - These categories are then used to classify individual entries given the percent they fall into categories.
 
         text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done
+            The text corpus over which analysis should be done.
 
         num_topics : int (default=10)
-            The number of categories for LDA and BERT based approaches
+            The number of categories for LDA and BERT based approaches.
 
         save_file : bool or str (default=False)
-            Whether to save the HTML file to the current working directory or a path in which to save it
+            Whether to save the HTML file to the current working directory or a path in which to save it.
 
         display_ipython : bool (default=False)
-            Whether iPython's display function should be used if in that working environment
+            Whether iPython's display function should be used if in that working environment.
 
         verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query
+            Whether to show a tqdm progress bar for the query.
 
         **kwargs : keyword arguments
-            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore
+            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore.
 
     Returns
     -------
         pyLDAvis.save_html or pyLDAvis.show : pyLDAvis methods
-            A visualization of the topics and their main keywords via pyLDAvis
+            A visualization of the topics and their main keywords via pyLDAvis.
     """
     method = method.lower()
 
@@ -500,10 +499,10 @@ def pyLDAvis_topics(
     else:
         if in_ipython() == True and display_ipython == True:
             pyLDAvis.enable_notebook()
-            # Display in an ipython notebook
+            # Display in an ipython notebook.
             display(pyLDAvis.display(vis))
         else:
-            # Opens HTML
+            # Opens HTML.
             pyLDAvis.show(vis)
 
 
@@ -527,30 +526,30 @@ def t_sne(
     ----------
         dimension : str (default=both)
             The dimension that t-SNE should reduce the data to for visualization
-            Options: 2d, 3d, and both (a plot with two subplots)
+            Options: 2d, 3d, and both (a plot with two subplots).
 
         text_corpus : list, list of lists
-            The tokenized and cleaned text corpus over which analysis should be done
+            The tokenized and cleaned text corpus over which analysis should be done.
 
         num_topics : int (default=10)
-            The number of categories for LDA based approaches
+            The number of categories for LDA based approaches.
 
         remove_3d_outliers : bool (default=False)
-            Whether to remove outliers from a 3d plot
+            Whether to remove outliers from a 3d plot.
 
         fig_size : tuple (default=(20,10))
-            The size of the figure
+            The size of the figure.
 
         save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it
+            Whether to save the figure as a png or a path in which to save it.
 
         **kwargs : keyword arguments
-            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore or sklearn.manifold.TSNE
+            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore or sklearn.manifold.TSNE.
 
     Returns
     -------
         fig : matplotlib.pyplot.figure
-            A t-SNE lower dimensional representation of an LDA model's topics and their constituent members
+            A t-SNE lower dimensional representation of an LDA model's topics and their constituent members.
     """
     token_corpus = [t.split(" ") for t in text_corpus]
     dirichlet_dict = corpora.Dictionary(token_corpus)

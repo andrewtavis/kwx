@@ -36,13 +36,13 @@ class TopicModel:
         Parameters
         ----------
             num_topics : int (default=10)
-                The number of categories for LDA and BERT based approaches
+                The number of categories for LDA and BERT based approaches.
 
             method : str (default=lda)
-                The modelling method
+                The modelling method.
 
             bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
-                A sentence transformer model
+                A sentence transformer model.
         """
         modeling_methods = ["lda", "bert"]
         if method not in modeling_methods:
@@ -71,18 +71,18 @@ class TopicModel:
         Parameters
         ----------
             text_corpus : list, list of lists, or str
-                The text corpus over which analysis should be done
+                The text corpus over which analysis should be done.
 
             method : str
-                The modeling technique to use
+                The modeling technique to use.
 
             **kwargs : keyword arguments
-                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore
+                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
         Returns
         -------
             vec : np.array
-                An array of text vectorizations
+                An array of text vectorizations.
         """
         if method is None:
             method = self.method
@@ -113,15 +113,15 @@ class TopicModel:
                 Parameters
                 ----------
                     bow_corpus : list of lists
-                        Contains doc2bow representations of the given texts
+                        Contains doc2bow representations of the given texts.
 
                     num_topics : int
-                        The number of categories for LDA and BERT based approaches
+                        The number of categories for LDA and BERT based approaches.
 
                 Returns
                 -------
                     vec_lda : np.array (n_doc * n_topic)
-                        The probabilistic topic assignments for all documents
+                        The probabilistic topic assignments for all documents.
                 """
                 n_doc = len(bow_corpus)
                 vec_lda = np.zeros((n_doc, num_topics))
@@ -155,21 +155,21 @@ class TopicModel:
         Parameters
         ----------
             text_corpus : list, list of lists, or str
-                The text corpus over which analysis should be done
+                The text corpus over which analysis should be done.
 
             method : str
-                The modeling technique to use
+                The modeling technique to use.
 
             m_clustering : sklearn.cluster.object
-                The method that should be used to cluster
+                The method that should be used to cluster.
 
             **kwargs : keyword arguments
-                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore
+                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
         Returns
         -------
             self : LDA or cluster model
-                A fitted model
+                A fitted model.
         """
         if method is None:
             method = self.method
