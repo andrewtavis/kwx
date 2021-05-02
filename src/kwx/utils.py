@@ -477,10 +477,10 @@ def clean(
 
     assert isinstance(
         min_token_len, int
-    ), "The 'min_token_len' argument must be an integer if used"
+    ), "The 'min_token_len' argument must be an integer if used."
     assert isinstance(
         min_token_freq, int
-    ), "The 'min_token_freq' argument must be an integer if used"
+    ), "The 'min_token_freq' argument must be an integer if used."
 
     min_len_freq_tokens = [
         [
