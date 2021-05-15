@@ -80,9 +80,6 @@ The following outlines using kwx to derive keywords from a text corpus with `pro
 from kwx.utils import prepare_data
 
 input_language = "english" # see kwx.languages for options
-num_keywords = 15
-num_topics = 10
-ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
 # kwx.utils.clean() can be used on a list of lists
 text_corpus = prepare_data(
@@ -100,6 +97,10 @@ text_corpus = prepare_data(
 
 ```python
 from kwx.model import extract_kws
+
+num_keywords = 15
+num_topics = 10
+ignore_words = ["words", "user", "knows", "they", "don't", "want"]
 
 # Remove n-grams for BERT training
 corpus_no_ngrams = [
