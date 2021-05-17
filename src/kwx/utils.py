@@ -73,6 +73,10 @@ def load_data(data, target_cols=None):
     elif isinstance(data, pd.DataFrame):
         df_texts = data
 
+    elif isinstance(data, pd.Series):
+        df_texts = pd.DataFrame(data).reset_index(drop=True)
+        df_texts.columns = data.index.values.tolist()
+
     else:
         ValueError(
             "The 'data' argument should be either the name of a csv/xlsx file a pandas dataframe."
