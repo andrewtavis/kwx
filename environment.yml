@@ -7,7 +7,7 @@ dependencies:
   - black=20.8b1
   - certifi=2020.12.5
   - defusedxml=0.7.1
-  - gensim=3.8.0
+  - gensim>=3.8.0
   - keras=2.3.1
   - matplotlib=3.3.2
   - nltk=3.5
@@ -29,4 +29,4 @@ dependencies:
     - pyldavis>=3.2.0
     - sentence-transformers==0.4.1.2
     - stopwordsiso==0.6.1
-    - tensorflow==2.4.1
+    - tensorflow==2.5.0
