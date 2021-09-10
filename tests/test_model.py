@@ -81,7 +81,7 @@ def test_extract_TFIDF_kws(long_text_corpus):
     ]
 
 
-if gensim.__version__[0] == "4":
+if float(gensim.__version__[0]) >= 4.0:
 
     def test_extract_LDA_kws(long_text_corpus):
         kws = model.extract_kws(

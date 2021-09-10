@@ -343,7 +343,7 @@ def clean(
 
     # Add bigrams and trigrams.
     # Use half the normal threshold.
-    if gensim.__version__[0] == "4":
+    if float(gensim.__version__[0]) >= 4:
         bigrams = Phrases(
             sentences=tokenized_texts,
             min_count=min_ngram_count,
