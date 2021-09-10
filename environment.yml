@@ -22,11 +22,11 @@ dependencies:
   - wordcloud=1.8.1
   - xlrd=2.0.1
   - pip:
-    - emoji==1.2.0
-    - gensim>=3.8.0
-    - googletrans==4.0.0rc1
-    - ipython==7.10.0
-    - pyldavis>=3.2.0
-    - sentence-transformers==0.4.1.2
-    - stopwordsiso==0.6.1
-    - tensorflow==2.5.0
+      - emoji==1.2.0
+      - gensim>=3.8.0
+      - googletrans==4.0.0rc1
+      - ipython==7.10.0
+      - pyldavis>=3.2.0
+      - sentence-transformers==0.4.1.2
+      - stopwordsiso==0.6.1
+      - tensorflow>=2.5.1
