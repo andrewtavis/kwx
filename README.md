@@ -130,7 +130,7 @@ The BERT keywords are:
 ['time', 'flight', 'plane', 'southwestair', 'ticket', 'cancel', 'united', 'baggage',
 'love', 'virginamerica', 'service', 'customer', 'delay', 'late', 'hour']
 
-Are there words that should be removed [y/n]? y
+Should words be removed [y/n]? y
 Type or copy word(s) to be removed: southwestair, united, virginamerica
 
 The new BERT keywords are:
@@ -138,7 +138,7 @@ The new BERT keywords are:
 ['late', 'baggage', 'service', 'flight', 'time', 'love', 'book', 'customer',
 'response', 'hold', 'hour', 'cancel', 'cancelled_flighted', 'delay', 'plane']
 
-Are there words that should be removed [y/n]? n
+Should words be removed [y/n]? n
 ```
 
 The model will be rerun until all words known to be unreasonable are removed for a suitable output. [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).

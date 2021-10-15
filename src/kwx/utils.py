@@ -837,7 +837,7 @@ def prompt_for_word_removal(words_to_ignore=None):
     words_added = False  # whether to run the models again
     more_words = True
     while more_words:
-        more_words = input("\nAre there words that should be removed [y/n]? ")
+        more_words = input("\nShould words be removed [y/n]? ")
         if more_words == "y":
             new_words_to_ignore = input("Type or copy word(s) to be removed: ")
             # Remove commas if the user has used them to separate words,

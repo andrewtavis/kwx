@@ -7,7 +7,7 @@ googletrans==4.0.0rc1
 ipython==7.10.0
 keras==2.3.1
 matplotlib==3.3.2
-nltk==3.5
+nltk>=3.6.4
 numpy>=1.20.0
 packaging==20.9
 pandas==1.2.1
