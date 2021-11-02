@@ -239,6 +239,8 @@ Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob
 
 - Adding t-SNE and pyLDAvis style visualizations for BERT models
 
+- Converting the translation feature over to use [OpenNMT-py](https://github.com/OpenNMT/OpenNMT-py) or another translation api rather than [py-googletrans](https://github.com/ssut/py-googletrans) [(see issue)](https://github.com/andrewtavis/kwx/issues/44)
+
 - Updates to [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) as lemmatization and other linguistic package dependencies evolve
 
 - Creating, improving and sharing [examples](https://github.com/andrewtavis/kwx/tree/main/examples)
