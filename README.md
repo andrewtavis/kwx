@@ -29,7 +29,7 @@ For a thorough overview of the process and techniques see the [Google slides](ht
 - [Visuals](#visuals)
 - [To-Do](#to-do)
 
-# Installation [`↩`](#contents) <a id="installation"></a>
+# Installation [`⇧`](#contents) <a id="installation"></a>
 
 kwx can be downloaded from PyPI via pip or sourced directly from this repository:
 
@@ -47,7 +47,7 @@ python setup.py install
 import kwx
 ```
 
-# Models [`↩`](#contents) <a id="models"></a>
+# Models [`⇧`](#contents) <a id="models"></a>
 
 Implemented NLP modeling methods within [kwx.model](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) include:
 
@@ -67,7 +67,7 @@ Although not as computationally robust as some machine learning models, LDA prov
 
 The user can also choose to simply query the most common words from a text corpus or compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwx as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
 
-# Usage [`↩`](#contents) <a id="usage"></a>
+# Usage [`⇧`](#contents) <a id="usage"></a>
 
 Keyword extraction can be useful to analyze surveys, tweets and other kinds of social media posts, research papers, and further classes of texts. [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
@@ -143,7 +143,7 @@ Should words be removed [y/n]? n
 
 The model will be rerun until all words known to be unreasonable are removed for a suitable output. [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
 
-# Visuals [`↩`](#contents) <a id="visuals"></a>
+# Visuals [`⇧`](#contents) <a id="visuals"></a>
 
 [kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/src/kwx/visuals.py) includes the following functions for presenting and analyzing the results of keyword extraction:
 
@@ -229,7 +229,7 @@ gen_word_cloud(
   <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/word_cloud.png" width="600" />
 </p>
 
-# To-Do [`↩`](#contents) <a id="to-do"></a>
+# To-Do [`⇧`](#contents) <a id="to-do"></a>
 
 Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
 
