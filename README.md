@@ -237,7 +237,7 @@ Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob
 
 - Adding key phrase extraction as an option for [kwx.model.extract_kws](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) [(see issues)](https://github.com/andrewtavis/kwx/issues/)
 
-- Adding t-SNE and pyLDAvis style visualizations for BERT models
+- Adding t-SNE and pyLDAvis style visualizations for BERT models [(see issues\)](https://github.com/andrewtavis/kwx/issues/45)
 
 - Converting the translation feature over to use another translation api rather than [py-googletrans](https://github.com/ssut/py-googletrans) [(see issue)](https://github.com/andrewtavis/kwx/issues/44)
 
