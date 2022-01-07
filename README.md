@@ -26,7 +26,13 @@ For a thorough overview of the process and techniques see the [Google slides](ht
 - [Installation](#installation)
 - [Models](#models)
 - [Usage](#usage)
+  - [Text Cleaning](#text-cleaning)
+  - [Keyword Extraction](#keyword-extraction)
 - [Visuals](#visuals)
+  - [Topic Number Evaluation](#topic-number-evaluation)
+  - [t-SNE](#t-sne)
+  - [pyLDAvis](#pyldavis)
+  - [Word Cloud](#word-cloud)
 - [To-Do](#to-do)
 
 # Installation [`⇧`](#contents) <a id="installation"></a>
@@ -73,7 +79,7 @@ Keyword extraction can be useful to analyze surveys, tweets and other kinds of s
 
 The following outlines using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
 
-### Text Cleaning
+### • Text Cleaning [`⇧`](#contents) <a id="text-cleaning"></a>
 
 ```python
 from kwx.utils import prepare_data
@@ -92,7 +98,7 @@ text_corpus = prepare_data(
 )
 ```
 
-### Keyword Extraction
+### • Keyword Extraction [`⇧`](#contents) <a id="keyword-extraction"></a>
 
 ```python
 from kwx.model import extract_kws
@@ -147,7 +153,7 @@ The model will be rerun until all words known to be unreasonable are removed for
 
 [kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/src/kwx/visuals.py) includes the following functions for presenting and analyzing the results of keyword extraction:
 
-### Topic Number Evaluation
+### • Topic Number Evaluation [`⇧`](#contents) <a id="topic-number-evaluation"></a>
 
 A graph of topic coherence and overlap given a variable number of topics to derive keywords from.
 
@@ -169,7 +175,7 @@ plt.show()
   <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/topic_num_eval.png" width="600" />
 </p>
 
-### t-SNE
+### • t-SNE [`⇧`](#contents) <a id="t-sne"></a>
 
 [t-SNE](https://en.wikipedia.org/wiki/T-distributed_stochastic_neighbor_embedding) allows the user to visualize their topic distribution in both two and three dimensions. Currently available just for LDA, this technique provides another check for model suitability.
 
@@ -190,7 +196,7 @@ plt.show()
   <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/t_sne.png" width="600" />
 </p>
 
-### pyLDAvis
+### • pyLDAvis [`⇧`](#contents) <a id="pyldavis"></a>
 
 [pyLDAvis](https://github.com/bmabey/pyLDAvis) is included so that users can inspect LDA extracted topics, and further so that it can easily be generated for output files.
 
@@ -209,7 +215,7 @@ pyLDAvis_topics(
   <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/pyLDAvis.png" width="600" />
 </p>
 
-### Word Cloud
+### Word Cloud [`⇧`](#contents) <a id="word-cloud"></a>
 
 Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
 
