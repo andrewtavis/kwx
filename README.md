@@ -25,6 +25,9 @@ For a thorough overview of the process and techniques see the [Google slides](ht
 
 - [Installation](#installation)
 - [Models](#models)
+  - [BERT](#bert)
+  - [LDA](#lda)
+  - [Other Methods](#other-methods)
 - [Usage](#usage)
   - [Text Cleaning](#text-cleaning)
   - [Keyword Extraction](#keyword-extraction)
@@ -57,19 +60,19 @@ import kwx
 
 Implemented NLP modeling methods within [kwx.model](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) include:
 
-### BERT
+### • BERT [`⇧`](#contents) <a id="bert"></a>
 
 [Bidirectional Encoder Representations from Transformers](https://github.com/google-research/bert) derives representations of words based on nlp models ran over open-source Wikipedia data. These representations are then leveraged to derive corpus topics.
 
 kwx uses [sentence-transformers](https://github.com/UKPLab/sentence-transformers) pretrained models. See their GitHub and [documentation](https://www.sbert.net/) for the available models.
 
-### LDA
+### • LDA [`⇧`](#contents) <a id="lda"></a>
 
 [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) is a generative statistical model that allows sets of observations to be explained by unobserved groups that explain why some parts of the data are similar. In the case of kwx, documents or text entries are posited to be a mixture of a given number of topics, and the presence of each word in a text body comes from its relation to these derived topics.
 
 Although not as computationally robust as some machine learning models, LDA provides quick results that are suitable for many applications. Specifically for keyword extraction, in most settings the results are similar to those of BERT in a fraction of the time.
 
-### Other Methods
+### • Other Methods [`⇧`](#contents) <a id="other-methods"></a>
 
 The user can also choose to simply query the most common words from a text corpus or compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwx as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
 
@@ -215,7 +218,7 @@ pyLDAvis_topics(
   <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/pyLDAvis.png" width="600" />
 </p>
 
-### Word Cloud [`⇧`](#contents) <a id="word-cloud"></a>
+### • Word Cloud [`⇧`](#contents) <a id="word-cloud"></a>
 
 Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
 
