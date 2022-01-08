@@ -27,7 +27,8 @@ For a thorough overview of the process and techniques see the [Google slides](ht
 - [Models](#models)
   - [BERT](#bert)
   - [LDA](#lda)
-  - [Other Methods](#other-methods)
+  - [TFIDF](#tfidf)
+  - [Word Frequency](#word-frequency)
 - [Usage](#usage)
   - [Text Cleaning](#text-cleaning)
   - [Keyword Extraction](#keyword-extraction)
@@ -72,9 +73,13 @@ kwx uses [sentence-transformers](https://github.com/UKPLab/sentence-transformers
 
 Although not as computationally robust as some machine learning models, LDA provides quick results that are suitable for many applications. Specifically for keyword extraction, in most settings the results are similar to those of BERT in a fraction of the time.
 
-### • Other Methods [`⇧`](#contents) <a id="other-methods"></a>
+### • TFIDF [`⇧`](#contents) <a id="tfidf"></a>
 
-The user can also choose to simply query the most common words from a text corpus or compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. The former method is used in kwx as a baseline to check model efficacy, and the latter is a useful baseline when a user has another text or text body to compare the target corpus against.
+The user can also compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. This is a useful baseline when a user has another text or text body to compare the target corpus against.
+
+### • Word Frequency [`⇧`](#contents) <a id="word-frequency"></a>
+
+Finally a user can simply query the most common words from a text corpus. This method is used in kwx as a baseline to check model efficacy.
 
 # Usage [`⇧`](#contents) <a id="usage"></a>
 
