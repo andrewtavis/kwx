@@ -17,7 +17,7 @@
 
 ### BERT, LDA, and TFIDF based keyword extraction in Python
 
-**kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert) and [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) for the various degrees of language support). A unique focus is allowing users to decide which words to not include in outputs, thereby guaranteeing sensible results that are in line with user intuitions.
+**kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert), [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and [Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) for the various degrees of language support). A unique focus is allowing users to decide which words to not include in outputs, thereby guaranteeing sensible results that are in line with user intuitions.
 
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
@@ -75,7 +75,7 @@ Although not as computationally robust as some machine learning models, LDA prov
 
 ### • TFIDF [`⇧`](#contents) <a id="tfidf"></a>
 
-The user can also compute TFIDF ([Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)) keywords - those that are unique in a text body in comparison to another that's compared. This is a useful baseline when a user has another text or text body to compare the target corpus against.
+The user can also compute [Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) keywords - those that are unique in a text body in comparison to another that's compared. This is a useful baseline when a user has another text or text body to compare the target corpus against.
 
 ### • Word Frequency [`⇧`](#contents) <a id="word-frequency"></a>
 
