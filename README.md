@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/kwx_logo_transparent.png" width=431 height=215></a>
+  <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/logo/kwx_logo_transparent.png" width=431 height=215></a>
 </div>
 
 ---
@@ -204,7 +204,7 @@ plt.show()
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/topic_num_eval.png" width="600" />
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/topic_num_eval.png" width="600" />
 </p>
 
 <a id="t-sne"></a>
@@ -227,7 +227,7 @@ plt.show()
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/t_sne.png" width="600" />
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/t_sne.png" width="600" />
 </p>
 
 <a id="pyldavis"></a>
@@ -248,7 +248,7 @@ pyLDAvis_topics(
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/pyLDAvis.png" width="600" />
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/pyLDAvis.png" width="600" />
 </p>
 
 <a id="word-cloud"></a>
@@ -270,7 +270,7 @@ gen_word_cloud(
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/gh_images/word_cloud.png" width="600" />
+  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/word_cloud.png" width="600" />
 </p>
 
 <a id="to-do"></a>

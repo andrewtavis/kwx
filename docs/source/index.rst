@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/andrewtavis/kwx/main/resources/kwx_logo_transparent.png
+.. image:: https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/logo/kwx_logo_transparent.png
     :width: 431
     :height: 215
     :align: center
