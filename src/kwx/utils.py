@@ -329,7 +329,7 @@ def clean(
     pbar.update()
 
     texts_no_emojis = [
-        emoji.get_emoji_regexp().sub(r"", response) for response in texts_no_punctuation
+        emoji.replace_emoji(response, replace="") for response in texts_no_punctuation
     ]
 
     tokenized_texts = [
