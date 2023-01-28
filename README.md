@@ -5,7 +5,7 @@
 <ol></ol>
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![ci](https://img.shields.io/github/workflow/status/andrewtavis/kwx/CI?logo=github)](https://github.com/andrewtavis/kwx/actions?query=workflow%3ACI)
+[![ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci.yml?branch=main?logo=github)](https://github.com/andrewtavis/kwx/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)
