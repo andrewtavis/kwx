@@ -3,7 +3,7 @@ defusedxml==0.7.1
 emoji==2.2.0
 gensim>=3.8.0
 googletrans==4.0.0rc1
-ipython==7.31.1
+ipython==8.10.0
 keras==2.6.0
 matplotlib==3.3.2
 nltk>=3.6.5
