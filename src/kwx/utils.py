@@ -33,6 +33,7 @@ import emoji
 import gensim
 import pandas as pd
 import spacy
+from spacy import __version__ as spacy_version
 from googletrans import Translator
 from nltk.stem.snowball import SnowballStemmer
 from stopwordsiso import stopwords
@@ -63,24 +64,19 @@ def load_data(data, target_cols=None):
             The texts as a df.
     """
     if isinstance(data, str):
-        if data[-len("xlsx") :] == "xlsx":
-            df_texts = pd.read_excel(io=data)
-        elif data[-len("csv") :] == "csv":
-            df_texts = pd.read_csv(filepath_or_buffer=data)
+        if data.endswith("xlsx"):
+            df_texts = pd.read_excel(data)
+        elif data.endswith("csv"):
+            df_texts = pd.read_csv(data)
         else:
-            ValueError("Strings passed should be paths to csv or xlsx files.")
-
+            raise ValueError("Strings passed should be paths to csv or xlsx files.")
     elif isinstance(data, pd.DataFrame):
         df_texts = data
-
     elif isinstance(data, pd.Series):
         df_texts = pd.DataFrame(data).reset_index(drop=True)
         df_texts.columns = data.index.values.tolist()
-
     else:
-        ValueError(
-            "The 'data' argument should be either the name of a csv/xlsx file a pandas dataframe."
-        )
+        raise ValueError("The 'data' argument should be either the name of a csv/xlsx file or a pandas dataframe.")
 
     if target_cols is None:
         target_cols = df_texts.columns
@@ -178,7 +174,7 @@ def _lemmatize(tokens, nlp=None, verbose=True):
             Tokens to be lemmatized.
 
         nlp : spacy.load object
-            A spacy language model.
+            A SpaCy language model.
 
         verbose : bool (default=True)
             Whether to show a tqdm progress bar for the query.
@@ -186,11 +182,12 @@ def _lemmatize(tokens, nlp=None, verbose=True):
     Returns
     -------
         base_tokens : list or list of lists
-            Tokens that have been lemmatized for nlp analysis.
+            Tokens that have been lemmatized for NLP analysis.
     """
     allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
 
     base_tokens = []
+    
     for t in tqdm(
         tokens,
         total=len(tokens),
@@ -200,7 +197,11 @@ def _lemmatize(tokens, nlp=None, verbose=True):
     ):
         combined_texts = _combine_texts_to_str(text_corpus=t)
 
-        lem_tokens = nlp(combined_texts)
+        if spacy_version >= "3.0.0":
+            lem_tokens = nlp(combined_texts)
+        else:
+            lem_tokens = nlp.tokenizer(combined_texts)
+        
         lemmed_tokens = [
             token.lemma_ for token in lem_tokens if token.pos_ in allowed_pos_tags
         ]
