@@ -10,7 +10,7 @@
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |ci| image:: https://img.shields.io/github/workflow/status/andrewtavis/kwx/CI?logo=github
+.. |ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci.yml?branch=main?logo=github
     :target: https://github.com/andrewtavis/kwx/actions?query=workflow%3ACI
 
 .. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg
