@@ -1,2 +1,5 @@
-numpydoc
+kwx
 m2r2
+numpydoc
+sphinx<7.0.0
+sphinx_rtd_theme
