@@ -3,8 +3,6 @@ name: CI
 on:
   pull_request:
     branches: [main]
-  # schedule:
-  #   - cron: '0 0 * * 0' # weekly
 
 jobs:
   run:
@@ -20,28 +18,32 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v2
+
       - name: Setup Python
         uses: actions/setup-python@main
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Add conda to system path
-        uses: conda-incubator/setup-miniconda@v2
+
+      - name: Add conda to system path (Miniforge)
+        uses: conda-incubator/setup-miniforge@v2
         with:
-          auto-update-conda: true
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+          auto-activate-base: false
+          auto-update-conda: true
+
+      - name: Install dependencies (create conda env)
         run: |
           eval "$(conda shell.bash hook)"
-          conda env create --file environment.yml
-      # - name: Build
-      #     eval "$(conda shell.bash hook)"
-      #     pip install -e .
+          # Create (or recreate) the dev environment expected by tests.
+          conda env create --file environment.yml --name kwx-dev --force
+
       - name: Test and generate coverage
         run: |
           eval "$(conda shell.bash hook)"
           conda activate kwx-dev
           export PYTHONPATH="./src"
           pytest --cov=src tests --cov-report=xml
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:

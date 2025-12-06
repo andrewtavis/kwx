@@ -1,0 +1,69 @@
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "*/tests.py",
+    "*/migrations/*.py",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "venv",
+]
+
+[tool.ruff.lint]
+
+select = [
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # isort
+]
+
+ignore = [
+    "E501", # line too long, handled by black
+]
+
+fixable = ["I"]
+unfixable = []
+
+[tool.ruff.lint.mccabe]
+# Flag errors (`C901`) whenever the complexity level exceeds the following value.
+max-complexity = 10
+
+[tool.isort]
+line_length = 88
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+
+[tool.coverage.run]
+omit = ["*/tests/*", "*/__init__.py"]
+
+[tool.mypy]
+mypy_path = "src"
+strict = true
+exclude = ["setup.py", "^tests/.*\\.py$", "docs"]
+
+[tool.numpydoc_validation]
+checks = [
+    "all",  # report on all checks, except the below
+    "ES01",
+    "EX01",
+    "SA01",
+]
+
+exclude = [
+    "^.*\\.Meta$",    # Meta classes
+    "^.*\\.__str__$", # __str__ methods
+    "^__init__$",     # __init__ files
+]
