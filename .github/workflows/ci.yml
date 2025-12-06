@@ -11,6 +11,7 @@ jobs:
       matrix:
         os: [macos-latest]
         python-version: [3.8]
+
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
@@ -24,18 +25,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Add conda to system path (Miniforge)
-        uses: conda-incubator/setup-miniforge@v2
+      - name: Add conda to system path
+        uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: ${{ matrix.python-version }}
-          auto-activate-base: false
           auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies (create conda env)
+      - name: Install dependencies
         run: |
           eval "$(conda shell.bash hook)"
-          # Create (or recreate) the dev environment expected by tests.
-          conda env create --file environment.yml --name kwx-dev --force
+          conda env create --file environment.yml
 
       - name: Test and generate coverage
         run: |
