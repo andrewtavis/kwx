@@ -42,7 +42,7 @@ repos:
       - id: spdx-license-checker
         name: run spdx-checker license check
         exclude: ^(?:.*/)?__init__\.py$
-        args: [-l, GPL-3.0-or-later, --fix, --continue-on-error]
+        args: [-l, BSD-3-Clause, --fix, --continue-on-error]
         types_or: [python, ts]
 
   - repo: local

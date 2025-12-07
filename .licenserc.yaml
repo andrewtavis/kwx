@@ -1,0 +1,16 @@
+header:
+  license:
+    content: "SPDX-License-Identifier: BSD-3-Clause"
+  paths:
+    - '**/*.py'
+    - '**/*.ts'
+  paths-ignore:
+    - 'build'
+    - 'dist'
+    - 'venv'
+    - '**/*.md'
+    - '**/__pycache__/**'
+    - '**/.git/**'
+    - '**/*__init__.py'
+  comment: on-failure
+  license-location-threshold: 10

@@ -1,0 +1,51 @@
+name: pr_ci
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "src/**"
+      - "tests/**"
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "tests/**"
+
+jobs:
+  ci:
+    name: Run PR Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+
+      - name: Set up Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create Environment and Install Dependencies
+        run: |
+          python -m pip install --upgrade uv
+          uv venv
+          . .venv/bin/activate
+          echo PATH=$PATH >> $GITHUB_ENV
+          uv pip install -r requirements-dev.txt
+
+      - name: Run Ruff Format - Formatting Check
+        run: ruff format ./src --check
+
+      - name: Run Ruff - Linting and Import Sorting Check
+        if: always()
+        run: ruff check ./src
+
+      - name: Run mypy - Static Type Checking
+        if: always()
+        run: mypy ./src --config-file ./pyproject.toml
