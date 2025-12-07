@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: BSD-3-Clause
+
 try:
     from setuptools import setup
 except ImportError:
