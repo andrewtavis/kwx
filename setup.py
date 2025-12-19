@@ -1,11 +1,11 @@
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-
+# SPDX-License-Identifier: BSD-3-Clause
 import os
 
-from setuptools import find_packages
+try:
+    from setuptools import find_packages, setup
+
+except ImportError:
+    from distutils.core import setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -25,11 +25,14 @@ setup_args = dict(
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Operating System :: OS Independent",
     ],
+    python_requires=">=3.10",
     description="BERT, LDA, and TFIDF based keyword extraction in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -40,6 +43,7 @@ setup_args = dict(
 on_rtd = os.environ.get("READTHEDOCS") == "True"
 if on_rtd:
     install_requires = []
+
 else:
     install_requires = [
         "pytest-cov",

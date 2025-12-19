@@ -6,14 +6,102 @@ Please take a moment to review this document in order to make the contribution p
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, and in accordance with this project's [code of conduct](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md), other contributors will reciprocate that respect in addressing your issue or assessing patches and features.
 
+<a id="contents"></a>
 
-## Using the issue tracker
+## **Contents**
+
+- [Development environment](#development-environment-)
+- [Using the issue tracker](#using-the-issue-tracker-)
+- [Bug reports](#bug-reports-)
+- [Feature requests](#feature-requests-)
+- [Pull requests](#pull-requests-)
+
+<a name="development-environment-"></a>
+
+## Development environment [`⇧`](#contents)
+
+Please follow the steps below to set up your development environment for kwx contributions.
+
+### Clone repository
+
+```bash
+# Clone your fork of the repo into the current directory.
+git clone https://github.com/<your-username>/kwx.git
+# Navigate to the newly cloned directory.
+cd kwx
+# Assign the original repo to a remote called "upstream".
+git remote add upstream https://github.com/andrewtavis/kwx.git
+```
+
+- Now, if you run `git remote -v` you should see two remote repositories named:
+  - `origin` (forked repository)
+  - `upstream` (kwx repository)
+
+### Conda environment
+
+Download [Anaconda](https://www.anaconda.com/download) if you don't have it installed already.
+
+```bash
+conda env create --file environment.yaml
+conda activate kwx-dev
+```
+
+### pip environment
+
+Create a virtual environment, activate it and install dependencies:
+
+```bash
+# Unix or MacOS:
+python3 -m venv venv
+source venv/bin/activate
+
+# Windows:
+python -m venv venv
+venv\Scripts\activate.bat
+
+# After activating venv:
+pip install --upgrade pip
+pip install -r requirements-dev.txt
+
+# To install the CLI for local development:
+pip install -e .
+```
+
+### pre-commit
+
+Install [pre-commit](https://pre-commit.com/) to ensure that each of your commits is properly checked against our linter and formatters:
+
+```bash
+# In the project root:
+pre-commit install
+
+# Then test the pre-commit hooks to see how it works:
+pre-commit run --all-files
+```
+
+> [!NOTE]
+> pre-commit is Python package that can be installed via pip or any other Python package manager. You can also find it in our [requirements-dev.txt](./requirements-dev.txt) file.
+>
+> ```bash
+> pip install pre-commit
+> ```
+
+> [!NOTE]
+> If you are having issues with pre-commit and want to send along your changes regardless, you can ignore the pre-commit hooks via the following:
+>
+> ```bash
+> git commit --no-verify -m "COMMIT_MESSAGE"
+> ```
+
+<a name="using-the-issue-tracker-"></a>
+
+## Using the issue tracker [`⇧`](#contents)
 
 The [issue tracker for kwx](https://github.com/andrewtavis/kwx/issues) is the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests) and [submitting pull requests](#pull-requests).
 
+<a name="bug-reports-"></a>
 
-<a name="bug-reports"></a>
-## Bug reports
+## Bug reports [`⇧`](#contents)
 
 A bug is a _demonstrable problem_ that is caused by the code in the repository. Good bug reports are extremely helpful - thank you!
 
@@ -26,6 +114,7 @@ Guidelines for bug reports:
 3. **Isolate the problem** to make sure that the code in the repository is _definitely_ responsible for the issue.
 
 **Great Bug Reports** tend to have:
+
 - A quick summary
 - Steps to reproduce
 - What you expected would happen
@@ -34,15 +123,15 @@ Guidelines for bug reports:
 
 Again, thank you for your time in reporting issues!
 
+<a name="feature-requests-"></a>
 
-<a name="feature-requests"></a>
-## Feature requests
+## Feature requests [`⇧`](#contents)
 
 Feature requests are more than welcome! Please take a moment to find out whether your idea fits with the scope and aims of the project. When making a suggestion, provide as much detail and context as possible, and further make clear the degree to which you would like to contribute in its development.
 
+<a name="pull-requests-"></a>
 
-<a name="pull-requests"></a>
-## Pull requests
+## Pull requests [`⇧`](#contents)
 
 Good pull requests - patches, improvements and new features - are a fantastic help. They should remain focused in scope and avoid containing unrelated commits. Note that all contributions to this project will be made under [the specified license](https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt) and should follow the coding indentation and style standards (contact us if unsure).
 
@@ -52,42 +141,42 @@ When making a contribution, adhering to the [GitHub flow](https://guides.github.
 
 1. [Fork](http://help.github.com/fork-a-repo/) the repo, clone your fork, and configure the remotes:
 
-    ```bash
-    # Clone your fork of the repo into the current directory
-    git clone https://github.com/<your-username>/<repo-name>
-    # Navigate to the newly cloned directory
-    cd <repo-name>
-    # Assign the original repo to a remote called "upstream"
-    git remote add upstream https://github.com/<upsteam-owner>/<repo-name>
-    ```
+   ```bash
+   # Clone your fork of the repo into the current directory
+   git clone https://github.com/<your-username>/<repo-name>
+   # Navigate to the newly cloned directory
+   cd <repo-name>
+   # Assign the original repo to a remote called "upstream"
+   git remote add upstream https://github.com/<upsteam-owner>/<repo-name>
+   ```
 
 2. If you cloned a while ago, get the latest changes from upstream:
 
-    ```bash
-    git checkout <dev-branch>
-    git pull upstream <dev-branch>
-    ```
+   ```bash
+   git checkout <dev-branch>
+   git pull upstream <dev-branch>
+   ```
 
 3. Create a new topic branch (off the main project development branch) to contain your feature, change, or fix:
 
-    ```bash
-    git checkout -b <topic-branch-name>
-    ```
+   ```bash
+   git checkout -b <topic-branch-name>
+   ```
 
 4. Commit your changes in logical chunks, and please try to adhere to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). Use Git's [interactive rebase](https://docs.github.com/en/github/getting-started-with-github/about-git-rebase) feature to tidy up your commits before making them public.
 
 5. Locally merge (or rebase) the upstream development branch into your topic branch:
 
-    ```bash
-    git pull --rebase upstream <dev-branch>
-    ```
+   ```bash
+   git pull --rebase upstream <dev-branch>
+   ```
 
 6. Push your topic branch up to your fork:
 
-    ```bash
-    git push origin <topic-branch-name>
-    ```
+   ```bash
+   git push origin <topic-branch-name>
+   ```
 
-7.  [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
+7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
 
 Thank you in advance for your contributions!

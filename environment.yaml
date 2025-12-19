@@ -1,0 +1,6 @@
+name: kwx-dev
+dependencies:
+  - python>=3.10
+  - pip
+  - pip:
+      - -r requirements-dev.txt

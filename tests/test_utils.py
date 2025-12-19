@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 """
 Utilities Tests
 ---------------
@@ -7,6 +8,7 @@ import os
 from io import StringIO
 
 import spacy
+
 from kwx import utils
 
 

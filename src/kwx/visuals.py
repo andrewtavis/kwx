@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 """
 visuals
 -------
@@ -88,7 +89,9 @@ def save_vis(vis, save_file, file_name):
         else:
             if os.path.exists(save_file):
                 vis.savefig(
-                    save_file + f"/{file_name}.png", bbox_inches="tight", dpi=300,
+                    save_file + f"/{file_name}.png",
+                    bbox_inches="tight",
+                    dpi=300,
                 )
 
             else:
@@ -176,9 +179,9 @@ def graph_topic_num_evals(
         ax : matplotlib axis
             A graph of the given metrics for each of the given models based on each topic number.
     """
-    assert (
-        metrics == "stability" or metrics == "coherence" or metrics == True
-    ), "An invalid value has been passed to the 'metrics' argument - please choose from 'stability', 'coherence', or True for both."
+    assert metrics == "stability" or metrics == "coherence" or metrics == True, (
+        "An invalid value has been passed to the 'metrics' argument - please choose from 'stability', 'coherence', or True for both."
+    )
 
     if metrics == True:
         metrics = ["stability", "coherence"]
@@ -235,7 +238,9 @@ def graph_topic_num_evals(
             bert_model = SentenceTransformer(bert_st_model)
 
         for t_n in tqdm(
-            topic_nums_to_compare, desc=f"{m}-topics", disable=not verbose,
+            topic_nums_to_compare,
+            desc=f"{m}-topics",
+            disable=not verbose,
         ):
             tm = topic_model.TopicModel(num_topics=t_n, method=m, bert_model=bert_model)
             tm.fit(text_corpus=text_corpus, method=m, m_clustering=None, **kwargs)
@@ -364,7 +369,10 @@ def graph_topic_num_evals(
 
 
 def gen_word_cloud(
-    text_corpus, ignore_words=None, height=500, save_file=False,
+    text_corpus,
+    ignore_words=None,
+    height=500,
+    save_file=False,
 ):
     """
     Generates a word cloud for a group of words.
@@ -660,7 +668,9 @@ def t_sne(
 
     if tsne_2 is not None and tsne_3 is not None:
         fig, (ax1, ax2) = plt.subplots(
-            nrows=1, ncols=2, figsize=fig_size  # pylint: disable=unused-variable
+            nrows=1,
+            ncols=2,
+            figsize=fig_size,  # pylint: disable=unused-variable
         )
         ax1.axis("off")
 

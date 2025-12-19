@@ -1,0 +1,56 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.1
+    hooks:
+      - id: ruff-check
+        name: run ruff linting check
+        args: [--fix, --exit-non-zero-on-fix]
+
+      - id: ruff-format
+        name: run ruff formatting check
+
+  - repo: https://github.com/tcort/markdown-link-check
+    rev: v3.13.6
+    hooks:
+      - id: markdown-link-check
+        name: run markdown link check
+        args: [-q]
+
+  - repo: https://github.com/sphinx-contrib/sphinx-lint
+    rev: v1.0.0
+    hooks:
+      - id: sphinx-lint
+        name: run sphinx linting
+
+  - repo: https://github.com/numpy/numpydoc
+    rev: v1.9.0
+    hooks:
+      - id: numpydoc-validation
+        files: ^src/
+        exclude: ^(tests/|.*__init__\.py$)
+
+  - repo: https://github.com/to-sta/spdx-checker-pre-commit
+    rev: 0.1.7
+    hooks:
+      - id: spdx-license-checker
+        name: run spdx-checker license check
+        exclude: ^(?:.*/)?__init__\.py$
+        args: [-l, BSD-3-Clause, --fix, --continue-on-error]
+        types_or: [python, ts]
+
+  - repo: local
+    hooks:
+      - id: mypy-check
+        name: run mypy static type checking
+        files: ^src/
+        entry: mypy ./src --config-file ./pyproject.toml
+        language: python
+        types: [python]
+        pass_filenames: false
