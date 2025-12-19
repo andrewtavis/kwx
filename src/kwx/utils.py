@@ -34,9 +34,9 @@ import emoji
 import gensim
 import pandas as pd
 import spacy
-from spacy import __version__ as spacy_version
 from googletrans import Translator
 from nltk.stem.snowball import SnowballStemmer
+from spacy import __version__ as spacy_version
 from stopwordsiso import stopwords
 from tqdm.auto import tqdm
 
@@ -67,20 +67,28 @@ def load_data(data, target_cols=None):
     if isinstance(data, str):
         if data.endswith("xlsx"):
             df_texts = pd.read_excel(data)
+
         elif data.endswith("csv"):
             df_texts = pd.read_csv(data)
+
         else:
             raise ValueError("Strings passed should be paths to csv or xlsx files.")
+
     elif isinstance(data, pd.DataFrame):
         df_texts = data
+
     elif isinstance(data, pd.Series):
         df_texts = pd.DataFrame(data).reset_index(drop=True)
         df_texts.columns = data.index.values.tolist()
+
     else:
-        raise ValueError("The 'data' argument should be either the name of a csv/xlsx file or a pandas dataframe.")
+        raise ValueError(
+            "The 'data' argument should be either the name of a csv/xlsx file or a pandas dataframe."
+        )
 
     if target_cols is None:
         target_cols = df_texts.columns
+
     elif isinstance(target_cols, str):
         target_cols = [target_cols]
 
@@ -108,8 +116,10 @@ def _combine_texts_to_str(text_corpus, ignore_words=None):
     """
     if isinstance(ignore_words, str):
         words_to_ignore = [ignore_words]
+
     elif isinstance(ignore_words, list):
         words_to_ignore = ignore_words
+
     else:
         words_to_ignore = []
 
@@ -188,7 +198,7 @@ def _lemmatize(tokens, nlp=None, verbose=True):
     allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
 
     base_tokens = []
-    
+
     for t in tqdm(
         tokens,
         total=len(tokens),
@@ -200,9 +210,10 @@ def _lemmatize(tokens, nlp=None, verbose=True):
 
         if spacy_version >= "3.0.0":
             lem_tokens = nlp(combined_texts)
+
         else:
             lem_tokens = nlp.tokenizer(combined_texts)
-        
+
         lemmed_tokens = [
             token.lemma_ for token in lem_tokens if token.pos_ in allowed_pos_tags
         ]
@@ -440,13 +451,17 @@ def clean(
         stemmer = None
         if input_language in SnowballStemmer.languages:
             stemmer = SnowballStemmer(input_language)
+
         # Correct if the abbreviations were put in.
         elif input_language == "ar":
             stemmer = SnowballStemmer("arabic")
+
         elif input_language == "fi":
             stemmer = SnowballStemmer("finish")
+
         elif input_language == "hu":
             stemmer = SnowballStemmer("hungarian")
+
         elif input_language == "sv":
             stemmer = SnowballStemmer("swedish")
 
@@ -478,6 +493,7 @@ def clean(
 
     if min_token_len is None or min_token_len == False:
         min_token_len = 0
+
     if min_token_freq is None or min_token_freq == False:
         min_token_freq = 0
 
@@ -790,20 +806,26 @@ def organize_by_pos(outputs, output_language):
         for o in outputs:
             if o not in flat_ordered_outputs:
                 other.append(o)
+
         ordered_outputs.append(other)
 
         outputs_dict = {}
         for i, o in enumerate(ordered_outputs):
             if i == 0:
                 outputs_dict["Nouns:"] = o
+
             if i == 1:
                 outputs_dict["Nouns:"] += o  # proper nouns put in nouns
+
             if i == 2:
                 outputs_dict["Adjectives:"] = ordered_outputs[i]
+
             if i == 3:
                 outputs_dict["Adverbs:"] = ordered_outputs[i]
+
             if i == 4:
                 outputs_dict["Verbs:"] = ordered_outputs[i]
+
             if i == 5:
                 outputs_dict["Other:"] = ordered_outputs[i]
 
@@ -843,7 +865,7 @@ def prompt_for_word_removal(words_to_ignore=None):
         if more_words == "y":
             new_words_to_ignore = input("Type or copy word(s) to be removed: ")
             # Remove commas if the user has used them to separate words,
-            # as well as apostraphes.
+            # as well as apostrophes.
             new_words_to_ignore = [
                 char for char in new_words_to_ignore if char not in [",", "'"]
             ]
