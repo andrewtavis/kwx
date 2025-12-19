@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -145,7 +146,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "kwx.tex", "kwx Documentation", "andrewtavis", "manual",)
+    (
+        master_doc,
+        "kwx.tex",
+        "kwx Documentation",
+        "andrewtavis",
+        "manual",
+    )
 ]
 
 

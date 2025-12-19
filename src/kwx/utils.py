@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 """
 utils
 -----
@@ -479,12 +480,12 @@ def clean(
     if min_token_freq is None or min_token_freq == False:
         min_token_freq = 0
 
-    assert isinstance(
-        min_token_len, int
-    ), "The 'min_token_len' argument must be an integer if used."
-    assert isinstance(
-        min_token_freq, int
-    ), "The 'min_token_freq' argument must be an integer if used."
+    assert isinstance(min_token_len, int), (
+        "The 'min_token_len' argument must be an integer if used."
+    )
+    assert isinstance(min_token_freq, int), (
+        "The 'min_token_freq' argument must be an integer if used."
+    )
 
     min_len_freq_tokens = [
         [

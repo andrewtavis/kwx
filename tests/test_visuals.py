@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 """
 Visuals Tests
 -------------
@@ -6,8 +7,9 @@ Visuals Tests
 import os
 
 import matplotlib.pyplot as plt
-from kwx import visuals
 from pytest_cov.embed import cleanup_on_sigterm
+
+from kwx import visuals
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 cleanup_on_sigterm()
@@ -44,14 +46,18 @@ def test_return_ideal_metrics(long_text_corpus):
 def test_gen_word_cloud(monkeypatch, long_text_corpus):
     monkeypatch.setattr(plt, "show", lambda: None)
     visuals.gen_word_cloud(
-        text_corpus=long_text_corpus, ignore_words="word", save_file=False,
+        text_corpus=long_text_corpus,
+        ignore_words="word",
+        save_file=False,
     )
 
 
 def test_gen_word_cloud_zip(monkeypatch, long_text_corpus):
     monkeypatch.setattr(plt, "show", lambda: None)
     visuals.gen_word_cloud(
-        text_corpus=long_text_corpus, ignore_words="word", save_file="tests/test.zip",
+        text_corpus=long_text_corpus,
+        ignore_words="word",
+        save_file="tests/test.zip",
     )
     os.remove("tests/test.zip")
 
@@ -91,7 +97,10 @@ def test_t_sne(monkeypatch, long_text_corpus):
     )
 
     visuals.t_sne(
-        dimension="2d", text_corpus=long_text_corpus, num_topics=3, save_file=False,
+        dimension="2d",
+        text_corpus=long_text_corpus,
+        num_topics=3,
+        save_file=False,
     )
 
     visuals.t_sne(
