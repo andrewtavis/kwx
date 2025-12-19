@@ -10,10 +10,10 @@
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |pr_ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/pr_ci.yaml?branch=main?&label=ci&logo=ruff
+.. |pr_ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/pr_ci.yaml?branch=main&label=ci&logo=ruff
     :target: https://github.com/andrewtavis/kwx/actions/workflows/pr_ci.yaml
 
-.. |python_package_ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/python_package_ci.yaml?branch=main?&label=build&logo=pytest
+.. |python_package_ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/python_package_ci.yaml?branch=main&label=build&logo=pytest
     :target: https://github.com/andrewtavis/kwx/actions/workflows/python_package_ci.yaml
 
 .. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg
