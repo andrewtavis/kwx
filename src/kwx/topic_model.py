@@ -208,6 +208,8 @@ class TopicModel:
 
             self.cluster_model = m_clustering(self.num_topics)
             self.vec[method] = self._vectorize(
-                text_corpus=self.text_corpus, method=method, **kwargs,
+                text_corpus=self.text_corpus,
+                method=method,
+                **kwargs,
             )
             self.cluster_model.fit(X=self.vec[method])

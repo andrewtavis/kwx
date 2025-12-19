@@ -436,9 +436,9 @@ def extract_kws(
     )
 
     if method.lower() == "tfidf":
-        assert (
-            corpuses_to_compare != None
-        ), "TFIDF requires another text corpus to be passed to the `corpuses_to_compare` argument."
+        assert corpuses_to_compare != None, (
+            "TFIDF requires another text corpus to be passed to the `corpuses_to_compare` argument."
+        )
 
     if input_language in languages.lem_abbr_dict():
         input_language = languages.lem_abbr_dict()[input_language]
@@ -693,7 +693,7 @@ def gen_files(
             method = method[0]
 
     if save_dir is None:
-        save_dir = f'keyword_extraction_{time.strftime("%Y%m%d-%H%M%S")}'
+        save_dir = f"keyword_extraction_{time.strftime('%Y%m%d-%H%M%S')}"
 
     if zip_results:
         if save_dir[-4:] != ".zip":
