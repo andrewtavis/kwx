@@ -1,0 +1,21 @@
+# In order to add, delete or modify a dependency, please update
+# the reference here and then run the following in the project root:
+#
+# Note: We unpin requirements in production as i18n-check needs to be installed in other projects.
+# - pip-compile --rebuild requirements.in && sed -i "" "s/==/>=/g" requirements.txt
+# - pip-compile --rebuild requirements-dev.in
+#
+# To update dependencies, please run the following in the project root:
+# - pip-compile --upgrade requirements.in && sed -i "" "s/==/>=/g" requirements.txt
+# - pip-compile --upgrade requirements-dev.in
+
+-r requirements.txt
+
+mypy
+numpydoc
+pip-tools
+pre-commit
+pytest
+pytest-cov
+ruff
+sphinx-rtd-theme

@@ -1,4 +1,4 @@
-name: pr_ci
+name: python_package_ci
 on:
   workflow_dispatch:
   pull_request:
@@ -24,7 +24,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest]
-        python-version: [3.8]
+        python-version: [3.11]
 
     env:
       OS: ${{ matrix.os }}
