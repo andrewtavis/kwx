@@ -5,8 +5,8 @@
 <ol></ol>
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![pr_ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/pr_ci.yml?branch=main?&label=ci&logo=ruff)](https://github.com/andrewtavis/kwx/actions/workflows/pr_ci.yaml)
-[![python_package_ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/python_package_ci.yml?branch=main?&label=build&logo=pytest)](https://github.com/andrewtavis/kwx/actions/workflows/python_package_ci.yaml)
+[![pr_ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/pr_ci.yaml?branch=main?&label=ci&logo=ruff)](https://github.com/andrewtavis/kwx/actions/workflows/pr_ci.yaml)
+[![python_package_ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/python_package_ci.yaml?branch=main?&label=build&logo=pytest)](https://github.com/andrewtavis/kwx/actions/workflows/python_package_ci.yaml)
 [![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)
@@ -302,7 +302,7 @@ git remote add upstream https://github.com/andrewtavis/kwx.git
 Download [Anaconda](https://www.anaconda.com/download) if you don't have it installed already.
 
 ```bash
-conda env create --file environment.yml
+conda env create --file environment.yaml
 conda activate kwx-dev
 ```
 
