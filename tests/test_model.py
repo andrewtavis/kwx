@@ -9,6 +9,7 @@ from io import StringIO
 
 import gensim
 import numpy as np
+
 from kwx import model
 
 np.random.seed(42)

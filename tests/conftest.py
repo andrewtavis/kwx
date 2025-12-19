@@ -7,10 +7,11 @@ Fixtures
 import numpy as np
 import pandas as pd
 import pytest
-from kwx import utils
 
 # Required or the import within kwx.visuals will fail.
 from sentence_transformers import SentenceTransformer
+
+from kwx import utils
 
 np.random.seed(42)
 

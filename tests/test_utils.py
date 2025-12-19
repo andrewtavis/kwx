@@ -8,6 +8,7 @@ import os
 from io import StringIO
 
 import spacy
+
 from kwx import utils
 
 

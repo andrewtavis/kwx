@@ -7,8 +7,9 @@ Visuals Tests
 import os
 
 import matplotlib.pyplot as plt
-from kwx import visuals
 from pytest_cov.embed import cleanup_on_sigterm
+
+from kwx import visuals
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 cleanup_on_sigterm()
