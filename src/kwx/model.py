@@ -885,7 +885,7 @@ def gen_files(
         )
 
     block_feature = True  # t_sne isn't zipping propertly
-    if t_sne_dest and block_feature:
+    if t_sne_dest and not block_feature:
         visuals.t_sne(
             dimension="both",  # 2d and 3d are also options
             text_corpus=text_corpus,
