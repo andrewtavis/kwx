@@ -27,12 +27,12 @@ import zipfile
 
 import numpy as np
 from gensim.models import CoherenceModel
+from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
-from sentence_transformers import SentenceTransformer
-
 from kwx import languages, topic_model, utils, visuals
+
+warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 
 
 def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
@@ -436,7 +436,7 @@ def extract_kws(
     )
 
     if method.lower() == "tfidf":
-        assert corpuses_to_compare != None, (
+        assert corpuses_to_compare is not None, (
             "TFIDF requires another text corpus to be passed to the `corpuses_to_compare` argument."
         )
 
@@ -591,8 +591,8 @@ def extract_kws(
         more_words_to_ignore = True
         first_iteration = True
         new_words_to_ignore = words_to_ignore  # initialize so that it can be added to
-        while more_words_to_ignore != False:
-            if first_iteration == True:
+        while more_words_to_ignore:
+            if first_iteration:
                 print("The {} keywords are:\n".format(method.upper()))
                 print(keywords)
 
@@ -606,7 +606,7 @@ def extract_kws(
             )
             first_iteration = False
 
-            if words_added == True:
+            if words_added:
                 keywords = _select_kws(
                     method=method,
                     kw_args=kw_args,
@@ -732,7 +732,7 @@ def gen_files(
             t_sne_dest = save_dir
 
     else:
-        if incl_visuals == True:
+        if incl_visuals:
             topic_num_evals_dest = save_dir
             word_cloud_dest = save_dir
             pyLDAvis_dest = save_dir
@@ -776,7 +776,7 @@ def gen_files(
         verbose=verbose,
     )
 
-    if pyLDAvis_dest != False and ideal_lda_num_topics != False:
+    if pyLDAvis_dest and ideal_lda_num_topics:
         visuals.pyLDAvis_topics(
             method="lda",
             text_corpus=text_corpus,
@@ -836,8 +836,8 @@ def gen_files(
         first_iteration = True
         new_words_to_ignore = words_to_ignore  # initialize so that it can be added to
 
-        while more_words_to_ignore != False:
-            if first_iteration == True:
+        while more_words_to_ignore:
+            if first_iteration:
                 print("The most frequent keywords are:\n")
                 print(most_freq_kw)
                 print("")
@@ -857,7 +857,7 @@ def gen_files(
             )
             first_iteration = False
 
-            if words_added == True:
+            if words_added:
                 most_freq_kw = _select_kws(
                     method="frequency",
                     kw_args=most_freq_kw_args,
@@ -875,7 +875,7 @@ def gen_files(
             else:
                 more_words_to_ignore = False
 
-    if word_cloud_dest != False:
+    if word_cloud_dest:
         # Make a word cloud that doesn't include the words that should be ignored.
         visuals.gen_word_cloud(
             text_corpus=text_corpus,
@@ -885,7 +885,7 @@ def gen_files(
         )
 
     block_feature = True  # t_sne isn't zipping propertly
-    if t_sne_dest != False and block_feature == False:
+    if t_sne_dest and not block_feature:
         visuals.t_sne(
             dimension="both",  # 2d and 3d are also options
             text_corpus=text_corpus,
@@ -923,7 +923,7 @@ def gen_files(
         input_obj.write(new_char)
         return input_obj
 
-    if zip_results == True:
+    if zip_results:
         edit_fxn = add_to_zip_str
         input_obj = ""
 
@@ -967,7 +967,7 @@ def gen_files(
                 input_obj = edit_fxn(input_obj=input_obj, new_char="=" * len(model_key))
                 input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
-    if zip_results == True:
+    if zip_results:
         with zipfile.ZipFile(save_dir, mode="a") as zf:
             zf.writestr(zinfo_or_arcname="keywords.txt", data=input_obj)
             zf.close()
