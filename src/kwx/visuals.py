@@ -47,6 +47,7 @@ from kwx import model, topic_model, utils
 
 warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 
+
 def save_vis(vis, save_file, file_name):
     """
     Saves a visualization file in the local or given directory if directed.

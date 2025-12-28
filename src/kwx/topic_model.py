@@ -26,6 +26,7 @@ logging.disable(logging.WARNING)
 warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
+
 class TopicModel:
     """
     The topic model class to fit and predict given an unsupervised learning technique.
