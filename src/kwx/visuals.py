@@ -37,16 +37,15 @@ from gensim.models.ldamulticore import LdaMulticore
 from IPython import get_ipython
 from IPython.display import display
 from matplotlib.lines import Line2D
-from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
+from sentence_transformers import SentenceTransformer
 from sklearn.manifold import TSNE
 from tqdm.auto import tqdm
 from wordcloud import WordCloud
 
-warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
-from sentence_transformers import SentenceTransformer
-
 from kwx import model, topic_model, utils
 
+warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 
 def save_vis(vis, save_file, file_name):
     """
@@ -69,7 +68,7 @@ def save_vis(vis, save_file, file_name):
     -------
         The file saved in the local or given directory if directed.
     """
-    if save_file == True:
+    if save_file:
         vis.savefig(
             f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
             bbox_inches="tight",
@@ -179,11 +178,11 @@ def graph_topic_num_evals(
         ax : matplotlib axis
             A graph of the given metrics for each of the given models based on each topic number.
     """
-    assert metrics == "stability" or metrics == "coherence" or metrics == True, (
+    assert metrics == "stability" or metrics == "coherence" or metrics, (
         "An invalid value has been passed to the 'metrics' argument - please choose from 'stability', 'coherence', or True for both."
     )
 
-    if metrics == True:
+    if metrics:
         metrics = ["stability", "coherence"]
 
     if isinstance(method, str):
@@ -485,7 +484,7 @@ def pyLDAvis_topics(
 
     vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
 
-    if save_file == True:
+    if save_file:
         pyLDAvis.save_html(
             vis, "lda_topics_{}.html".format(time.strftime("%Y%m%d-%H%M%S"))
         )
@@ -505,7 +504,7 @@ def pyLDAvis_topics(
                 )
 
     else:
-        if in_ipython() == True and display_ipython == True:
+        if in_ipython() and display_ipython:
             pyLDAvis.enable_notebook()
             # Display in an ipython notebook.
             display(pyLDAvis.display(vis))

@@ -491,10 +491,10 @@ def clean(
         for t in list(set(tokens)):
             token_frequencies[t] += 1
 
-    if min_token_len is None or min_token_len == False:
+    if min_token_len is None or not min_token_len:
         min_token_len = 0
 
-    if min_token_freq is None or min_token_freq == False:
+    if min_token_freq is None or not min_token_freq:
         min_token_freq = 0
 
     assert isinstance(min_token_len, int), (

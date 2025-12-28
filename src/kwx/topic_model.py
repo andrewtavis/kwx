@@ -17,15 +17,14 @@ import os
 import warnings
 from datetime import datetime
 
-logging.disable(logging.WARNING)
-warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-
 import numpy as np
 from gensim import corpora
 from gensim.models.ldamulticore import LdaMulticore
 from sklearn.cluster import KMeans
 
+logging.disable(logging.WARNING)
+warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 class TopicModel:
     """
