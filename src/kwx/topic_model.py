@@ -48,9 +48,7 @@ class TopicModel:
         modeling_methods = ["lda", "bert"]
         if method not in modeling_methods:
             ValueError(
-                "The indicated method is invalid. Please choose from {}.".format(
-                    modeling_methods
-                )
+                f"The indicated method is invalid. Please choose from {modeling_methods}."
             )
 
         self.num_topics = num_topics
@@ -63,7 +61,7 @@ class TopicModel:
         self.vec = {}
         self.gamma = 15  # parameter for relative importance of LDA
         self.method = method.lower()
-        self.id = method + "_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        self.id = f"{method}_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
     def _vectorize(self, text_corpus, method=None, **kwargs):
         """

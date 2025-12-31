@@ -438,11 +438,12 @@ def clean(
 
     except OSError:
         try:
-            os.system("python -m spacy download {}".format(input_language))
+            os.system(f"python -m spacy download {input_language}")
             nlp = spacy.load(input_language)
             base_tokens = _lemmatize(
                 tokens=tokens_remove_unwanted, nlp=nlp, verbose=verbose
             )
+
         except OSError:
             nlp = None
 
@@ -525,12 +526,12 @@ def clean(
         selected_idxs = list(range(len(text_corpus)))
 
     else:
-        selected_idxs = [
-            i
-            for i in random.choices(
+        selected_idxs = list(
+            random.choices(
                 range(len(text_corpus)), k=int(sample_size * len(text_corpus))
             )
-        ]
+        )
+
     text_corpus = [
         _combine_texts_to_str(text_corpus=text_corpus[i]) for i in selected_idxs
     ]

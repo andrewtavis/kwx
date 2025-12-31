@@ -259,7 +259,7 @@ def graph_topic_num_evals(
             )
 
         if "stability" in metrics:
-            for j in range(0, len(topic_nums_to_compare) - 1):
+            for j in range(len(topic_nums_to_compare) - 1):
                 jaccard_sims = []
                 for t1, topic1 in enumerate(  # pylint: disable=unused-variable
                     topics_dict[topic_nums_to_compare[j]]

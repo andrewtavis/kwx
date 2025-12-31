@@ -168,7 +168,7 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
             bow=tm.bow_corpus, eps=0
         )  # cutoff probability to 0
 
-        topics_per_response = [response for response in topic_corpus]
+        topics_per_response = list(topic_corpus)
         flat_topic_coherences = [
             item for sublist in topics_per_response for item in sublist
         ]
@@ -196,7 +196,7 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
         counts_dict = {
             k: v for k, v in counts_dict.items() if k in non_blank_topic_idxs
         }
-        keys_ordered = sorted([k for k in counts_dict])
+        keys_ordered = sorted(list(counts_dict))
 
         # Map to the range from 0 to the number of non-blank topics.
         counts_dict_mapped = {i: counts_dict[k] for i, k in enumerate(keys_ordered)}
@@ -223,10 +223,12 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
     # Create selection indexes for each topic given its average coherence
     # and how many keywords are wanted.
     selection_indexes = [
-        list(range(int(math.floor(num_keywords * a))))
-        if math.floor(num_keywords * a) > 0
-        else [0]
-        for i, a in enumerate(ordered_topic_averages)
+        (
+            list(range(int(math.floor(num_keywords * a))))
+            if math.floor(num_keywords * a) > 0
+            else [0]
+        )
+        for a in ordered_topic_averages
     ]
 
     total_indexes = sum(len(i) for i in selection_indexes)
@@ -431,9 +433,8 @@ def extract_kws(
 
     assert method in valid_methods, (
         "The value for the 'method' argument is invalid. Please choose one of "
-        + " ".join(m for m in valid_methods)
-        + "."
-    )
+        + " ".join(valid_methods)
+    ) + "."
 
     if method.lower() == "tfidf":
         assert corpuses_to_compare is not None, (
@@ -593,13 +594,13 @@ def extract_kws(
         new_words_to_ignore = words_to_ignore  # initialize so that it can be added to
         while more_words_to_ignore:
             if first_iteration:
-                print("The {} keywords are:\n".format(method.upper()))
-                print(keywords)
+                print(f"The {method.upper()} keywords are:\n")
 
             else:
                 print("\n")
-                print("The new {} keywords are:\n".format(method.upper()))
-                print(keywords)
+                print(f"The new {method.upper()} keywords are:\n")
+
+            print(keywords)
 
             new_words_to_ignore, words_added = utils.prompt_for_word_removal(
                 words_to_ignore=new_words_to_ignore
@@ -618,13 +619,11 @@ def extract_kws(
                 more_words_to_ignore = False
 
     if output_language != input_language:
-        translated_keywords = utils.translate_output(
+        return utils.translate_output(
             outputs=keywords,
             input_language=input_language,
             output_language=output_language,
         )
-
-        return translated_keywords
 
     else:
         return keywords
@@ -688,9 +687,8 @@ def gen_files(
     -------
         A directory or zip file in the current working or save_dir directory.
     """
-    if isinstance(method, list):
-        if len(method) == 1:
-            method = method[0]
+    if isinstance(method, list) and len(method) == 1:
+        method = method[0]
 
     if save_dir is None:
         save_dir = f"keyword_extraction_{time.strftime('%Y%m%d-%H%M%S')}"
@@ -699,12 +697,12 @@ def gen_files(
         if save_dir[-4:] != ".zip":
             save_dir += ".zip"
 
-        if os.path.exists(os.getcwd() + "/" + save_dir):
-            os.remove(os.getcwd() + "/" + save_dir)
+        if os.path.exists(f"{os.getcwd()}/{save_dir}"):
+            os.remove(f"{os.getcwd()}/{save_dir}")
 
     else:
         # Create the directory
-        save_dir = os.getcwd() + "/" + save_dir
+        save_dir = f"{os.getcwd()}/{save_dir}"
         os.makedirs(save_dir)
         if os.path.exists(save_dir):
             os.rmdir(save_dir)
