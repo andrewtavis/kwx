@@ -11,12 +11,16 @@ on:
     paths:
       - "src/**"
       - "tests/**"
+      - "requirements.txt"
+      - "requirements-dev.txt"
   push:
     branches:
       - main
     paths:
       - "src/**"
       - "tests/**"
+      - "requirements.txt"
+      - "requirements-dev.txt"
 
 jobs:
   ci:
