@@ -93,7 +93,7 @@ defusedxml==0.7.1
     # via -r requirements.txt
 distlib==0.4.0
     # via virtualenv
-docutils==0.21.2
+docutils==0.22.4
     # via
     #   sphinx
     #   sphinx-rtd-theme
@@ -185,7 +185,7 @@ hyperframe==6.1.0
     # via
     #   -r requirements.txt
     #   h2
-identify==2.6.15
+identify==2.6.16
     # via pre-commit
 idna==3.11
     # via
@@ -220,7 +220,7 @@ joblib==1.5.3
     #   nltk
     #   pyldavis
     #   scikit-learn
-keras==3.13.0
+keras==3.13.1
     # via
     #   -r requirements.txt
     #   tensorflow
@@ -232,9 +232,9 @@ libclang==18.1.1
     # via
     #   -r requirements.txt
     #   tensorflow
-librt==0.7.7
+librt==0.7.8
     # via mypy
-markdown==3.10
+markdown==3.10.1
     # via
     #   -r requirements.txt
     #   tensorboard
@@ -327,7 +327,7 @@ optree==0.18.0
     # via
     #   -r requirements.txt
     #   keras
-packaging==25.0
+packaging==26.0
     # via
     #   -r requirements.txt
     #   build
@@ -342,7 +342,8 @@ packaging==25.0
     #   thinc
     #   transformers
     #   weasel
-pandas==2.3.3
+    #   wheel
+pandas==3.0.0
     # via
     #   -r requirements.txt
     #   pyldavis
@@ -382,7 +383,7 @@ prompt-toolkit==3.0.52
     # via
     #   -r requirements.txt
     #   ipython
-protobuf==6.33.3
+protobuf==6.33.4
     # via
     #   -r requirements.txt
     #   tensorboard
@@ -416,7 +417,7 @@ pygments==2.19.2
     #   sphinx
 pyldavis==3.4.1
     # via -r requirements.txt
-pyparsing==3.3.1
+pyparsing==3.3.2
     # via
     #   -r requirements.txt
     #   matplotlib
@@ -435,17 +436,13 @@ python-dateutil==2.9.0.post0
     #   -r requirements.txt
     #   matplotlib
     #   pandas
-pytz==2025.2
-    # via
-    #   -r requirements.txt
-    #   pandas
 pyyaml==6.0.3
     # via
     #   -r requirements.txt
     #   huggingface-hub
     #   pre-commit
     #   transformers
-regex==2025.11.3
+regex==2026.1.15
     # via
     #   -r requirements.txt
     #   nltk
@@ -464,10 +461,8 @@ rich==14.2.0
     #   -r requirements.txt
     #   keras
 roman-numerals==4.1.0
-    # via roman-numerals-py
-roman-numerals-py==4.1.0
     # via sphinx
-ruff==0.14.11
+ruff==0.14.14
     # via -r requirements-dev.in
 safetensors==0.7.0
     # via
@@ -513,12 +508,12 @@ spacy-loggers==1.0.5
     # via
     #   -r requirements.txt
     #   spacy
-sphinx==8.2.3
+sphinx==9.1.0
     # via
     #   numpydoc
     #   sphinx-rtd-theme
     #   sphinxcontrib-jquery
-sphinx-rtd-theme==3.0.2
+sphinx-rtd-theme==3.1.0
     # via -r requirements-dev.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
@@ -577,7 +572,7 @@ tokenizers==0.22.2
     # via
     #   -r requirements.txt
     #   transformers
-torch==2.9.1
+torch==2.10.0
     # via
     #   -r requirements.txt
     #   sentence-transformers
@@ -594,7 +589,7 @@ traitlets==5.14.3
     #   -r requirements.txt
     #   ipython
     #   matplotlib-inline
-transformers==4.57.3
+transformers==4.57.6
     # via
     #   -r requirements.txt
     #   sentence-transformers
@@ -621,10 +616,6 @@ typing-inspection==0.4.2
     # via
     #   -r requirements.txt
     #   pydantic
-tzdata==2025.3
-    # via
-    #   -r requirements.txt
-    #   pandas
 urllib3==2.6.3
     # via
     #   -r requirements.txt
@@ -637,7 +628,7 @@ wasabi==1.1.3
     #   spacy
     #   thinc
     #   weasel
-wcwidth==0.2.14
+wcwidth==0.3.1
     # via
     #   -r requirements.txt
     #   prompt-toolkit
@@ -649,12 +640,12 @@ werkzeug==3.1.5
     # via
     #   -r requirements.txt
     #   tensorboard
-wheel==0.45.1
+wheel==0.46.3
     # via
     #   -r requirements.txt
     #   astunparse
     #   pip-tools
-wordcloud==1.9.5
+wordcloud==1.9.6
     # via -r requirements.txt
 wrapt==2.0.1
     # via
