@@ -1,7 +1,0 @@
-include CHANGELOG.* CONTRIBUTORS.* LICENSE.*
-graft src
-graft docs
-prune docs/build
-graft tests
-global-exclude *.py[cod]
-global-exclude .DS_Store

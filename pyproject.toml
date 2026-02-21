@@ -1,3 +1,91 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kwx"
+version = "1.0.2"
+description = "BERT, LDA, and TFIDF based keyword extraction in Python"
+readme = "README.md"
+requires-python = ">=3.12"
+keywords = [
+    "multilingual",
+    "nlp",
+    "natural-language-processing",
+    "text-mining",
+    "text-classification",
+    "text-analysis",
+    "topic-modelling",
+    "unsupervised-learning",
+    "keyword-extraction",
+]
+authors = [
+    { name = "Andrew Tavis McAllister", email = "andrew.t.mcallister@gmail.com" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "defusedxml>=0.7.1",
+    "emoji>=2.15.0",
+    "gensim>=4.4.0",
+    "googletrans>=4.0.2",
+    "ipython>=9.10.0",
+    "keras>=3.13.2",
+    "matplotlib>=3.10.8",
+    "nltk>=3.9.2",
+    "numpy>=2.4.2",
+    "packaging>=26.0",
+    "pandas>=3.0.1",
+    "pyldavis>=3.4.1",
+    "scikit-learn>=1.8.0",
+    "seaborn>=0.13.2",
+    "sentence-transformers>=5.2.3",
+    "spacy>=3.8.11",
+    "stopwordsiso>=0.6.1",
+    "tensorflow>=2.20.0",
+    "tqdm>=4.67.3",
+    "wordcloud>=1.9.6",
+    "xlrd>=2.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.19.1",
+    "prek>=0.3.3",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.2",
+]
+docs = [
+    # Keep docs dependencies formatted in this way with ruff to allow for upgrades via VS Code extension.
+    "m2r2>=0.3.4",
+    "numpydoc>=1.10.0",
+    "sphinx-rtd-theme>=3.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/andrewtavis/kwx"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
+
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [
@@ -22,7 +110,6 @@ exclude = [
 ]
 
 [tool.ruff.lint]
-
 select = [
     "E", # pycodestyle errors
     "F", # pyflakes
@@ -42,9 +129,6 @@ max-complexity = 10
 
 [tool.isort]
 line_length = 88
-
-[tool.pytest.ini_options]
-pythonpath = "src"
 
 [tool.coverage.run]
 omit = ["*/tests/*", "*/__init__.py"]

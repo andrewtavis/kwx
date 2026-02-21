@@ -1,10 +1,10 @@
 .. mdinclude:: ../../.github/CONTRIBUTING.md
 
+=======
 License
--------
+=======
 
-.. literalinclude:: ../../LICENSE.txt
-  :language: text
+.. literalinclude:: _static/LICENSE.txt
 
 Change log
 ----------

@@ -11,16 +11,16 @@ on:
     paths:
       - "src/**"
       - "tests/**"
-      - "requirements.txt"
-      - "requirements-dev.txt"
+      - "pyproject.toml"
+      - "uv.lock"
   push:
     branches:
       - main
     paths:
       - "src/**"
       - "tests/**"
-      - "requirements.txt"
-      - "requirements-dev.txt"
+      - "pyproject.toml"
+      - "uv.lock"
 
 jobs:
   run:
@@ -48,23 +48,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Add Conda to System Path
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-update-conda: true
-          python-version: ${{ matrix.python-version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
 
-      - name: Install Dependencies
-        run: |
-          eval "$(conda shell.bash hook)"
-          conda env create --file environment.yaml
-
-      - name: Test and Generate Coverage
-        run: |
-          eval "$(conda shell.bash hook)"
-          conda activate kwx-dev
-          export PYTHONPATH="./src"
-          pytest --cov=src tests --cov-report=xml
+      - name: Sync environment and install dependencies
+        run: uv sync --frozen --all-extras
+      - name: Run pytest - Unit Tests
+        run: uv run pytest . --cov=src --cov-report=term-missing --cov-config=./pyproject.toml -v
 
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v2

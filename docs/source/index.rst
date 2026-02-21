@@ -44,15 +44,33 @@ BERT, LDA, and TFIDF based keyword extraction in Python
 
 Installation
 ------------
+
+``kwx`` is available for installation via `uv <https://docs.astral.sh/uv/>`_ (recommended) or `pip <https://pypi.org/project/kwx/>`_.
+
 .. code-block:: shell
 
+    # Using uv (recommended - fast, Rust-based installer):
+    uv pip install kwx
+
+    # Or using pip:
     pip install kwx
 
 .. code-block:: shell
 
+    # For a development build of the package:
     git clone https://github.com/andrewtavis/kwx.git
     cd kwx
-    python setup.py install
+
+    # With uv (recommended):
+    uv sync --all-extras  # install all dependencies
+    source .venv/bin/activate  # activate venv (macOS/Linux)
+    # .venv\Scripts\activate  # activate venv (Windows)
+
+    # Or with pip:
+    python -m venv .venv  # create virtual environment
+    source .venv/bin/activate  # activate venv (macOS/Linux)
+    # .venv\Scripts\activate  # activate venv (Windows)
+    pip install -e .
 
 .. code-block:: python
 

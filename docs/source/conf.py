@@ -12,6 +12,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 
 import os
+import shutil
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
@@ -179,3 +180,11 @@ texinfo_documents = [
         "Miscellaneous",
     )
 ]
+
+# Copy the license to the source directory during build.
+current_dir = os.path.abspath(os.path.dirname(__file__))
+project_root = os.path.join(current_dir, "..", "..")
+shutil.copy(
+    os.path.join(project_root, "LICENSE.txt"),
+    os.path.join(current_dir, "_static/LICENSE.txt"),
+)
