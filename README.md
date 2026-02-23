@@ -201,8 +201,6 @@ The model will be rerun until all words known to be unreasonable are removed for
 
 [kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/src/kwx/visuals.py) includes the following functions for presenting and analyzing the results of keyword extraction:
 
-<sub><a href="#top">Back to top.</a></sub>
-
 ### Topic Number Evaluation
 
 A graph of topic coherence and overlap given a variable number of topics to derive keywords from.
