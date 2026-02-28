@@ -43,7 +43,7 @@ dependencies = [
     "ipython>=9.10.0",
     "keras>=3.13.2",
     "matplotlib>=3.10.8",
-    "nltk>=3.9.2",
+    "nltk>=3.9.3",
     "numpy>=2.4.2",
     "packaging>=26.0",
     "pandas>=3.0.1",
@@ -62,10 +62,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "mypy>=1.19.1",
-    "prek>=0.3.3",
+    "prek>=0.3.4",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
-    "ruff>=0.15.2",
+    "ruff>=0.15.4",
 ]
 docs = [
     # Keep docs dependencies formatted in this way with ruff to allow for upgrades via VS Code extension.
