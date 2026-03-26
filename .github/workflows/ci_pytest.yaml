@@ -1,4 +1,4 @@
-name: python_package_ci
+name: ci_pytest
 on:
   workflow_dispatch:
   pull_request:
