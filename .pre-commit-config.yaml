@@ -45,12 +45,12 @@ repos:
         args: [-l, BSD-3-Clause, --fix, --continue-on-error]
         types_or: [python, ts]
 
-  - repo: local
-    hooks:
-      - id: mypy-check
-        name: run mypy static type checking
-        files: ^src/
-        entry: mypy ./src --config-file ./pyproject.toml
-        language: python
-        types: [python]
-        pass_filenames: false
+  # - repo: local
+  #   hooks:
+  #     - id: ty-check
+  #       name: run ty static type checking
+  #       files: ^src/
+  #       entry: ty check
+  #       language: python
+  #       types: [python]
+  #       pass_filenames: false

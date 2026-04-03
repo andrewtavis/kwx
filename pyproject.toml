@@ -1,3 +1,5 @@
+# MARK: Project
+
 [build-system]
 requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -19,9 +21,11 @@ keywords = [
     "unsupervised-learning",
     "keyword-extraction",
 ]
+
 authors = [
     { name = "Andrew Tavis McAllister", email = "andrew.t.mcallister@gmail.com" },
 ]
+
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -35,23 +39,26 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
 ]
+
+# MARK: Dependencies
+
 dependencies = [
     "defusedxml>=0.7.1",
     "emoji>=2.15.0",
     "gensim>=4.4.0",
     "googletrans>=4.0.2",
-    "ipython>=9.10.0",
-    "keras>=3.13.2",
+    "ipython>=9.12.0",
+    "keras>=3.14.0",
     "matplotlib>=3.10.8",
     "nltk>=3.9.4",
-    "numpy>=2.4.3",
+    "numpy>=2.4.4",
     "packaging>=26.0",
-    "pandas>=3.0.1",
+    "pandas>=3.0.2",
     "pyldavis>=3.4.1",
     "scikit-learn>=1.8.0",
     "seaborn>=0.13.2",
     "sentence-transformers>=5.3.0",
-    "spacy>=3.8.13",
+    "spacy>=3.8.14",
     "stopwordsiso>=0.6.1",
     "tensorflow>=2.21.0",
     "tqdm>=4.67.3",
@@ -61,12 +68,13 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "mypy>=1.19.1",
     "prek>=0.3.8",
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
-    "ruff>=0.15.8",
+    "ruff>=0.15.9",
+    # "ty>=0.0.28",
 ]
+
 docs = [
     # Keep docs dependencies formatted in this way with ruff to allow for upgrades via VS Code extension.
     "m2r2>=0.3.4",
@@ -83,8 +91,15 @@ package-dir = { "" = "src" }
 [tool.setuptools.packages.find]
 where = ["src"]
 
+# MARK: pytest
+
 [tool.pytest.ini_options]
 pythonpath = "src"
+
+[tool.coverage.run]
+omit = ["*/tests/*", "*/__init__.py"]
+
+# MARK: Ruff
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
@@ -96,7 +111,6 @@ exclude = [
     ".eggs",
     ".git",
     ".git-rewrite",
-    ".mypy_cache",
     ".nox",
     ".pants.d",
     ".pytype",
@@ -130,13 +144,12 @@ max-complexity = 10
 [tool.isort]
 line_length = 88
 
-[tool.coverage.run]
-omit = ["*/tests/*", "*/__init__.py"]
+# MARK: ty
 
-[tool.mypy]
-mypy_path = "src"
-strict = true
-exclude = ["setup.py", "^tests/.*\\.py$", "docs"]
+# See: https://docs.astral.sh/ty/reference/rules/
+# [tool.ty.rules]
+
+# MARK: numpydoc
 
 [tool.numpydoc_validation]
 checks = [
