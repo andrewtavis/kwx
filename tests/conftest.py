@@ -9,8 +9,7 @@ import pandas as pd
 import pytest
 
 # Required or the import within kwx.visuals will fail.
-from sentence_transformers import SentenceTransformer
-
+# from sentence_transformers import SentenceTransformer
 from kwx import utils
 
 np.random.seed(42)

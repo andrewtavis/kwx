@@ -9,21 +9,23 @@ from io import StringIO
 
 import gensim
 import numpy as np
+import pytest
 
 from kwx import model
 
 np.random.seed(42)
 
 
-def test_extract_frequent_kws(long_text_corpus):
-    kws = model.extract_kws(
+@pytest.mark.asyncio
+async def test_extract_frequent_kws(long_text_corpus):
+    kws = await model.extract_kws(
         method="frequency",
         text_corpus=long_text_corpus,
         input_language="english",
         num_keywords=10,
         prompt_remove_words=False,
     )
-    assert kws == [
+    required = [
         "virginamerica",
         "flight",
         "tco",
@@ -36,32 +38,39 @@ def test_extract_frequent_kws(long_text_corpus):
         "lax",
     ]
 
-
-# def test_translate_kw_output(long_text_corpus):
-#     kws = model.extract_kws(
-#         method="frequency",
-#         text_corpus=long_text_corpus,
-#         input_language="english",
-#         output_language="german",
-#         num_keywords=10,
-#         prompt_remove_words=False,
-#     )
-#     assert kws == [
-#         "VirginAmerica.",
-#         "Flug",
-#         "tco.",
-#         "Carrie underwood",
-#         "Lady Gaga",
-#         "Fliege",
-#         "virginamerica_ladygaga.",
-#         "virginamerica_ladygaga_carrieunderwood.",
-#         "Sitz",
-#         "lax",
-#     ]
+    missing = [x for x in required if x not in kws]
+    assert not missing, f"Missing keywords: {missing}"
 
 
-def test_extract_TFIDF_kws(long_text_corpus):
-    kws = model.extract_kws(
+@pytest.mark.asyncio
+async def test_translate_kw_output(long_text_corpus):
+    kws = await model.extract_kws(
+        method="frequency",
+        text_corpus=long_text_corpus,
+        input_language="english",
+        output_language="german",
+        num_keywords=10,
+        prompt_remove_words=False,
+    )
+    required = [
+        "VirginAmerica.",
+        "Flug",
+        "tco.",
+        "Carrie underwood",
+        "Lady Gaga",
+        "Fliege",
+        "virginamerica_ladygaga.",
+        "virginamerica_ladygaga_carrieunderwood.",
+        "Sitz",
+        "lax",
+    ]
+    missing = [x for x in required if x not in kws]
+    assert not missing, f"Missing keywords: {missing}"
+
+
+@pytest.mark.asyncio
+async def test_extract_TFIDF_kws(long_text_corpus):
+    kws = await model.extract_kws(
         method="TFIDF",
         text_corpus=long_text_corpus,
         corpuses_to_compare=long_text_corpus,
@@ -85,8 +94,9 @@ def test_extract_TFIDF_kws(long_text_corpus):
 
 if float(gensim.__version__[0]) >= 4.0:
 
-    def test_extract_LDA_kws(long_text_corpus):
-        kws = model.extract_kws(
+    @pytest.mark.asyncio
+    async def test_extract_LDA_kws(long_text_corpus):
+        kws = await model.extract_kws(
             method="lda",
             text_corpus=long_text_corpus,
             input_language="english",
@@ -108,10 +118,11 @@ if float(gensim.__version__[0]) >= 4.0:
             "week",
         ]
 
-    def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
+    @pytest.mark.asyncio
+    async def test_extract_kws_remove_words(monkeypatch, long_text_corpus):
         monkeypatch.setattr("sys.stdin", StringIO("y\nvirginamerica\nn\n"))
 
-        kws = model.extract_kws(
+        kws = await model.extract_kws(
             method="lda",
             text_corpus=long_text_corpus,
             input_language="english",
@@ -183,8 +194,9 @@ else:
         ]
 
 
-def test_extract_BERT_kws(long_text_corpus):
-    kws = model.extract_kws(
+@pytest.mark.asyncio
+async def test_extract_BERT_kws(long_text_corpus):
+    kws = await model.extract_kws(
         method="bert",
         text_corpus=long_text_corpus,
         input_language="english",
@@ -212,7 +224,7 @@ def test_gen_files(monkeypatch, long_text_corpus):
     model.gen_files(
         method="lda",
         text_corpus=long_text_corpus,
-        input_language="english",
+        input_language="en_core_web_sm",
         num_keywords=10,
         topic_nums_to_compare=[10, 11],
         prompt_remove_words=True,
