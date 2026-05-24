@@ -14,7 +14,7 @@ Contents:
 """
 
 
-def lem_abbr_dict():
+def lem_abbr_dict() -> dict[str, str]:
     """
     Calls a dictionary of languages and their abbreviations for lemmatization.
 
@@ -46,7 +46,7 @@ def lem_abbr_dict():
     }
 
 
-def stem_abbr_dict():
+def stem_abbr_dict() -> dict[str, str]:
     """
     Calls a dictionary of languages and their abbreviations for stemming.
 
@@ -67,7 +67,7 @@ def stem_abbr_dict():
     }
 
 
-def sw_abbr_dict():
+def sw_abbr_dict() -> dict[str, str]:
     """
     Calls a dictionary of languages and their abbreviations for stop word removal.
 
