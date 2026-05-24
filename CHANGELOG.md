@@ -6,11 +6,21 @@ kwx tries to follow [semantic versioning](https://semver.org/), a MAJOR.MINOR.PA
 - MINOR version when we add functionality in a backwards compatible manner
 - PATCH version when we make backwards compatible bug fixes
 
-# kwx 1.0.0 (December 28th, 2021)
+## kwx 2.0.0
+
+- All functions were typed and docstrings were expanded
+- `prek` based pre-commit hooks are used to improve package development
+- `Ruff` is now used for formatting and import sorting instead of `black`
+- Linting is now done with `ty` instead of `mypy`
+- Dependency management is now done via `uv`
+- All production and development dependencies were updated
+- Tests and GitHub workflows were updated given the above changes
+
+## kwx 1.0.0
 
 - Release switches kwx over to [semantic versioning](https://semver.org/) and indicates that it is stable
 
-# kwx 0.1.8 (April 29th, 2021)
+## kwx 0.1.8
 
 Changes include:
 
@@ -19,7 +29,7 @@ Changes include:
 - An alert for users when the corpus size is to small for the number of topics was added
 - An import error for pyLDAvis was fixed
 
-# kwx 0.1.7.3 (March 30th, 2021)
+## kwx 0.1.7.3
 
 Changes include:
 
@@ -31,7 +41,7 @@ Changes include:
 - More extensive contributing guidelines
 - Tests now use random seeds and are thus more robust
 
-# kwx 0.1.5 (March 15th, 2021)
+## kwx 0.1.5
 
 Changes include:
 
@@ -42,7 +52,7 @@ Changes include:
 - The user has greater control over the cleaning process
 - Reformatting of the code to make the process more clear
 
-# kwx 0.1.0 (Feb 17th, 2021)
+## kwx 0.1.0
 
 First stable release of kwx
 
@@ -54,7 +64,7 @@ Changes include:
 - Extensive testing of all modules with GH Actions and Codecov
 - Code of conduct and contribution guidelines
 
-# kwx 0.0.2.2 (Jan 31st, 2021)
+## kwx 0.0.2.2
 
 The minimum viable product of kwx:
 

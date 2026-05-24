@@ -74,12 +74,12 @@ dev = [
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.14",
-    "ty>=0.0.38",
+    "ty>=0.0.39",
 ]
 
 docs = [
     # Keep docs dependencies formatted in this way with ruff to allow for upgrades via VS Code extension.
-    "m2r2>=0.3.4",
+    "myst-parser>=5.1.0",
     "numpydoc>=1.10.0",
     "sphinx-rtd-theme>=3.1.0",
 ]

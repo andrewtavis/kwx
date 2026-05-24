@@ -1,14 +1,14 @@
 <a id="top"></a>
 
 <div align="center">
-  <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/logo/kwx_logo_transparent.png" width=431 height=215></a>
+  <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/logo/kwx_logo_transparent.png" height=215></a>
 </div>
 
 <ol></ol>
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![pr_ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/pr_ci.yaml?branch=main&label=ci&logo=ruff)](https://github.com/andrewtavis/kwx/actions/workflows/pr_ci.yaml)
-[![python_package_ci](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/python_package_ci.yaml?branch=main&label=build&logo=pytest)](https://github.com/andrewtavis/kwx/actions/workflows/python_package_ci.yaml)
+[![ci_static_analysis](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_static_analysis.yaml?branch=main&label=ci&logo=ruff)](https://github.com/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml)
+[![ci_pytest](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_pytest.yaml?branch=main&label=build&logo=pytest)](https://github.com/andrewtavis/kwx/actions/workflows/ci_pytest.yaml)
 [![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)
@@ -369,7 +369,7 @@ uv run prek run --all-files
 
 ## To-Do
 
-Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
+Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
 
 - Including more methods to extract keywords [(see issue)](https://github.com/andrewtavis/kwx/issues/17)
 
