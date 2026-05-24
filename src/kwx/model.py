@@ -347,7 +347,7 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
     return keywords
 
 
-def extract_kws(
+async def extract_kws(
     method="lda",
     bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus=None,
@@ -497,7 +497,7 @@ def extract_kws(
                 comparative_string_corpus
             )
             corpus_scored = tfidf_vectorizer.transform(comparative_string_corpus)
-            terms = tfidf_vectorizer.get_feature_names()
+            terms = tfidf_vectorizer.get_feature_names_out()
             scores = corpus_scored.toarray().flatten().tolist()
             kw_args = dict(zip(terms, scores))
 
@@ -513,7 +513,7 @@ def extract_kws(
             )
 
             # Check that more words than the number that appear in the text is not given.
-            frequent_words = extract_kws(
+            frequent_words = await extract_kws(
                 method="frequency",
                 text_corpus=text_corpus,
                 input_language=input_language,
@@ -545,7 +545,7 @@ def extract_kws(
 
         if return_topics:
             if output_language != input_language:
-                ordered_topic_words = utils.translate_output(
+                ordered_topic_words = await utils.translate_output(
                     outputs=ordered_topic_words,
                     input_language=input_language,
                     output_language=output_language,
@@ -570,7 +570,7 @@ def extract_kws(
             # If there are not enough words, then add non-included most
             # frequent ones in order.
             if len(keywords) < num_keywords:
-                frequent_words = extract_kws(
+                frequent_words = await extract_kws(
                     method="frequency",
                     text_corpus=text_corpus,
                     input_language=input_language,
@@ -619,7 +619,7 @@ def extract_kws(
                 more_words_to_ignore = False
 
     if output_language != input_language:
-        return utils.translate_output(
+        return await utils.translate_output(
             outputs=keywords,
             input_language=input_language,
             output_language=output_language,
@@ -629,7 +629,7 @@ def extract_kws(
         return keywords
 
 
-def gen_files(
+async def gen_files(
     method=["lda", "bert"],
     text_corpus=None,
     input_language=None,
@@ -784,7 +784,7 @@ def gen_files(
         )
 
     # Extract most frequent keywords
-    most_freq_kw_args = extract_kws(
+    most_freq_kw_args = await extract_kws(
         method="frequency",
         text_corpus=text_corpus,
         input_language=input_language,
@@ -799,7 +799,7 @@ def gen_files(
     )
 
     # Extract keywords based on the best topic model.
-    model_kw_args = extract_kws(
+    model_kw_args = await extract_kws(
         method=best_method,
         text_corpus=text_corpus,
         input_language=input_language,

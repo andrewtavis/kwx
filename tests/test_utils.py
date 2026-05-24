@@ -7,6 +7,7 @@ Utilities Tests
 import os
 from io import StringIO
 
+import pytest
 import spacy
 
 from kwx import utils
@@ -45,10 +46,10 @@ def test__combine_texts_to_str():
 
 def test__lemmatize():
     try:
-        nlp = spacy.load("en")
+        nlp = spacy.load("en_core_web_sm")
     except OSError:
-        os.system("python -m spacy download {}".format("en"))
-        nlp = spacy.load("en")
+        os.system("python -m spacy download {}".format("en_core_web_sm"))
+        nlp = spacy.load("en_core_web_sm")
     assert utils._lemmatize([["better"], ["walking"], ["dogs"]], nlp=nlp) == [
         ["well"],
         ["walk"],
@@ -198,17 +199,22 @@ def test_prepare_data(df_texts):
     )
 
 
-def test_translate_output():
-    assert utils.translate_output(
+@pytest.mark.asyncio
+async def test_translate_output():
+    assert await utils.translate_output(
         outputs=["good"], input_language="english", output_language="german"
-    ) == ["gut"]
+    ) == ["Gut"]
 
 
 def test_organize_by_pos():
     test_list = ["run", "jump", "dog", "tall"]
-    assert str(utils.organize_by_pos(test_list, output_language="english")) == str(
-        "{'Nouns:': [dog], 'Adjectives:': [tall], 'Verbs:': [run, jump]}"
-    )
+    result = utils.organize_by_pos(test_list, output_language="en_core_web_sm")
+    print(result)
+    assert result == {
+        "Nouns:": ["jump", "dog"],
+        "Adjectives:": ["tall"],
+        "Verbs:": ["run"],
+    }
 
 
 def test_prompt_for_word_removal(monkeypatch):

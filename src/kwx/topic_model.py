@@ -16,10 +16,12 @@ import logging
 import os
 import warnings
 from datetime import datetime
+from typing import Iterable, Optional, Type
 
 import numpy as np
 from gensim import corpora
 from gensim.models.ldamulticore import LdaMulticore
+from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
 
 logging.disable(logging.WARNING)
@@ -32,7 +34,12 @@ class TopicModel:
     The topic model class to fit and predict given an unsupervised learning technique.
     """
 
-    def __init__(self, num_topics=10, method="lda", bert_model=None):
+    def __init__(
+        self,
+        num_topics: int = 10,
+        method: str = "lda",
+        bert_model: Optional[SentenceTransformer] = None,
+    ) -> None:
         """
         Parameters
         ----------
@@ -54,16 +61,16 @@ class TopicModel:
         self.num_topics = num_topics
         self.bert_model = bert_model
         self.dirichlet_dict = None
-        self.bow_corpus = None
-        self.text_corpus = None
+        self.bow_corpus: list[list[tuple[int, int]]] | None = None
+        self.text_corpus: list[str] | None = None
         self.cluster_model = None
         self.lda_model = None
-        self.vec = {}
+        self.vec: dict[str, np.ndarray] = {}
         self.gamma = 15  # parameter for relative importance of LDA
         self.method = method.lower()
         self.id = f"{method}_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
-    def _vectorize(self, text_corpus, method=None, **kwargs):
+    def _vectorize(self, text_corpus, method=None, **kwargs) -> np.ndarray:
         """
         Get vector representations from selected methods.
 

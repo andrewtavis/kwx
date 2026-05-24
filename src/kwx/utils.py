@@ -29,7 +29,6 @@ import os
 import random
 import string
 from multiprocessing import Pool
-from typing import Optional
 
 import emoji
 import gensim
@@ -38,6 +37,7 @@ import spacy
 from googletrans import Translator
 from nltk.stem.snowball import SnowballStemmer
 from spacy import __version__ as spacy_version
+from spacy.language import Language
 from stopwordsiso import stopwords
 from tqdm.auto import tqdm
 
@@ -182,7 +182,7 @@ def _remove_unwanted(args: list[tuple[str], tuple[str], tuple[str]]) -> list[str
 
 def _lemmatize(
     tokens: list[str] | list[list[str]],
-    nlp: spacy.load | None = None,
+    nlp: Language | None = None,
     verbose: bool = True,
 ) -> list[str] | list[list[str]]:
     """
@@ -739,7 +739,7 @@ def _prepare_corpus_path(
     return text_corpus
 
 
-def translate_output(
+async def translate_output(
     outputs: list[str], input_language: str, output_language: str
 ) -> list[str]:
     """
@@ -766,8 +766,10 @@ def translate_output(
     if isinstance(outputs[0], list):
         translated_outputs = [
             [
-                translator.translate(
-                    text=o, src=input_language, dest=output_language
+                (
+                    await translator.translate(
+                        text=o, src=input_language, dest=output_language
+                    )
                 ).text
                 for o in sub_output
             ]
@@ -776,7 +778,11 @@ def translate_output(
 
     elif isinstance(outputs[0], str):
         translated_outputs = [
-            translator.translate(text=o, src=input_language, dest=output_language).text
+            (
+                await translator.translate(
+                    text=o, src=input_language, dest=output_language
+                )
+            ).text
             for o in outputs
         ]
 
@@ -802,55 +808,37 @@ def organize_by_pos(
         ordered_outputs : list
             The given keywords ordered by their pos.
     """
-    if output_language in languages.lem_abbr_dict().keys():
+    if output_language in languages.lem_abbr_dict():
         output_language = languages.lem_abbr_dict()[output_language]
 
-    if (
-        output_language in languages.lem_abbr_dict().values()
-    ):  # we can use spacy to detect parts of speech.
+    try:
         nlp = spacy.load(output_language)
-        nlp_outputs = [nlp(o)[0] for o in outputs]
-
-        # Those parts of speech to be considered (others go to an 'Other' category).
-        pos_order = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
-        ordered_outputs = [[o for o in nlp_outputs if o.pos_ == p] for p in pos_order]
-        flat_ordered_outputs = [str(o) for sub in ordered_outputs for o in sub]
-
-        other = []
-        for o in outputs:
-            if o not in flat_ordered_outputs:
-                other.append(o)
-
-        ordered_outputs.append(other)
-
-        outputs_dict: dict[str, list[str]] = {}
-        for i, o in enumerate(ordered_outputs):
-            if i == 0:
-                outputs_dict["Nouns:"] = o
-
-            if i == 1:
-                outputs_dict["Nouns:"] += o  # proper nouns put in nouns
-
-            if i == 2:
-                outputs_dict["Adjectives:"] = ordered_outputs[i]
-
-            if i == 3:
-                outputs_dict["Adverbs:"] = ordered_outputs[i]
-
-            if i == 4:
-                outputs_dict["Verbs:"] = ordered_outputs[i]
-
-            if i == 5:
-                outputs_dict["Other:"] = ordered_outputs[i]
-
-        outputs_dict = {
-            k: v for k, v in outputs_dict.items() if v != []
-        }  # remove if no entries
-
-        return outputs_dict
-
-    else:
+    except OSError:
         return outputs
+
+    nlp_outputs = [nlp(o)[0] for o in outputs]
+
+    pos_order = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
+
+    ordered_outputs: list[list[str]] = [
+        [str(o) for o in nlp_outputs if o.pos_ == p] for p in pos_order
+    ]
+
+    flat_ordered_outputs = [o for sub in ordered_outputs for o in sub]
+
+    other = [o for o in outputs if o not in flat_ordered_outputs]
+
+    outputs_dict: dict[str, list[str]] = {
+        "Nouns:": ordered_outputs[0] + ordered_outputs[1],
+        "Adjectives:": ordered_outputs[2],
+        "Adverbs:": ordered_outputs[3],
+        "Verbs:": ordered_outputs[4],
+        "Other:": other,
+    }
+
+    outputs_dict = {k: v for k, v in outputs_dict.items() if v}
+
+    return outputs_dict
 
 
 def prompt_for_word_removal(

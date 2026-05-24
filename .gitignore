@@ -34,3 +34,9 @@ kwx-dev
 examples/data/
 .coverage
 _*.ipynb
+error.txt
+error2.txt
+test_lemme.txt
+result.txt
+*.png
+*.html
