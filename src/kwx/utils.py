@@ -29,6 +29,7 @@ import os
 import random
 import string
 from multiprocessing import Pool
+from typing import Optional
 
 import emoji
 import gensim
@@ -47,7 +48,9 @@ with warnings.catch_warnings():
 from kwx import languages
 
 
-def load_data(data, target_cols=None):
+def load_data(
+    data: str | pd.DataFrame, target_cols: str | list[str] | None = None
+) -> pd.DataFrame:
     """
     Loads data from a path and formats it into a pandas df.
 
@@ -97,7 +100,9 @@ def load_data(data, target_cols=None):
     return df_texts
 
 
-def _combine_texts_to_str(text_corpus, ignore_words=None):
+def _combine_texts_to_str(
+    text_corpus: str | list[str], ignore_words: str | list[str] | None = None
+) -> str:
     """
     Combines texts into one string.
 
@@ -143,7 +148,7 @@ def _combine_texts_to_str(text_corpus, ignore_words=None):
     return " ".join(flat_words)
 
 
-def _remove_unwanted(args):
+def _remove_unwanted(args: list[tuple[str], tuple[str], tuple[str]]) -> list[str]:
     """
     Lower cases tokens and removes numbers and possibly names.
 
@@ -175,7 +180,11 @@ def _remove_unwanted(args):
     ]
 
 
-def _lemmatize(tokens, nlp=None, verbose=True):
+def _lemmatize(
+    tokens: list[str] | list[list[str]],
+    nlp: spacy.load | None = None,
+    verbose: bool = True,
+) -> list[str] | list[list[str]]:
     """
     Lemmatizes tokens.
 
@@ -224,18 +233,18 @@ def _lemmatize(tokens, nlp=None, verbose=True):
 
 
 def clean(
-    texts,
-    input_language=None,
-    min_token_freq=2,
-    min_token_len=3,
-    min_tokens=0,
-    max_token_index=-1,
-    min_ngram_count=3,
-    remove_stopwords=True,
-    ignore_words=None,
-    sample_size=1,
-    verbose=True,
-):
+    texts: str | list,
+    input_language: str = None,
+    min_token_freq: int = 2,
+    min_token_len: int = 3,
+    min_tokens: int = 0,
+    max_token_index: int = -1,
+    min_ngram_count: int = 3,
+    remove_stopwords: int = True,
+    ignore_words: str | list[str] = None,
+    sample_size: int = 1,
+    verbose: bool = True,
+) -> list[str] | list[list[str]]:
     """
     Cleans and tokenizes a text body to prepare it for analysis.
 
@@ -543,19 +552,19 @@ def clean(
 
 
 def prepare_data(
-    data=None,
-    target_cols=None,
-    input_language=None,
-    min_token_freq=2,
-    min_token_len=3,
-    min_tokens=0,
-    max_token_index=-1,
-    min_ngram_count=3,
-    remove_stopwords=True,
-    ignore_words=None,
-    sample_size=1,
-    verbose=True,
-):
+    data: str | pd.DataFrame = None,
+    target_cols: str | list[str] = None,
+    input_language: str | None = None,
+    min_token_freq: int = 2,
+    min_token_len: int = 3,
+    min_tokens: int = 0,
+    max_token_index: int = -1,
+    min_ngram_count: int = 3,
+    remove_stopwords: bool = True,
+    ignore_words: str | list[str] | None = None,
+    sample_size: int = 1,
+    verbose: bool = True,
+) -> list[str] | list[list[str]]:
     """
     Prepares input data for analysis from a pandas.DataFrame or path.
 
@@ -641,20 +650,20 @@ def prepare_data(
 
 
 def _prepare_corpus_path(
-    text_corpus=None,
-    clean_texts=None,
-    target_cols=None,
-    input_language=None,
-    min_token_freq=2,
-    min_token_len=3,
-    min_tokens=0,
-    max_token_index=-1,
-    min_ngram_count=3,
-    remove_stopwords=True,
-    ignore_words=None,
-    sample_size=1,
-    verbose=True,
-):
+    text_corpus: str | list[str] | list[list[str]] = None,
+    clean_texts: str = None,
+    target_cols: str | list[str] = None,
+    input_language: str | None = None,
+    min_token_freq: int = 2,
+    min_token_len: int = 3,
+    min_tokens: int = 0,
+    max_token_index: int = -1,
+    min_ngram_count: int = 3,
+    remove_stopwords: bool = True,
+    ignore_words: str | list | None = None,
+    sample_size: int = 1,
+    verbose: bool = True,
+) -> list[str] | list[list[str]] | None:
     """
     Checks a text corpus to see if it's a path, and prepares the data if so.
 
@@ -730,7 +739,9 @@ def _prepare_corpus_path(
     return text_corpus
 
 
-def translate_output(outputs, input_language, output_language):
+def translate_output(
+    outputs: list[str], input_language: str, output_language: str
+) -> list[str]:
     """
     Translates model outputs using https://github.com/ssut/py-googletrans.
 
@@ -772,7 +783,9 @@ def translate_output(outputs, input_language, output_language):
     return translated_outputs
 
 
-def organize_by_pos(outputs, output_language):
+def organize_by_pos(
+    outputs: list[str], output_language: str
+) -> list[str] | dict[str, list[str]]:
     """
     Orders a keyword output by the part of speech of the words.
 
@@ -810,7 +823,7 @@ def organize_by_pos(outputs, output_language):
 
         ordered_outputs.append(other)
 
-        outputs_dict = {}
+        outputs_dict: dict[str, list[str]] = {}
         for i, o in enumerate(ordered_outputs):
             if i == 0:
                 outputs_dict["Nouns:"] = o
@@ -840,7 +853,9 @@ def organize_by_pos(outputs, output_language):
         return outputs
 
 
-def prompt_for_word_removal(words_to_ignore=None):
+def prompt_for_word_removal(
+    words_to_ignore: str | list[str] | None = None,
+) -> list[list[str], bool]:
     """
     Prompts the user for words that should be ignored in kewword extraction.
 
