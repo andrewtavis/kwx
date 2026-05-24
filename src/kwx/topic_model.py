@@ -16,7 +16,7 @@ import logging
 import os
 import warnings
 from datetime import datetime
-from typing import Iterable, Optional, Type
+from typing import Optional
 
 import numpy as np
 from gensim import corpora
