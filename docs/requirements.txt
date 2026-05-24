@@ -1,5 +1,5 @@
 kwx
-m2r2
+myst-parser
 numpydoc
 sphinx<7.0.0
 sphinx_rtd_theme

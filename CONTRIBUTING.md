@@ -8,15 +8,13 @@ Please take a moment to review this document in order to make the contribution p
 
 Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, and in accordance with this project's [code of conduct](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md), other contributors will reciprocate that respect in addressing your issue or assessing patches and features.
 
-# Contents
+## Contents
 
-- [Development environment](#development-environment-)
-- [Using the issue tracker](#using-the-issue-tracker-)
-- [Bug reports](#bug-reports-)
-- [Feature requests](#feature-requests-)
-- [Pull requests](#pull-requests-)
-
-<a name="development-environment-"></a>
+- [Development environment](#development-environment)
+- [Using the issue tracker](#using-the-issue-tracker)
+- [Bug reports](#bug-reports)
+- [Feature requests](#feature-requests)
+- [Pull requests](#pull-requests)
 
 ## Development environment
 

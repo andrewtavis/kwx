@@ -54,9 +54,4 @@ jobs:
       - name: Sync environment and install dependencies
         run: uv sync --frozen --all-extras
       - name: Run pytest - Unit Tests
-        run: uv run pytest . --cov=src --cov-report=term-missing --cov-config=./pyproject.toml -v
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v2
-        with:
-          fail_ci_if_error: true
+        run: uv run pytest . --cov=src --cov-report=term-missing --cov-fail-under=50 --cov-config=./pyproject.toml -v

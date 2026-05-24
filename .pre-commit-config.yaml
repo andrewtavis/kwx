@@ -7,7 +7,7 @@ repos:
       - id: check-yaml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.1
+    rev: v0.15.14
     hooks:
       - id: ruff-check
         name: run ruff linting check
@@ -30,27 +30,27 @@ repos:
         name: run sphinx linting
 
   - repo: https://github.com/numpy/numpydoc
-    rev: v1.9.0
+    rev: v1.10.0
     hooks:
       - id: numpydoc-validation
         files: ^src/
         exclude: ^(tests/|.*__init__\.py$)
 
   - repo: https://github.com/to-sta/spdx-checker-pre-commit
-    rev: 0.1.7
+    rev: 0.1.8
     hooks:
       - id: spdx-license-checker
         name: run spdx-checker license check
         exclude: ^(?:.*/)?__init__\.py$
         args: [-l, BSD-3-Clause, --fix, --continue-on-error]
-        types_or: [python, ts]
+        types_or: [python]
 
   # - repo: local
   #   hooks:
   #     - id: ty-check
   #       name: run ty static type checking
   #       files: ^src/
-  #       entry: ty check
+  #       entry: ty check src
   #       language: python
   #       types: [python]
   #       pass_filenames: false

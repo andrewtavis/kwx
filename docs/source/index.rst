@@ -3,21 +3,17 @@
     :height: 215
     :align: center
     :target: https://github.com/andrewtavis/kwx
-============
 
-|rtd| |pr_ci| |python_package_ci| |codecov| |pyversions| |pypi| |pypistatus| |license| |coc| |codestyle| |colab|
+|rtd| |ci_static_analysis| |ci_pytest| |pyversions| |pypi| |pypistatus| |license| |coc| |codestyle| |colab|
 
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |pr_ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/pr_ci.yaml?branch=main&label=ci&logo=ruff
-    :target: https://github.com/andrewtavis/kwx/actions/workflows/pr_ci.yaml
+.. |ci_static_analysis| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_static_analysis.yaml?branch=main&label=ci&logo=ruff
+    :target: https://github.com/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml
 
-.. |python_package_ci| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/python_package_ci.yaml?branch=main&label=build&logo=pytest
-    :target: https://github.com/andrewtavis/kwx/actions/workflows/python_package_ci.yaml
-
-.. |codecov| image:: https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg
-    :target: https://codecov.io/gh/andrewtavis/kwx
+.. |ci_pytest| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_pytest.yaml?branch=main&label=build&logo=pytest
+    :target: https://github.com/andrewtavis/kwx/actions/workflows/ci_pytest.yaml
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998
     :target: https://pypi.org/project/kwx/
@@ -76,16 +72,25 @@ Installation
 
     import kwx
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+Contents
+========
 
-   model
-   topic_model
-   visuals
-   languages
-   utils
-   notes
+.. toctree::
+    :maxdepth: 2
+
+    model
+    topic_model
+    visuals
+    languages
+    utils
+
+Development
+===========
+
+.. toctree::
+    :maxdepth: 2
+
+    notes
 
 Project Indices
 ===============
