@@ -62,6 +62,7 @@ dependencies = [
     "stopwordsiso>=0.7.0",
     "tensorflow>=2.21.0",
     "tqdm>=4.68.3",
+    "spacy[en-core-web-sm]>=3.8.11",
     "wordcloud>=1.9.6",
     "xlrd>=2.0.2",
 ]
@@ -73,6 +74,7 @@ dev = [
     "pytest-cov>=7.1.0",
     "ruff>=0.15.20",
     "ty>=0.0.56",
+    "pytest-asyncio>=1.3.0",
 ]
 
 docs = [

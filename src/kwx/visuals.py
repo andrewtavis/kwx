@@ -69,27 +69,57 @@ def save_vis(vis, save_file, file_name):
     -------
         The file saved in the local or given directory if directed.
     """
-    if save_file:
-        vis.savefig(
-            f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
-            bbox_inches="tight",
-            dpi=300,
-        )
+    # if save_file:
+    #     vis.savefig(
+    #         f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
+    #         bbox_inches="tight",
+    #         dpi=300,
+    #     )
 
-    elif isinstance(save_file, str):  # a save path has been provided
-        if save_file[-4:] == ".zip":
+    # elif isinstance(save_file, str):  # a save path has been provided
+    #     if save_file[-4:] == ".zip":
+    #         with zipfile.ZipFile(save_file, mode="a") as zf:
+    #             vis.plot([0, 0])
+    #             buf = io.BytesIO()
+    #             vis.savefig(buf, bbox_inches="tight", dpi=300)
+    #             vis.close()
+    #             zf.writestr(zinfo_or_arcname=f"{file_name}.png", data=buf.getvalue())
+    #             zf.close()
+
+    #     else:
+    #         if os.path.exists(save_file):
+    #             vis.savefig(
+    #                 save_file + f"/{file_name}.png",
+    #                 bbox_inches="tight",
+    #                 dpi=300,
+    #             )
+
+    #         else:
+    #             vis.savefig(
+    #                 f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
+    #                 bbox_inches="tight",
+    #                 dpi=300,
+    #             )
+    if isinstance(save_file, str):
+        if save_file.endswith(".zip"):
             with zipfile.ZipFile(save_file, mode="a") as zf:
-                vis.plot([0, 0])
                 buf = io.BytesIO()
-                vis.savefig(buf, bbox_inches="tight", dpi=300)
-                vis.close()
-                zf.writestr(zinfo_or_arcname=f"{file_name}.png", data=buf.getvalue())
-                zf.close()
+
+                vis.savefig(
+                    buf,
+                    bbox_inches="tight",
+                    dpi=300,
+                    format="png",
+                )
+
+                buf.seek(0)
+
+                zf.writestr(f"{file_name}.png", buf.getvalue())
 
         else:
             if os.path.exists(save_file):
                 vis.savefig(
-                    save_file + f"/{file_name}.png",
+                    os.path.join(save_file, f"{file_name}.png"),
                     bbox_inches="tight",
                     dpi=300,
                 )
@@ -101,18 +131,28 @@ def save_vis(vis, save_file, file_name):
                     dpi=300,
                 )
 
+    elif save_file is True:
+        vis.savefig(
+            f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
+            bbox_inches="tight",
+            dpi=300,
+        )
+
 
 def graph_topic_num_evals(
-    method=["lda", "bert"],
-    bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus=None,
-    num_keywords=10,
-    topic_nums_to_compare=None,
-    metrics=True,
-    fig_size=(20, 10),
-    save_file=False,
-    return_ideal_metrics=False,
-    verbose=True,
+    method: str | list[str] = [
+        "lda",
+        "bert",
+    ],  # metrics: bool | Literal["stability", "coherence"] = True
+    bert_st_model: str = "xlm-r-bert-base-nli-stsb-mean-tokens",
+    text_corpus: list[str] | list[list[str]] | str | None = None,
+    num_keywords: int = 10,
+    topic_nums_to_compare: list[int] | None = None,
+    metrics: bool = True,
+    fig_size: tuple[int] = (20, 10),
+    save_file: bool | str = False,
+    return_ideal_metrics: bool = False,
+    verbose: bool = True,
     **kwargs,
 ):
     """
@@ -485,32 +525,38 @@ def pyLDAvis_topics(
 
     vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
 
-    if save_file:
-        pyLDAvis.save_html(
-            vis, "lda_topics_{}.html".format(time.strftime("%Y%m%d-%H%M%S"))
-        )
-    elif isinstance(save_file, str):
-        if save_file[-4:] == ".zip":
-            pyLDAvis.save_html(vis, "lda_topics.html")
-            with zipfile.ZipFile(save_file, mode="a") as zf:
-                zf.write(filename="lda_topics.html")
-                os.remove("lda_topics.html")
-                zf.close()
+    if isinstance(save_file, str):
+        if save_file.endswith(".zip"):
+            html = pyLDAvis.prepared_data_to_html(vis)
+
+            with zipfile.ZipFile(save_file, mode="w") as zf:
+                zf.writestr("lda_topics.html", html)
+
         else:
             if os.path.exists(save_file):
-                pyLDAvis.save_html(vis, save_file + "/lda_topics.html")
+                pyLDAvis.save_html(
+                    vis,
+                    os.path.join(save_file, "lda_topics.html"),
+                )
+
             else:
                 pyLDAvis.save_html(
-                    vis, "/lda_topics_{}.html".format(time.strftime("%Y%m%d-%H%M%S"))
+                    vis,
+                    f"lda_topics_{time.strftime('%Y%m%d-%H%M%S')}.html",
                 )
+
+    elif save_file is True:
+        pyLDAvis.save_html(
+            vis,
+            f"lda_topics_{time.strftime('%Y%m%d-%H%M%S')}.html",
+        )
 
     else:
         if in_ipython() and display_ipython:
             pyLDAvis.enable_notebook()
-            # Display in an ipython notebook.
             display(pyLDAvis.display(vis))
+
         else:
-            # Opens HTML.
             pyLDAvis.show(vis)
 
 
@@ -576,7 +622,7 @@ def t_sne(
     )
 
     for i, b in enumerate(bow_corpus):
-        df_topic_coherences.loc[i] = [0] * num_topics
+        df_topic_coherences.loc[i] = [0.0] * num_topics
 
         output = dirichlet_model.__getitem__(bow=b, eps=0)
 
@@ -584,11 +630,6 @@ def t_sne(
             topic_num = o[0]
             coherence = o[1]
             df_topic_coherences.iloc[i, topic_num] = coherence
-
-    for i in range(num_topics):
-        df_topic_coherences.iloc[:, i] = df_topic_coherences.iloc[:, i].astype(
-            "float64", copy=False
-        )
 
     df_topic_coherences["main_topic"] = df_topic_coherences.iloc[:, :num_topics].idxmax(
         axis=1
