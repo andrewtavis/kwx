@@ -48,9 +48,9 @@ jobs:
         if: always()
         run: uv run ruff check ./src
 
-      # - name: Run ty - Static Type Checking
-      #   if: always()
-      # run: uv run ty check ./src
+      - name: Run ty - Static Type Checking
+        if: always()
+        run: uv run ty check ./src
 
       - name: Run numpydoc Documentation Check
         if: always()
