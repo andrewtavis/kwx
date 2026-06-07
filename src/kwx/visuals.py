@@ -69,37 +69,6 @@ def save_vis(vis, save_file, file_name):
     -------
         The file saved in the local or given directory if directed.
     """
-    # if save_file:
-    #     vis.savefig(
-    #         f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
-    #         bbox_inches="tight",
-    #         dpi=300,
-    #     )
-
-    # elif isinstance(save_file, str):  # a save path has been provided
-    #     if save_file[-4:] == ".zip":
-    #         with zipfile.ZipFile(save_file, mode="a") as zf:
-    #             vis.plot([0, 0])
-    #             buf = io.BytesIO()
-    #             vis.savefig(buf, bbox_inches="tight", dpi=300)
-    #             vis.close()
-    #             zf.writestr(zinfo_or_arcname=f"{file_name}.png", data=buf.getvalue())
-    #             zf.close()
-
-    #     else:
-    #         if os.path.exists(save_file):
-    #             vis.savefig(
-    #                 save_file + f"/{file_name}.png",
-    #                 bbox_inches="tight",
-    #                 dpi=300,
-    #             )
-
-    #         else:
-    #             vis.savefig(
-    #                 f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
-    #                 bbox_inches="tight",
-    #                 dpi=300,
-    #             )
     if isinstance(save_file, str):
         if save_file.endswith(".zip"):
             with zipfile.ZipFile(save_file, mode="a") as zf:

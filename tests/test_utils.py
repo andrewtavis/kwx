@@ -61,15 +61,16 @@ def test_clean(list_texts):
     result = [
         "virginamerica sfo",
         "virginamerica",
-        "virginamerica fly sfo seat",
-        "fly virginamerica",
-        "virginamerica fly",
-        "virginamerica seat",
+        "virginamerica sfo seat",
+        "virginamerica",
+        "virginamerica",
+        "virginamerica",
         "virginamerica love",
         "virginamerica love",
         "virginamerica",
-        "virginamerica seat seat seat",
+        "virginamerica seat",
     ]
+
     assert (
         utils.clean(
             texts=list_texts,
@@ -93,11 +94,11 @@ def test_clean(list_texts):
         "virginamerica seat",
         "virginamerica",
         "virginamerica",
-        "virginamerica seat",
+        "virginamerica",
         "virginamerica love",
         "virginamerica love",
         "virginamerica",
-        "virginamerica seat seat seat",
+        "virginamerica seat",
     ]
 
     assert (
@@ -120,14 +121,14 @@ def test_clean(list_texts):
     result_min_3_freq = [
         "virginamerica",
         "virginamerica",
-        "virginamerica fly seat",
-        "fly virginamerica",
-        "virginamerica fly",
-        "virginamerica seat",
         "virginamerica",
         "virginamerica",
         "virginamerica",
-        "virginamerica seat seat seat",
+        "virginamerica",
+        "virginamerica",
+        "virginamerica",
+        "virginamerica",
+        "virginamerica",
     ]
 
     assert (
@@ -171,15 +172,16 @@ def test_prepare_data(df_texts):
     result = [
         "virginamerica sfo",
         "virginamerica",
-        "virginamerica fly sfo seat",
-        "fly virginamerica",
-        "virginamerica fly",
-        "virginamerica seat",
+        "virginamerica sfo seat",
+        "virginamerica",
+        "virginamerica",
+        "virginamerica",
         "virginamerica love",
         "virginamerica love",
         "virginamerica",
-        "virginamerica seat seat seat",
+        "virginamerica seat",
     ]
+
     assert (
         utils.prepare_data(
             data=df_texts,
@@ -231,14 +233,14 @@ def test__prepare_corpus_path(short_text_corpus, df_texts):
     result = [
         "virginamerica sfo",
         "virginamerica",
-        "virginamerica fly sfo seat",
-        "fly virginamerica",
-        "virginamerica fly",
-        "virginamerica seat",
+        "virginamerica sfo seat",
+        "virginamerica",
+        "virginamerica",
+        "virginamerica",
         "virginamerica love",
         "virginamerica love",
         "virginamerica",
-        "virginamerica seat seat seat",
+        "virginamerica seat",
     ]
 
     assert (

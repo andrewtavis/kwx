@@ -105,6 +105,7 @@ class TopicModel:
                     for k, v in kwargs.items()
                     if k in inspect.getfullargspec(LdaMulticore)[0]
                 }
+                kwargs.setdefault("random_state", 42)
                 self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,
@@ -198,6 +199,7 @@ class TopicModel:
                     for k, v in kwargs.items()
                     if k in inspect.getfullargspec(LdaMulticore)[0]
                 }
+                kwargs.setdefault("random_state", 42)
                 self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,

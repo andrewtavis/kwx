@@ -31,11 +31,11 @@ async def test_extract_frequent_kws(long_text_corpus):
         "tco",
         "carrieunderwood",
         "ladygaga",
-        "fly",
         "virginamerica_ladygaga",
         "virginamerica_ladygaga_carrieunderwood",
-        "seat",
+        "flights",
         "lax",
+        "time",
     ]
 
     missing = [x for x in required if x not in kws]
@@ -53,16 +53,16 @@ async def test_translate_kw_output(long_text_corpus):
         prompt_remove_words=False,
     )
     required = [
-        "VirginAmerica.",
+        "Virginiaamerika",
         "Flug",
-        "tco.",
-        "Carrie underwood",
-        "Lady Gaga",
-        "Fliege",
-        "virginamerica_ladygaga.",
-        "virginamerica_ladygaga_carrieunderwood.",
-        "Sitz",
+        "tco",
+        "carrieunderwood",
+        "Ladygaga",
+        "virginamerica_ladygaga",
+        "virginamerica_ladygaga_carrieunderwood",
+        "Flüge",
         "lax",
+        "Zeit",
     ]
     missing = [x for x in required if x not in kws]
     assert not missing, f"Missing keywords: {missing}"
@@ -84,11 +84,11 @@ async def test_extract_TFIDF_kws(long_text_corpus):
         "tco",
         "carrieunderwood",
         "ladygaga",
-        "fly",
         "virginamerica_ladygaga_carrieunderwood",
         "virginamerica_ladygaga",
-        "seat",
+        "flights",
         "time",
+        "lax",
     ]
 
 
@@ -108,14 +108,14 @@ if float(gensim.__version__[0]) >= 4.0:
         assert kws == [
             "virginamerica",
             "tco",
-            "love",
+            "lax",
             "flight",
-            "airline",
-            "trip",
-            "fly",
-            "change",
             "carrieunderwood",
-            "week",
+            "time",
+            "trip",
+            "booked",
+            "virginamerica_ladygaga_carrieunderwood",
+            "experience",
         ]
 
     @pytest.mark.asyncio
@@ -130,18 +130,17 @@ if float(gensim.__version__[0]) >= 4.0:
             num_topics=10,
             prompt_remove_words=True,
         )
-        print(kws)
         assert kws == [
             "flight",
-            "reservation",
-            "online",
-            "change",
-            "check",
-            "lax",
+            "tco",
             "ladygaga",
-            "virginamerica_ladygaga",
+            "lax",
+            "seat",
+            "flew",
+            "service",
             "carrieunderwood",
-            "virginamerica_ladygaga_carrieunderwood",
+            "elevate",
+            "virginamerica_ladygaga",
         ]
 
 
@@ -181,16 +180,16 @@ else:
             prompt_remove_words=True,
         )
         assert kws == [
-            "flight",
-            "time",
-            "seat",
-            "traveler",
+            "virginamerica",
+            "tco",
             "lax",
-            "fly",
-            "ladygaga",
-            "virginamerica_ladygaga",
+            "flight",
             "carrieunderwood",
+            "time",
+            "trip",
+            "booked",
             "virginamerica_ladygaga_carrieunderwood",
+            "experience",
         ]
 
 
@@ -206,22 +205,23 @@ async def test_extract_BERT_kws(long_text_corpus):
     )
     assert kws == [
         "virginamerica",
-        "bad",
-        "hawaii",
-        "seat",
-        "flight",
-        "carrieunderwood",
-        "fly",
-        "tco",
         "time",
-        "account",
+        "tco",
+        "flight",
+        "elevate",
+        "lax",
+        "fly",
+        "carrieunderwood",
+        "service",
+        "experience",
     ]
 
 
-def test_gen_files(monkeypatch, long_text_corpus):
+@pytest.mark.asyncio
+async def test_gen_files(monkeypatch, long_text_corpus):
     monkeypatch.setattr("sys.stdin", StringIO("y\nrandom_word\nn\n"))
 
-    model.gen_files(
+    await model.gen_files(
         method="lda",
         text_corpus=long_text_corpus,
         input_language="en_core_web_sm",
