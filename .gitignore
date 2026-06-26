@@ -28,6 +28,9 @@ kwx-dev
 ###############
 *_preview.png
 *.sketch
+*.html
+*.png
+*.txt
 
 # Testing files
 ###############

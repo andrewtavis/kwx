@@ -24,6 +24,7 @@ import math
 import os
 import time
 import zipfile
+from typing import Any, Optional, Union
 
 import numpy as np
 from gensim.models import CoherenceModel
@@ -35,7 +36,12 @@ from kwx import languages, topic_model, utils, visuals
 warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 
 
-def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
+def get_topic_words(
+    text_corpus: list[str],
+    labels: list[str],
+    num_topics: Optional[int] = None,
+    num_keywords: Optional[int] = None,
+) -> tuple[list[list[str]], list[int]]:
     """
     Get top words within each topic for cluster models.
 
@@ -81,7 +87,13 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
     return topics, non_blank_topic_idxs
 
 
-def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c_v"):
+def get_coherence(
+    model: Any,
+    text_corpus: list[str],
+    num_topics: int = 10,
+    num_keywords: int = 10,
+    measure: str = "c_v",
+) -> float:
     """
     Gets model coherence from gensim.models.coherencemodel.
 
@@ -137,7 +149,9 @@ def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c
     return cm.get_coherence()
 
 
-def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
+def _order_and_subset_by_coherence(
+    tm: Any, num_topics: int = 10, num_keywords: int = 10
+) -> tuple[list[list[str]], list[list[int]]]:
     """
     Orders topics based on their average coherence across the text corpus.
 
@@ -243,7 +257,12 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
     return ordered_topic_words, selection_indexes
 
 
-def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
+def _select_kws(
+    method: str = "lda",
+    kw_args: Optional[Any] = None,
+    words_to_ignore: Optional[list[str]] = None,
+    n: int = 10,
+):
     """
     Selects keywords from a group of extracted keywords.
 
@@ -347,19 +366,19 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
     return keywords
 
 
-async def extract_kws(
-    method="lda",
-    bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus=None,
-    input_language=None,
-    output_language=None,
-    num_keywords=10,
-    num_topics=10,
-    corpuses_to_compare=None,
-    return_topics=False,
-    ignore_words=None,
-    prompt_remove_words=True,
-    return_kw_args=False,
+def extract_kws(
+    method: str="lda",
+    bert_st_model: str="xlm-r-bert-base-nli-stsb-mean-tokens",
+    text_corpus: Optional[str]=None,
+    input_language: Optional[str]=None,
+    output_language: Optional[str]=None,
+    num_keywords: int=10,
+    num_topics: int=10,
+    corpuses_to_compare: Optional[list[list[str]]]=None,
+    return_topics: bool=False,
+    ignore_words: Optional[Union[str, list[str]]]=None,
+    prompt_remove_words: bool=True,
+    return_kw_args: bool=False,
     **kwargs,
 ):
     """
@@ -629,24 +648,24 @@ async def extract_kws(
         return keywords
 
 
-async def gen_files(
-    method=["lda", "bert"],
-    text_corpus=None,
-    input_language=None,
-    output_language=None,
-    num_keywords=10,
-    topic_nums_to_compare=None,
-    corpuses_to_compare=None,
-    ignore_words=None,
-    prompt_remove_words=True,
-    verbose=True,
-    fig_size=(20, 10),
-    incl_most_freq=True,
-    org_by_pos=True,
-    incl_visuals=True,
-    save_dir=None,
-    zip_results=True,
-):
+def gen_files(
+    method: Union[str, list[str]]=["lda", "bert"],
+    text_corpus: Optional[list[str]]=None,
+    input_language: Optional[str]=None,
+    output_language: Optional[str]=None,
+    num_keywords: int=10,
+    topic_nums_to_compare: Optional[list[int]]=None,
+    corpuses_to_compare: Optional[list[list[str]]]=None,
+    ignore_words: Optional[Union[str, list[str]]]=None,
+    prompt_remove_words: bool=True,
+    verbose: bool=True,
+    fig_size: tuple[int, int]=(20, 10),
+    incl_most_freq: bool=True,
+    org_by_pos: bool=True,
+    incl_visuals: bool=True,
+    save_dir: Optional[str]=None,
+    zip_results: bool=True,
+) -> None:
     """
     Generates a directory or zip file of all keyword analysis elements.
 
@@ -907,14 +926,14 @@ async def gen_files(
         "{} Keywords".format(best_method.upper()): model_kw,
     }
 
-    def add_to_zip_str(input_obj, new_char):
+    def add_to_zip_str(input_obj: str, new_char: str) -> str:
         """
         Adds characters to a string that will be zipped.
         """
         input_obj += new_char
         return input_obj
 
-    def add_to_txt_file(input_obj, new_char):
+    def add_to_txt_file(input_obj: Any, new_char: str) -> Any:
         """
         Adds characters to a string that will be zipped.
         """
