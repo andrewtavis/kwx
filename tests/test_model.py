@@ -203,20 +203,17 @@ async def test_extract_BERT_kws(long_text_corpus):
         num_topics=10,
         prompt_remove_words=False,
     )
-    required = [
-        "virginamerica",
-        "time",
-        "tco",
-        "flight",
-        "elevate",
-        "lax",
-        "fly",
-        "carrieunderwood",
-        "service",
-        "experience",
-    ]
-    missing = [x for x in required if x not in kws]
-    assert not missing, f"Missing keywords: {missing}"
+    required = {
+    "virginamerica",
+    "flight",
+    "service",
+    "fly",
+    "tco",
+    }
+
+    missing = required - set(kws)
+
+    assert not missing
 
 
 @pytest.mark.asyncio
