@@ -366,7 +366,7 @@ def _select_kws(
     return keywords
 
 
-def extract_kws(
+async def extract_kws(
     method: str="lda",
     bert_st_model: str="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus: Optional[str]=None,
@@ -648,7 +648,7 @@ def extract_kws(
         return keywords
 
 
-def gen_files(
+async def gen_files(
     method: Union[str, list[str]]=["lda", "bert"],
     text_corpus: Optional[list[str]]=None,
     input_language: Optional[str]=None,
