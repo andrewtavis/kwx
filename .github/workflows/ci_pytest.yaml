@@ -52,6 +52,6 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Sync environment and install dependencies
-        run: uv sync --frozen --all-extras
+        run: uv sync --frozen --all-groups
       - name: Run pytest - Unit Tests
         run: uv run pytest . --cov=src --cov-report=term-missing --cov-fail-under=50 --cov-config=./pyproject.toml -v
