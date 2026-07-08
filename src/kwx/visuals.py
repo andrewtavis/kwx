@@ -492,7 +492,13 @@ def pyLDAvis_topics(
         except NameError:
             return False  # Probably standard Python interpreter
 
-    vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
+    # vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
+    vis = pyLDAvis_gensim.prepare(
+        tm.lda_model,
+        tm.bow_corpus,
+        tm.dirichlet_dict,
+        mds="mmds",
+    )
 
     if isinstance(save_file, str):
         if save_file.endswith(".zip"):
