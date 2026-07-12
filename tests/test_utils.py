@@ -46,9 +46,11 @@ def test__combine_texts_to_str():
 def test__lemmatize():
     try:
         nlp = spacy.load("en_core_web_sm")
+
     except OSError:
         os.system("python -m spacy download {}".format("en_core_web_sm"))
         nlp = spacy.load("en_core_web_sm")
+
     assert utils._lemmatize([["better"], ["walking"], ["dogs"]], nlp=nlp) == [
         ["well"],
         ["walk"],
