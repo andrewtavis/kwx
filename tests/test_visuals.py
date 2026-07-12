@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-Visuals Tests
--------------
+Visualization tests.
 """
 
 import os

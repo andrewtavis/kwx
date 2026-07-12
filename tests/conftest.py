@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-Fixtures
---------
+Testing fixtures.
 """
 
 import numpy as np

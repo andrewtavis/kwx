@@ -1,14 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-topic_model
------------
-
 The unsupervised learning topic model for keyword extraction.
-
-Contents:
-    TopicModel Class:
-        _vectorize,
-        fit
 """
 
 import inspect
@@ -32,6 +24,17 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 class TopicModel:
     """
     The topic model class to fit and predict given an unsupervised learning technique.
+
+    Parameters
+    ----------
+    num_topics : int (default=10)
+        The number of categories for LDA and BERT based approaches.
+
+    method : str (default=lda)
+        The modelling method.
+
+    bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
+        A sentence transformer model.
     """
 
     def __init__(
@@ -41,16 +44,18 @@ class TopicModel:
         bert_model: Optional[SentenceTransformer] = None,
     ) -> None:
         """
+        Initialization of the TopicModel class.
+
         Parameters
         ----------
-            num_topics : int (default=10)
-                The number of categories for LDA and BERT based approaches.
+        num_topics : int (default=10)
+            The number of categories for LDA and BERT based approaches.
 
-            method : str (default=lda)
-                The modelling method.
+        method : str (default=lda)
+            The modelling method.
 
-            bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
-                A sentence transformer model.
+        bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
+            A sentence transformer model.
         """
         modeling_methods = ["lda", "bert"]
         if method not in modeling_methods:
@@ -76,19 +81,19 @@ class TopicModel:
 
         Parameters
         ----------
-            text_corpus : list, list of lists, or str
-                The text corpus over which analysis should be done.
+        text_corpus : list, list of lists, or str
+            The text corpus over which analysis should be done.
 
-            method : str
-                The modeling technique to use.
+        method : str
+            The modeling technique to use.
 
-            **kwargs : keyword arguments
-                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
         Returns
         -------
-            vec : np.array
-                An array of text vectorizations.
+        np.array
+            An array of text vectorizations.
         """
         if method is None:
             method = self.method
@@ -119,16 +124,17 @@ class TopicModel:
 
                 Parameters
                 ----------
-                    bow_corpus : list of lists
-                        Contains doc2bow representations of the given texts.
+                bow_corpus : list of lists
+                    Contains doc2bow representations of the given texts.
 
-                    num_topics : int
-                        The number of categories for LDA and BERT based approaches.
+                num_topics : int
+                    The number of categories for LDA and BERT based approaches.
 
                 Returns
                 -------
-                    vec_lda : np.array (n_doc * n_topic)
-                        The probabilistic topic assignments for all documents.
+                np.array
+                    (n_doc * n_topic)
+                    The probabilistic topic assignments for all documents.
                 """
                 n_doc = len(bow_corpus)
                 vec_lda = np.zeros((n_doc, num_topics))
@@ -161,22 +167,23 @@ class TopicModel:
 
         Parameters
         ----------
-            text_corpus : list, list of lists, or str
-                The text corpus over which analysis should be done.
+        text_corpus : list, list of lists, or str
+            The text corpus over which analysis should be done.
 
-            method : str
-                The modeling technique to use.
+        method : str
+            The modeling technique to use.
 
-            m_clustering : sklearn.cluster.object
-                The method that should be used to cluster.
+        m_clustering : sklearn.cluster.object
+            The method that should be used to cluster.
 
-            **kwargs : keyword arguments
-                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
         Returns
         -------
-            self : LDA or cluster model
-                A fitted model.
+        Object
+            LDA or cluster model
+            A fitted model.
         """
         if method is None:
             method = self.method

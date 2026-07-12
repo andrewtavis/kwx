@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-Utilities Tests
----------------
+Utility function tests.
 """
 
 import os

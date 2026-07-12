@@ -1,31 +1,23 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-languages
----------
-
 Module for organizing language dependencies for text cleaning.
 
 The following languages have been selected because their stopwords can be removed via https://github.com/stopwords-iso/stopwords-iso/tree/master/python.
-
-Contents:
-    lem_abbr_dict,
-    stem_abbr_dict,
-    sw_abbr_dict
 """
 
 
 def lem_abbr_dict() -> dict[str, str]:
     """
-    Calls a dictionary of languages and their abbreviations for lemmatization.
-
-    Notes
-    -----
-        These languages can be lemmatized via https://spacy.io/usage/models, and are also those that can have their words ordered by parts of speech.
+    Call a dictionary of languages and their abbreviations for lemmatization.
 
     Returns
     -------
-        lem_abbr_dict : dict
-            A dictionary with languages as keys and their abbreviations as items.
+    dict
+        A dictionary with languages as keys and their abbreviations as items.
+
+    Notes
+    -----
+    These languages can be lemmatized via https://spacy.io/usage/models, and are also those that can have their words ordered by parts of speech.
     """
     return {
         "chinese": "zh",
@@ -48,16 +40,16 @@ def lem_abbr_dict() -> dict[str, str]:
 
 def stem_abbr_dict() -> dict[str, str]:
     """
-    Calls a dictionary of languages and their abbreviations for stemming.
-
-    Notes
-    -----
-        These languages don't have good lemmatizers, and will thus be stemmed via https://www.nltk.org/api/nltk.stem.html.
+    Call a dictionary of languages and their abbreviations for stemming.
 
     Returns
     -------
-        stem_abbr_dict : dict
-            A dictionary with languages as keys and their abbreviations as items.
+    dict
+        A dictionary with languages as keys and their abbreviations as items.
+
+    Notes
+    -----
+    These languages don't have good lemmatizers, and will thus be stemmed via https://www.nltk.org/api/nltk.stem.html.
     """
     return {
         "arabic": "ar",
@@ -69,16 +61,16 @@ def stem_abbr_dict() -> dict[str, str]:
 
 def sw_abbr_dict() -> dict[str, str]:
     """
-    Calls a dictionary of languages and their abbreviations for stop word removal.
-
-    Notes
-    -----
-        These languages can only have their stopwords removed via https://github.com/stopwords-iso/stopwords-iso).
+    Call a dictionary of languages and their abbreviations for stop word removal.
 
     Returns
     -------
-        sw_abbr_dict : dict
-            A dictionary with languages as keys and their abbreviations as items.
+    dict
+        A dictionary with languages as keys and their abbreviations as items.
+
+    Notes
+    -----
+    These languages can only have their stopwords removed via https://github.com/stopwords-iso/stopwords-iso).
     """
     return {
         "afrikaans": "af",

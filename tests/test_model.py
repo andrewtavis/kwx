@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-Model Tests
------------
+Model tests.
 """
 
 import os
@@ -204,11 +203,11 @@ async def test_extract_BERT_kws(long_text_corpus):
         prompt_remove_words=False,
     )
     required = {
-    "virginamerica",
-    "flight",
-    "service",
-    "fly",
-    "tco",
+        "virginamerica",
+        "flight",
+        "service",
+        "fly",
+        "tco",
     }
 
     missing = required - set(kws)
