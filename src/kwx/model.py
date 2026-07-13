@@ -1,17 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-model
------
-
 Functions for modeling text corpuses and extracting keywords.
-
-Contents:
-    get_topic_words,
-    get_coherence,
-    _order_and_subset_by_coherence,
-    _select_kws,
-    extract_kws,
-    gen_files
 """
 
 import warnings
@@ -24,6 +13,7 @@ import math
 import os
 import time
 import zipfile
+from typing import Any
 
 import numpy as np
 from gensim.models import CoherenceModel
@@ -35,28 +25,33 @@ from kwx import languages, topic_model, utils, visuals
 warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 
 
-def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
+def get_topic_words(
+    text_corpus: list[str],
+    labels: list[str],
+    num_topics: int = None,
+    num_keywords: int = None,
+) -> tuple[list[list[str]], list[int]]:
     """
     Get top words within each topic for cluster models.
 
     Parameters
     ----------
-        text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done.
+    text_corpus : list, list of lists, or str
+        The text corpus over which analysis should be done.
 
-        labels : list
-            The labels assigned to topics.
+    labels : list
+        The labels assigned to topics.
 
-        num_topics : int (default=None)
-            The number of categories for LDA and BERT based approaches.
+    num_topics : int (default=None)
+        The number of categories for LDA and BERT based approaches.
 
-        num_keywords : int (default=None)
-            The number of keywords that should be extracted.
+    num_keywords : int (default=None)
+        The number of keywords that should be extracted.
 
     Returns
     -------
-        topics, non_blank_topic_idxs : list and list
-            Topic keywords and indexes of those that are not empty lists.
+    tuple[list[list[str]], list]
+        Topic keywords and indexes of those that are not empty lists.
     """
     if num_topics is None:
         num_topics = len(np.unique(labels))
@@ -81,31 +76,37 @@ def get_topic_words(text_corpus, labels, num_topics=None, num_keywords=None):
     return topics, non_blank_topic_idxs
 
 
-def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c_v"):
+def get_coherence(
+    model: Any,
+    text_corpus: list[str],
+    num_topics: int = 10,
+    num_keywords: int = 10,
+    measure: str = "c_v",
+) -> float:
     """
-    Gets model coherence from gensim.models.coherencemodel.
+    Get model coherence from gensim.models.coherencemodel.
 
     Parameters
     ----------
-        model : kwx.topic_model.TopicModel
-            A model trained on the given text corpus.
+    model : kwx.topic_model.TopicModel
+        A model trained on the given text corpus.
 
-        text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done.
+    text_corpus : list, list of lists, or str
+        The text corpus over which analysis should be done.
 
-        num_topics : int (default=10)
-            The number of categories for LDA and BERT based approaches.
+    num_topics : int (default=10)
+        The number of categories for LDA and BERT based approaches.
 
-        num_keywords : int (default=10)
-            The number of keywords that should be extracted.
+    num_keywords : int (default=10)
+        The number of keywords that should be extracted.
 
-        measure : str (default=c_v)
-            A gensim measure of coherence.
+    measure : str (default=c_v)
+        A gensim measure of coherence.
 
     Returns
     -------
-        coherence : float
-            The coherence of the given model over the given texts.
+    float
+        The coherence of the given model over the given texts.
     """
     token_corpus = [t.split(" ") for t in text_corpus]
 
@@ -137,25 +138,27 @@ def get_coherence(model, text_corpus, num_topics=10, num_keywords=10, measure="c
     return cm.get_coherence()
 
 
-def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
+def _order_and_subset_by_coherence(
+    tm: Any, num_topics: int = 10, num_keywords: int = 10
+) -> tuple[list[list[str]], list[list[int]]]:
     """
-    Orders topics based on their average coherence across the text corpus.
+    Order topics based on their average coherence across the text corpus.
 
     Parameters
     ----------
-        tm : kwx.topic_model.TopicModel
-            A model trained on the given text corpus.
+    tm : kwx.topic_model.TopicModel
+        A model trained on the given text corpus.
 
-        num_topics : int (default=10)
-            The number of categories for LDA and BERT based approaches.
+    num_topics : int (default=10)
+        The number of categories for LDA and BERT based approaches.
 
-        num_keywords : int (default=10)
-            The number of keywords that should be extracted.
+    num_keywords : int (default=10)
+        The number of keywords that should be extracted.
 
     Returns
     -------
-        ordered_topic_words, selection_indexes: list of lists and list of lists
-            Topics words ordered by average coherence and indexes by which they should be selected.
+    list[list], list[list]
+        Topics words ordered by average coherence and indexes by which they should be selected.
     """
     # Derive average topics across texts for a given method
     if tm.method == "lda":
@@ -243,46 +246,51 @@ def _order_and_subset_by_coherence(tm, num_topics=10, num_keywords=10):
     return ordered_topic_words, selection_indexes
 
 
-def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
+def _select_kws(
+    method: str = "lda",
+    kw_args: Any = None,
+    words_to_ignore: list[str] = None,
+    n: int = 10,
+):
     """
-    Selects keywords from a group of extracted keywords.
+    Select keywords from a group of extracted keywords.
 
     Parameters
     ----------
-        method : str (default=lda)
-            The modelling method.
+    method : str (default=lda)
+        The modelling method.
 
-            Options:
-                frequency: a count of the most frequent words.
+        Options:
+            frequency: a count of the most frequent words.
 
-                TFIDF: Term Frequency Inverse Document Frequency.
+            TFIDF: Term Frequency Inverse Document Frequency.
 
-                    - Allows for words within one text group to be compared to those of another.
-                    - Gives a better idea of what users specifically want from a given publication.
+                - Allows for words within one text group to be compared to those of another.
+                - Gives a better idea of what users specifically want from a given publication.
 
-                LDA: Latent Dirichlet Allocation
+            LDA: Latent Dirichlet Allocation
 
-                    - Text data is classified into a given number of categories.
-                    - These categories are then used to classify individual entries given the percent they fall into categories.
+                - Text data is classified into a given number of categories.
+                - These categories are then used to classify individual entries given the percent they fall into categories.
 
-                BERT: Bidirectional Encoder Representations from Transformers
+            BERT: Bidirectional Encoder Representations from Transformers
 
-                    - Words are classified via Google Neural Networks.
-                    - Word classifications are then used to derive topics.
+                - Words are classified via Google Neural Networks.
+                - Word classifications are then used to derive topics.
 
-        kw_args : dict (default=None)
-            A dictionary of keywords and metrics through which to order them as values.
+    kw_args : dict (default=None)
+        A dictionary of keywords and metrics through which to order them as values.
 
-        words_to_ignore : list (default=None)
-            Words to not include in the selected keywords.
+    words_to_ignore : list (default=None)
+        Words to not include in the selected keywords.
 
-        n : int (default=10)
-            The number of keywords to select.
+    n : int (default=10)
+        The number of keywords to select.
 
     Returns
     -------
-        keywords : list
-            Selected keywords from those extracted.
+    list[str]
+        Selected keywords from those extracted.
     """
     if method in ["frequency", "tfidf"]:
         kw_dict = {
@@ -347,84 +355,87 @@ def _select_kws(method="lda", kw_args=None, words_to_ignore=None, n=10):
     return keywords
 
 
-def extract_kws(
-    method="lda",
-    bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus=None,
-    input_language=None,
-    output_language=None,
-    num_keywords=10,
-    num_topics=10,
-    corpuses_to_compare=None,
-    return_topics=False,
-    ignore_words=None,
-    prompt_remove_words=True,
-    return_kw_args=False,
+async def extract_kws(
+    method: str = "lda",
+    bert_st_model: str = "xlm-r-bert-base-nli-stsb-mean-tokens",
+    text_corpus: str = None,
+    input_language: str = None,
+    output_language: str = None,
+    num_keywords: int = 10,
+    num_topics: int = 10,
+    corpuses_to_compare: list[list[str]] = None,
+    return_topics: bool = False,
+    ignore_words: str | list[str] = None,
+    prompt_remove_words: bool = True,
+    return_kw_args: bool = False,
     **kwargs,
 ):
     """
-    Extracts keywords given data, metadata, and model parameter inputs.
+    Extract keywords given data, metadata, and model parameter inputs.
 
     Parameters
     ----------
-        method : str (default=lda)
-            The modelling method.
+    method : str (default=lda)
+        The modelling method.
 
-            Options:
-                frequency: a count of the most frequent words.
+        Options:
+            frequency: a count of the most frequent words.
 
-                TFIDF: Term Frequency Inverse Document Frequency.
+            TFIDF: Term Frequency Inverse Document Frequency.
 
-                    - Allows for words within one text group to be compared to those of another.
-                    - Gives a better idea of what users specifically want from a given publication.
+                - Allows for words within one text group to be compared to those of another.
+                - Gives a better idea of what users specifically want from a given publication.
 
-                LDA: Latent Dirichlet Allocation
+            LDA: Latent Dirichlet Allocation
 
-                    - Text data is classified into a given number of categories.
-                    - These categories are then used to classify individual entries given the percent they fall into categories.
+                - Text data is classified into a given number of categories.
+                - These categories are then used to classify individual entries given the percent they fall into categories.
 
-                BERT: Bidirectional Encoder Representations from Transformers
+            BERT: Bidirectional Encoder Representations from Transformers
 
-                    - Words are classified via Google Neural Networks.
-                    - Word classifications are then used to derive topics.
+                - Words are classified via Google Neural Networks.
+                - Word classifications are then used to derive topics.
 
-        bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
-            The BERT model to use.
+    bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
+        The BERT model to use.
 
-        text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done.
+    text_corpus : list, list of lists, or str
+        The text corpus over which analysis should be done.
 
-        input_language : str (default=None)
-            The spoken language in which the texts are found.
+    input_language : str (default=None)
+        The spoken language in which the texts are found.
 
-        output_language : str (default=None: same as input_language)
-            The spoken language in which the results should be given.
+    output_language : str (default=None: same as input_language)
+        The spoken language in which the results should be given.
 
-        num_keywords : int (default=10)
-            The number of keywords that should be extracted.
+    num_keywords : int (default=10)
+        The number of keywords that should be extracted.
 
-        num_topics : int (default=10)
-            The number of categories for LDA and BERT based approaches.
+    num_topics : int (default=10)
+        The number of categories for LDA and BERT based approaches.
 
-        corpuses_to_compare : list : contains lists (default=None)
-            A list of other text corpuses that the main corpus should be compared to using TFIDF.
+    corpuses_to_compare : list : contains lists (default=None)
+        A list of other text corpuses that the main corpus should be compared to using TFIDF.
 
-        return_topics : bool (default=False)
-            Whether to return the topics that are extracted by an LDA model.
+    return_topics : bool (default=False)
+        Whether to return the topics that are extracted by an LDA model.
 
-        ignore_words : str or list (default=None)
-            Words that should be removed.
+    ignore_words : str or list (default=None)
+        Words that should be removed.
 
-        prompt_remove_words : bool (default=True)
-            Whether to prompt the user for keywords to remove.
+    prompt_remove_words : bool (default=True)
+        Whether to prompt the user for keywords to remove.
 
-        **kwargs : keyword arguments
-            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode, gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer.
+    return_kw_args : bool (default=False)
+        Whether to return the keyword arguments from the function.
+
+    **kwargs : keyword arguments
+        Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode, gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer.
 
     Returns
     -------
-        output_keywords : list or list of lists
-            A list of lists where sub_lists are the keywords best associated with the data entry.
+    list
+        A list of lists where sub_lists are the keywords best associated with the data entry.
     """
     input_language = input_language.lower()
     method = method.lower()
@@ -461,7 +472,7 @@ def extract_kws(
     else:
         words_to_ignore = []
 
-    if method == "frequency" or method == "tfidf":
+    if method in ["frequency", "tfidf"]:
         if method == "frequency":
             kw_args = Counter(
                 item for subtext in text_corpus for item in subtext.split()
@@ -497,7 +508,7 @@ def extract_kws(
                 comparative_string_corpus
             )
             corpus_scored = tfidf_vectorizer.transform(comparative_string_corpus)
-            terms = tfidf_vectorizer.get_feature_names()
+            terms = tfidf_vectorizer.get_feature_names_out()
             scores = corpus_scored.toarray().flatten().tolist()
             kw_args = dict(zip(terms, scores))
 
@@ -513,7 +524,7 @@ def extract_kws(
             )
 
             # Check that more words than the number that appear in the text is not given.
-            frequent_words = extract_kws(
+            frequent_words = await extract_kws(
                 method="frequency",
                 text_corpus=text_corpus,
                 input_language=input_language,
@@ -545,7 +556,7 @@ def extract_kws(
 
         if return_topics:
             if output_language != input_language:
-                ordered_topic_words = utils.translate_output(
+                ordered_topic_words = await utils.translate_output(
                     outputs=ordered_topic_words,
                     input_language=input_language,
                     output_language=output_language,
@@ -570,7 +581,7 @@ def extract_kws(
             # If there are not enough words, then add non-included most
             # frequent ones in order.
             if len(keywords) < num_keywords:
-                frequent_words = extract_kws(
+                frequent_words = await extract_kws(
                     method="frequency",
                     text_corpus=text_corpus,
                     input_language=input_language,
@@ -619,7 +630,7 @@ def extract_kws(
                 more_words_to_ignore = False
 
     if output_language != input_language:
-        return utils.translate_output(
+        return await utils.translate_output(
             outputs=keywords,
             input_language=input_language,
             output_language=output_language,
@@ -629,63 +640,114 @@ def extract_kws(
         return keywords
 
 
-def gen_files(
-    method=["lda", "bert"],
-    text_corpus=None,
-    input_language=None,
-    output_language=None,
-    num_keywords=10,
-    topic_nums_to_compare=None,
-    corpuses_to_compare=None,
-    ignore_words=None,
-    prompt_remove_words=True,
-    verbose=True,
-    fig_size=(20, 10),
-    incl_most_freq=True,
-    org_by_pos=True,
-    incl_visuals=True,
-    save_dir=None,
-    zip_results=True,
-):
+async def gen_files(
+    method: str | list[str] = ["lda", "bert"],
+    text_corpus: list[str] = None,
+    input_language: str = None,
+    output_language: str = None,
+    num_keywords: int = 10,
+    topic_nums_to_compare: list[int] = None,
+    corpuses_to_compare: list[list[str]] = None,
+    ignore_words: str | list[str] = None,
+    prompt_remove_words: bool = True,
+    verbose: bool = True,
+    fig_size: tuple[int, int] = (20, 10),
+    incl_most_freq: bool = True,
+    org_by_pos: bool = True,
+    incl_visuals: bool = True,
+    save_dir: str = None,
+    zip_results: bool = True,
+) -> None:
     """
-    Generates a directory or zip file of all keyword analysis elements.
+    Generate a directory or zip file of all keyword analysis elements.
 
     Parameters
     ----------
-        Most parameters for the following kwx functions:
+    method : str | list[str] (default=["lda", "bert"])
+        The modelling method.
 
-            visuals.graph_topic_num_evals
+        Options:
+            frequency: a count of the most frequent words.
 
-            visuals.gen_word_cloud
+            TFIDF: Term Frequency Inverse Document Frequency.
 
-            visuals.pyLDAvis_topics
+                - Allows for words within one text group to be compared to those of another.
+                - Gives a better idea of what users specifically want from a given publication.
 
-            model.extract_kws
+            LDA: Latent Dirichlet Allocation
 
-            utils.prompt_for_word_removal
+                - Text data is classified into a given number of categories.
+                - These categories are then used to classify individual entries given the percent they fall into categories.
 
-        incl_most_freq : bool (default=True)
-            Whether to include the most frequent words in the output.
+            BERT: Bidirectional Encoder Representations from Transformers
 
-        org_by_pos : bool (default=True)
-            Whether to organize words by their parts of speech.
+                - Words are classified via Google Neural Networks.
+                - Word classifications are then used to derive topics.
 
-        incl_visuals : str or bool (default=True)
-            Which visual graphs to include in the output.
+    text_corpus : list[str]
+        The text corpus over which analysis should be done.
 
-            Str options: topic_num_evals, word_cloud, pyLDAvis, t_sne.
+    input_language : str
+        The spoken language in which the texts are found.
 
-            Bool options: True - all; False - none.
+    output_language : str
+        The spoken language in which the results should be given.
 
-        save_dir : str (default=None)
-            A path to a directory where the results will be saved.
+    num_keywords : int (default=10)
+        The number of keywords that should be extracted.
 
-        zip_results : bool (default=True)
-            Whether to zip the results from the analysis.
+    topic_nums_to_compare : list[int]
+        The number of topics to compare metrics over.
+
+        Note: None selects all numbers from 1 to num_keywords.
+
+    corpuses_to_compare : list[list[str]]
+        A list of other text corpuses that the main corpus should be compared to using TFIDF.
+
+    ignore_words : str | list[str] (default=True)
+        Words that should be removed.
+
+    prompt_remove_words : bool (default=True)
+        Whether to prompt the user for keywords to remove.
+
+    verbose : bool (default=True)
+        Whether to show a tqdm progress bar for the query.
+
+    fig_size : tuple[int, int] (default=(20, 10))
+        The size of the figure.
+
+    incl_most_freq : bool (default=True)
+        Whether to include the most frequent words in the output.
+
+    org_by_pos : bool (default=True)
+        Whether to organize words by their parts of speech.
+
+    incl_visuals : str or bool (default=True)
+        Which visual graphs to include in the output.
+
+        Str options: topic_num_evals, word_cloud, pyLDAvis, t_sne.
+
+        Bool options: True - all; False - none.
+
+    save_dir : str (default=None)
+        A path to a directory where the results will be saved.
+
+    zip_results : bool (default=True)
+        Whether to zip the results from the analysis.
 
     Returns
     -------
+    dict
         A directory or zip file in the current working or save_dir directory.
+
+    Notes
+    -----
+    Most parameters for the following kwx functions:
+        - visuals.graph_topic_num_evals
+        - visuals.gen_word_cloud
+        - visuals.pyLDAvis_topics
+        - model.extract_kws
+        - utils.prompt_for_word_removal
     """
     if isinstance(method, list) and len(method) == 1:
         method = method[0]
@@ -784,7 +846,7 @@ def gen_files(
         )
 
     # Extract most frequent keywords
-    most_freq_kw_args = extract_kws(
+    most_freq_kw_args = await extract_kws(
         method="frequency",
         text_corpus=text_corpus,
         input_language=input_language,
@@ -799,7 +861,7 @@ def gen_files(
     )
 
     # Extract keywords based on the best topic model.
-    model_kw_args = extract_kws(
+    model_kw_args = await extract_kws(
         method=best_method,
         text_corpus=text_corpus,
         input_language=input_language,
@@ -907,16 +969,42 @@ def gen_files(
         "{} Keywords".format(best_method.upper()): model_kw,
     }
 
-    def add_to_zip_str(input_obj, new_char):
+    def add_to_zip_str(input_obj: str, new_char: str) -> str:
         """
-        Adds characters to a string that will be zipped.
+        Add characters to a string that will be zipped.
+
+        Parameters
+        ----------
+        input_obj : Any
+            The input object that characters will be added to.
+
+        new_char : str
+            The new character to add.
+
+        Returns
+        -------
+        Any
+            An input object that has been written to.
         """
         input_obj += new_char
         return input_obj
 
-    def add_to_txt_file(input_obj, new_char):
+    def add_to_txt_file(input_obj: Any, new_char: str) -> Any:
         """
-        Adds characters to a string that will be zipped.
+        Add characters to a string that will be zipped.
+
+        Parameters
+        ----------
+        input_obj : Any
+            The input object that characters will be added to.
+
+        new_char : str
+            The new character to add.
+
+        Returns
+        -------
+        Any
+            An input object that has been written to.
         """
         input_obj.write(new_char)
         return input_obj
