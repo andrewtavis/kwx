@@ -1,18 +1,19 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-Visuals Tests
--------------
+Visualization tests.
 """
 
 import os
 
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
-from pytest_cov.embed import cleanup_on_sigterm
 
 from kwx import visuals
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-cleanup_on_sigterm()
 
 
 def test_graph_topic_num_evals(monkeypatch, long_text_corpus):

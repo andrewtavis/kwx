@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-Languages Tests
----------------
+Language tests.
 """
 
 from kwx import languages

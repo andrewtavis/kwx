@@ -1,21 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-utils
------
-
 Utility functions for data loading, cleaning, output formatting, and user interaction.
-
-Contents:
-    load_data,
-    _combine_texts_to_str,
-    _remove_unwanted,
-    _lemmatize,
-    clean,
-    prepare_data,
-    _prepare_corpus_path,
-    translate_output,
-    organize_by_pos,
-    prompt_for_word_removal
 """
 
 import warnings
@@ -37,6 +22,7 @@ import spacy
 from googletrans import Translator
 from nltk.stem.snowball import SnowballStemmer
 from spacy import __version__ as spacy_version
+from spacy.language import Language
 from stopwordsiso import stopwords
 from tqdm.auto import tqdm
 
@@ -47,22 +33,24 @@ with warnings.catch_warnings():
 from kwx import languages
 
 
-def load_data(data, target_cols=None):
+def load_data(
+    data: str | pd.DataFrame, target_cols: str | list[str] | None = None
+) -> pd.DataFrame:
     """
-    Loads data from a path and formats it into a pandas df.
+    Load data from a path and formats it into a pandas df.
 
     Parameters
     ----------
-        data : pd.DataFrame or csv/xlsx path
-            The data in df or path form.
+    data : pd.DataFrame or csv/xlsx path
+        The data in df or path form.
 
-        target_cols : str or list (default=None)
-            The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
+    target_cols : str or list (default=None)
+        The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
     Returns
     -------
-        df_texts : pd.DataFrame
-            The texts as a df.
+    pd.DataFrame
+        The texts as a df.
     """
     if isinstance(data, str):
         if data.endswith("xlsx"):
@@ -97,22 +85,24 @@ def load_data(data, target_cols=None):
     return df_texts
 
 
-def _combine_texts_to_str(text_corpus, ignore_words=None):
+def _combine_texts_to_str(
+    text_corpus: str | list[str], ignore_words: str | list[str] | None = None
+) -> str:
     """
-    Combines texts into one string.
+    Combine texts into one string.
 
     Parameters
     ----------
-        text_corpus : str or list
-            The texts to be combined.
+    text_corpus : str or list
+        The texts to be combined.
 
-        ignore_words : str or list
-            Strings that should be removed from the text body.
+    ignore_words : str or list
+        Strings that should be removed from the text body.
 
     Returns
     -------
-        texts_str : str
-            A string of the full text with unwanted words removed.
+    str
+        A string of the full text with unwanted words removed.
     """
     if isinstance(ignore_words, str):
         words_to_ignore = [ignore_words]
@@ -143,28 +133,19 @@ def _combine_texts_to_str(text_corpus, ignore_words=None):
     return " ".join(flat_words)
 
 
-def _remove_unwanted(args):
+def _remove_unwanted(args: list[tuple[str], tuple[str], tuple[str]]) -> list[str]:
     """
     Lower cases tokens and removes numbers and possibly names.
 
     Parameters
     ----------
-        args : list of tuples
-            The following arguments zipped.
-
-        text : list
-            The text to clean.
-
-        words_to_ignore : str or list
-            Strings that should be removed from the text body.
-
-        stop_words : str or list
-            Stopwords for the given language.
+    args : list of tuples
+        The following arguments zipped.
 
     Returns
     -------
-        text_words_removed : list
-            The text without unwanted tokens.
+    list
+        The text without unwanted tokens.
     """
     text, words_to_ignore, stop_words = args
 
@@ -175,25 +156,29 @@ def _remove_unwanted(args):
     ]
 
 
-def _lemmatize(tokens, nlp=None, verbose=True):
+def _lemmatize(
+    tokens: list[str] | list[list[str]],
+    nlp: Language | None = None,
+    verbose: bool = True,
+) -> list[str] | list[list[str]]:
     """
-    Lemmatizes tokens.
+    Lemmatize tokens.
 
     Parameters
     ----------
-        tokens : list or list of lists
-            Tokens to be lemmatized.
+    tokens : list or list of lists
+        Tokens to be lemmatized.
 
-        nlp : spacy.load object
-            A SpaCy language model.
+    nlp : spacy.load object
+        A SpaCy language model.
 
-        verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query.
+    verbose : bool (default=True)
+        Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
-        base_tokens : list or list of lists
-            Tokens that have been lemmatized for NLP analysis.
+    list
+        Tokens that have been lemmatized for NLP analysis.
     """
     allowed_pos_tags = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
 
@@ -224,60 +209,60 @@ def _lemmatize(tokens, nlp=None, verbose=True):
 
 
 def clean(
-    texts,
-    input_language=None,
-    min_token_freq=2,
-    min_token_len=3,
-    min_tokens=0,
-    max_token_index=-1,
-    min_ngram_count=3,
-    remove_stopwords=True,
-    ignore_words=None,
-    sample_size=1,
-    verbose=True,
-):
+    texts: str | list,
+    input_language: str = None,
+    min_token_freq: int = 2,
+    min_token_len: int = 3,
+    min_tokens: int = 0,
+    max_token_index: int = -1,
+    min_ngram_count: int = 3,
+    remove_stopwords: int = True,
+    ignore_words: str | list[str] = None,
+    sample_size: int = 1,
+    verbose: bool = True,
+) -> list[str] | list[list[str]]:
     """
-    Cleans and tokenizes a text body to prepare it for analysis.
+    Clean and tokenizes a text body to prepare it for analysis.
 
     Parameters
     ----------
-        texts : str or list
-            The texts to be cleaned and tokenized.
+    texts : str or list
+        The texts to be cleaned and tokenized.
 
-        input_language : str (default=None)
-            The English name of the language in which the texts are found.
+    input_language : str (default=None)
+        The English name of the language in which the texts are found.
 
-        min_token_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus.
+    min_token_freq : int (default=2)
+        The minimum allowable frequency of a word inside the text corpus.
 
-        min_token_len : int (default=3)
-            The smallest allowable length of a word.
+    min_token_len : int (default=3)
+        The smallest allowable length of a word.
 
-        min_tokens : int (default=0)
-            The minimum allowable length of a tokenized text.
+    min_tokens : int (default=0)
+        The minimum allowable length of a tokenized text.
 
-        max_token_index : int (default=-1)
-            The maximum allowable length of a tokenized text.
+    max_token_index : int (default=-1)
+        The maximum allowable length of a tokenized text.
 
-        min_ngram_count : int (default=5)
-            The minimum occurrences for an n-gram to be included.
+    min_ngram_count : int (default=5)
+        The minimum occurrences for an n-gram to be included.
 
-        remove_stopwords : bool (default=True)
-            Whether to remove stopwords.
+    remove_stopwords : bool (default=True)
+        Whether to remove stopwords.
 
-        ignore_words : str or list
-            Strings that should be removed from the text body.
+    ignore_words : str or list
+        Strings that should be removed from the text body.
 
-        sample_size : float (default=1)
-            The amount of data to be randomly sampled.
+    sample_size : float (default=1)
+        The amount of data to be randomly sampled.
 
-        verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query.
+    verbose : bool (default=True)
+        Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
-        text_corpus : list or list of lists
-            The texts formatted for analysis.
+    list
+        The texts formatted for analysis.
     """
     input_language = input_language.lower()
 
@@ -543,64 +528,64 @@ def clean(
 
 
 def prepare_data(
-    data=None,
-    target_cols=None,
-    input_language=None,
-    min_token_freq=2,
-    min_token_len=3,
-    min_tokens=0,
-    max_token_index=-1,
-    min_ngram_count=3,
-    remove_stopwords=True,
-    ignore_words=None,
-    sample_size=1,
-    verbose=True,
-):
+    data: str | pd.DataFrame = None,
+    target_cols: str | list[str] = None,
+    input_language: str | None = None,
+    min_token_freq: int = 2,
+    min_token_len: int = 3,
+    min_tokens: int = 0,
+    max_token_index: int = -1,
+    min_ngram_count: int = 3,
+    remove_stopwords: bool = True,
+    ignore_words: str | list[str] | None = None,
+    sample_size: int = 1,
+    verbose: bool = True,
+) -> list[str] | list[list[str]]:
     """
-    Prepares input data for analysis from a pandas.DataFrame or path.
+    Prepare input data for analysis from a pandas.DataFrame or path.
 
     Parameters
     ----------
-        data : pd.DataFrame or csv/xlsx path
-            The data in df or path form.
+    data : pd.DataFrame or csv/xlsx path
+        The data in df or path form.
 
-        target_cols : str or list (default=None)
-            The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
+    target_cols : str or list (default=None)
+        The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
-        input_language : str (default=None)
-            The English name of the language in which the texts are found.
+    input_language : str (default=None)
+        The English name of the language in which the texts are found.
 
-        min_token_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus.
+    min_token_freq : int (default=2)
+        The minimum allowable frequency of a word inside the text corpus.
 
-        min_token_len : int (default=3)
-            The smallest allowable length of a word.
+    min_token_len : int (default=3)
+        The smallest allowable length of a word.
 
-        min_tokens : int (default=0)
-            The minimum allowable length of a tokenized text.
+    min_tokens : int (default=0)
+        The minimum allowable length of a tokenized text.
 
-        max_token_index : int (default=-1)
-            The maximum allowable length of a tokenized text.
+    max_token_index : int (default=-1)
+        The maximum allowable length of a tokenized text.
 
-        min_ngram_count : int (default=5)
-            The minimum occurrences for an n-gram to be included.
+    min_ngram_count : int (default=5)
+        The minimum occurrences for an n-gram to be included.
 
-        remove_stopwords : bool (default=True)
-            Whether to remove stopwords.
+    remove_stopwords : bool (default=True)
+        Whether to remove stopwords.
 
-        ignore_words : str or list
-            Strings that should be removed from the text body.
+    ignore_words : str or list
+        Strings that should be removed from the text body.
 
-        sample_size : float (default=1)
-            The amount of data to be randomly sampled.
+    sample_size : float (default=1)
+        The amount of data to be randomly sampled.
 
-        verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query.
+    verbose : bool (default=True)
+        Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
-        text_corpus, clean_texts, selected_idxs : list or list of lists, list, list
-            The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries.
+    list, list, list
+        The texts formatted for text analysis both as tokens and strings, as well as the indexes for selected entries.
     """
     input_language = input_language.lower()
 
@@ -641,68 +626,68 @@ def prepare_data(
 
 
 def _prepare_corpus_path(
-    text_corpus=None,
-    clean_texts=None,
-    target_cols=None,
-    input_language=None,
-    min_token_freq=2,
-    min_token_len=3,
-    min_tokens=0,
-    max_token_index=-1,
-    min_ngram_count=3,
-    remove_stopwords=True,
-    ignore_words=None,
-    sample_size=1,
-    verbose=True,
-):
+    text_corpus: str | list[str] | list[list[str]] = None,
+    clean_texts: str = None,
+    target_cols: str | list[str] = None,
+    input_language: str | None = None,
+    min_token_freq: int = 2,
+    min_token_len: int = 3,
+    min_tokens: int = 0,
+    max_token_index: int = -1,
+    min_ngram_count: int = 3,
+    remove_stopwords: bool = True,
+    ignore_words: str | list | None = None,
+    sample_size: int = 1,
+    verbose: bool = True,
+) -> list[str] | list[list[str]] | None:
     """
-    Checks a text corpus to see if it's a path, and prepares the data if so.
+    Check a text corpus to see if it's a path, and prepares the data if so.
 
     Parameters
     ----------
-        text_corpus : str or list or list of lists
-            A path or text corpus over which analysis should be done.
+    text_corpus : str or list or list of lists
+        A path or text corpus over which analysis should be done.
 
-        clean_texts : str
-            The texts formatted for analysis as strings.
+    clean_texts : str
+        The texts formatted for analysis as strings.
 
-        target_cols : str or list (default=None)
-            The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
+    target_cols : str or list (default=None)
+        The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
-        input_language : str (default=None)
-            The English name of the language in which the texts are found.
+    input_language : str (default=None)
+        The English name of the language in which the texts are found.
 
-        min_token_freq : int (default=2)
-            The minimum allowable frequency of a word inside the text corpus.
+    min_token_freq : int (default=2)
+        The minimum allowable frequency of a word inside the text corpus.
 
-        min_token_len : int (default=3)
-            The smallest allowable length of a word.
+    min_token_len : int (default=3)
+        The smallest allowable length of a word.
 
-        min_tokens : int (default=0)
-            The minimum allowable length of a tokenized text.
+    min_tokens : int (default=0)
+        The minimum allowable length of a tokenized text.
 
-        max_token_index : int (default=-1)
-            The maximum allowable length of a tokenized text.
+    max_token_index : int (default=-1)
+        The maximum allowable length of a tokenized text.
 
-        min_ngram_count : int (default=5)
-            The minimum occurrences for an n-gram to be included.
+    min_ngram_count : int (default=5)
+        The minimum occurrences for an n-gram to be included.
 
-        remove_stopwords : bool (default=True)
-            Whether to remove stopwords.
+    remove_stopwords : bool (default=True)
+        Whether to remove stopwords.
 
-        ignore_words : str or list
-            Strings that should be removed from the text body.
+    ignore_words : str or list
+        Strings that should be removed from the text body.
 
-        sample_size : float (default=1)
-            The amount of data to be randomly sampled.
+    sample_size : float (default=1)
+        The amount of data to be randomly sampled.
 
-        verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query.
+    verbose : bool (default=True)
+        Whether to show a tqdm progress bar for the query.
 
     Returns
     -------
-        text_corpus : list or list of lists
-            A prepared text corpus for the data in the given path.
+    list
+        A prepared text corpus for the data in the given path.
     """
     if isinstance(text_corpus, str):
         try:
@@ -730,33 +715,37 @@ def _prepare_corpus_path(
     return text_corpus
 
 
-def translate_output(outputs, input_language, output_language):
+async def translate_output(
+    outputs: list[str], input_language: str, output_language: str
+) -> list[str]:
     """
-    Translates model outputs using https://github.com/ssut/py-googletrans.
+    Translate model outputs using https://github.com/ssut/py-googletrans.
 
     Parameters
     ----------
-        outputs : list
-            Output keywords of a model.
+    outputs : list
+        Output keywords of a model.
 
-        input_language : str
-            The English name of the language in which the texts are found.
+    input_language : str
+        The English name of the language in which the texts are found.
 
-        output_language
-            The English name of the desired language for outputs.
+    output_language : str
+        The English name of the desired language for outputs.
 
     Returns
     -------
-        translated_outputs : list
-            A list of keywords translated to the given output_language.
+    list
+        A list of keywords translated to the given output_language.
     """
     translator = Translator()
 
     if isinstance(outputs[0], list):
         translated_outputs = [
             [
-                translator.translate(
-                    text=o, src=input_language, dest=output_language
+                (
+                    await translator.translate(
+                        text=o, src=input_language, dest=output_language
+                    )
                 ).text
                 for o in sub_output
             ]
@@ -765,94 +754,85 @@ def translate_output(outputs, input_language, output_language):
 
     elif isinstance(outputs[0], str):
         translated_outputs = [
-            translator.translate(text=o, src=input_language, dest=output_language).text
+            (
+                await translator.translate(
+                    text=o, src=input_language, dest=output_language
+                )
+            ).text
             for o in outputs
         ]
 
     return translated_outputs
 
 
-def organize_by_pos(outputs, output_language):
+def organize_by_pos(
+    outputs: list[str], output_language: str
+) -> list[str] | dict[str, list[str]]:
     """
-    Orders a keyword output by the part of speech of the words.
+    Order a keyword output by the part of speech of the words.
 
     Parameters
     ----------
-        outputs : list
-            The keywords that have been extracted.
+    outputs : list
+        The keywords that have been extracted.
 
-        output_language : str
-            The spoken language in which the results should be given.
+    output_language : str
+        The spoken language in which the results should be given.
 
     Returns
     -------
-        ordered_outputs : list
-            The given keywords ordered by their pos.
+    list
+        The given keywords ordered by their pos.
     """
-    if output_language in languages.lem_abbr_dict().keys():
+    if output_language in languages.lem_abbr_dict():
         output_language = languages.lem_abbr_dict()[output_language]
 
-    if (
-        output_language in languages.lem_abbr_dict().values()
-    ):  # we can use spacy to detect parts of speech.
+    try:
         nlp = spacy.load(output_language)
-        nlp_outputs = [nlp(o)[0] for o in outputs]
 
-        # Those parts of speech to be considered (others go to an 'Other' category).
-        pos_order = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
-        ordered_outputs = [[o for o in nlp_outputs if o.pos_ == p] for p in pos_order]
-        flat_ordered_outputs = [str(o) for sub in ordered_outputs for o in sub]
-
-        other = []
-        for o in outputs:
-            if o not in flat_ordered_outputs:
-                other.append(o)
-
-        ordered_outputs.append(other)
-
-        outputs_dict = {}
-        for i, o in enumerate(ordered_outputs):
-            if i == 0:
-                outputs_dict["Nouns:"] = o
-
-            if i == 1:
-                outputs_dict["Nouns:"] += o  # proper nouns put in nouns
-
-            if i == 2:
-                outputs_dict["Adjectives:"] = ordered_outputs[i]
-
-            if i == 3:
-                outputs_dict["Adverbs:"] = ordered_outputs[i]
-
-            if i == 4:
-                outputs_dict["Verbs:"] = ordered_outputs[i]
-
-            if i == 5:
-                outputs_dict["Other:"] = ordered_outputs[i]
-
-        outputs_dict = {
-            k: v for k, v in outputs_dict.items() if v != []
-        }  # remove if no entries
-
-        return outputs_dict
-
-    else:
+    except OSError:
         return outputs
 
+    nlp_outputs = [nlp(o)[0] for o in outputs]
 
-def prompt_for_word_removal(words_to_ignore=None):
+    pos_order = ["NOUN", "PROPN", "ADJ", "ADV", "VERB"]
+
+    ordered_outputs: list[list[str]] = [
+        [str(o) for o in nlp_outputs if o.pos_ == p] for p in pos_order
+    ]
+
+    flat_ordered_outputs = [o for sub in ordered_outputs for o in sub]
+
+    other = [o for o in outputs if o not in flat_ordered_outputs]
+
+    outputs_dict: dict[str, list[str]] = {
+        "Nouns:": ordered_outputs[0] + ordered_outputs[1],
+        "Adjectives:": ordered_outputs[2],
+        "Adverbs:": ordered_outputs[3],
+        "Verbs:": ordered_outputs[4],
+        "Other:": other,
+    }
+
+    outputs_dict = {k: v for k, v in outputs_dict.items() if v}
+
+    return outputs_dict
+
+
+def prompt_for_word_removal(
+    words_to_ignore: str | list[str] | None = None,
+) -> list[list[str], bool]:
     """
-    Prompts the user for words that should be ignored in kewword extraction.
+    Prompt the user for words that should be ignored in kewword extraction.
 
     Parameters
     ----------
-        words_to_ignore : str or list
-            Words that should not be included in the output.
+    words_to_ignore : str or list
+        Words that should not be included in the output.
 
     Returns
     -------
-        ignore words, words_added : list, bool
-            A new list of words to ignore and a boolean indicating if words have been added.
+    list, bool
+        A new list of words to ignore and a boolean indicating if words have been added.
     """
     if isinstance(words_to_ignore, str):
         words_to_ignore = [words_to_ignore]

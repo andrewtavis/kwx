@@ -1,14 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-topic_model
------------
-
 The unsupervised learning topic model for keyword extraction.
-
-Contents:
-    TopicModel Class:
-        _vectorize,
-        fit
 """
 
 import inspect
@@ -20,6 +12,7 @@ from datetime import datetime
 import numpy as np
 from gensim import corpora
 from gensim.models.ldamulticore import LdaMulticore
+from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
 
 logging.disable(logging.WARNING)
@@ -30,20 +23,38 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 class TopicModel:
     """
     The topic model class to fit and predict given an unsupervised learning technique.
+
+    Parameters
+    ----------
+    num_topics : int (default=10)
+        The number of categories for LDA and BERT based approaches.
+
+    method : str (default=lda)
+        The modelling method.
+
+    bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
+        A sentence transformer model.
     """
 
-    def __init__(self, num_topics=10, method="lda", bert_model=None):
+    def __init__(
+        self,
+        num_topics: int = 10,
+        method: str = "lda",
+        bert_model: SentenceTransformer = None,
+    ) -> None:
         """
+        Initialization of the TopicModel class.
+
         Parameters
         ----------
-            num_topics : int (default=10)
-                The number of categories for LDA and BERT based approaches.
+        num_topics : int (default=10)
+            The number of categories for LDA and BERT based approaches.
 
-            method : str (default=lda)
-                The modelling method.
+        method : str (default=lda)
+            The modelling method.
 
-            bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
-                A sentence transformer model.
+        bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
+            A sentence transformer model.
         """
         modeling_methods = ["lda", "bert"]
         if method not in modeling_methods:
@@ -54,34 +65,34 @@ class TopicModel:
         self.num_topics = num_topics
         self.bert_model = bert_model
         self.dirichlet_dict = None
-        self.bow_corpus = None
-        self.text_corpus = None
+        self.bow_corpus: list[list[tuple[int, int]]] | None = None
+        self.text_corpus: list[str] | None = None
         self.cluster_model = None
         self.lda_model = None
-        self.vec = {}
+        self.vec: dict[str, np.ndarray] = {}
         self.gamma = 15  # parameter for relative importance of LDA
         self.method = method.lower()
         self.id = f"{method}_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
-    def _vectorize(self, text_corpus, method=None, **kwargs):
+    def _vectorize(self, text_corpus, method=None, **kwargs) -> np.ndarray:
         """
         Get vector representations from selected methods.
 
         Parameters
         ----------
-            text_corpus : list, list of lists, or str
-                The text corpus over which analysis should be done.
+        text_corpus : list, list of lists, or str
+            The text corpus over which analysis should be done.
 
-            method : str
-                The modeling technique to use.
+        method : str
+            The modeling technique to use.
 
-            **kwargs : keyword arguments
-                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
         Returns
         -------
-            vec : np.array
-                An array of text vectorizations.
+        np.array
+            An array of text vectorizations.
         """
         if method is None:
             method = self.method
@@ -98,6 +109,7 @@ class TopicModel:
                     for k, v in kwargs.items()
                     if k in inspect.getfullargspec(LdaMulticore)[0]
                 }
+                kwargs.setdefault("random_state", 42)
                 self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,
@@ -111,16 +123,17 @@ class TopicModel:
 
                 Parameters
                 ----------
-                    bow_corpus : list of lists
-                        Contains doc2bow representations of the given texts.
+                bow_corpus : list of lists
+                    Contains doc2bow representations of the given texts.
 
-                    num_topics : int
-                        The number of categories for LDA and BERT based approaches.
+                num_topics : int
+                    The number of categories for LDA and BERT based approaches.
 
                 Returns
                 -------
-                    vec_lda : np.array (n_doc * n_topic)
-                        The probabilistic topic assignments for all documents.
+                np.array
+                    (n_doc * n_topic)
+                    The probabilistic topic assignments for all documents.
                 """
                 n_doc = len(bow_corpus)
                 vec_lda = np.zeros((n_doc, num_topics))
@@ -153,22 +166,23 @@ class TopicModel:
 
         Parameters
         ----------
-            text_corpus : list, list of lists, or str
-                The text corpus over which analysis should be done.
+        text_corpus : list, list of lists, or str
+            The text corpus over which analysis should be done.
 
-            method : str
-                The modeling technique to use.
+        method : str
+            The modeling technique to use.
 
-            m_clustering : sklearn.cluster.object
-                The method that should be used to cluster.
+        m_clustering : sklearn.cluster.object
+            The method that should be used to cluster.
 
-            **kwargs : keyword arguments
-                Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
+        **kwargs : keyword arguments
+            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
         Returns
         -------
-            self : LDA or cluster model
-                A fitted model.
+        Object
+            LDA or cluster model
+            A fitted model.
         """
         if method is None:
             method = self.method
@@ -191,6 +205,7 @@ class TopicModel:
                     for k, v in kwargs.items()
                     if k in inspect.getfullargspec(LdaMulticore)[0]
                 }
+                kwargs.setdefault("random_state", 42)
                 self.lda_model = LdaMulticore(
                     corpus=self.bow_corpus,
                     num_topics=self.num_topics,

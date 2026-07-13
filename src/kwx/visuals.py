@@ -1,16 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 """
-visuals
--------
-
 Functions for keyword and topic visualization.
-
-Contents:
-    save_vis,
-    graph_topic_num_evals,
-    gen_word_cloud,
-    pyLDAvis_topics,
-    t_sne
 """
 
 import inspect
@@ -50,46 +40,46 @@ warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarn
 
 def save_vis(vis, save_file, file_name):
     """
-    Saves a visualization file in the local or given directory if directed.
+    Save a visualization file in the local or given directory if directed.
 
     Parameters
     ----------
-        vis : matplotlib.pyplot
-            The visualization to be saved.
+    vis : matplotlib.pyplot
+        The visualization to be saved.
 
-        save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it.
+    save_file : bool or str (default=False)
+        Whether to save the figure as a png or a path in which to save it.
 
-            Note: directory paths can begin from the working directory.
+        Note: directory paths can begin from the working directory.
 
-        file_name : str
-            The name for the file.
+    file_name : str
+        The name for the file.
 
     Returns
     -------
+    None
         The file saved in the local or given directory if directed.
     """
-    if save_file:
-        vis.savefig(
-            f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
-            bbox_inches="tight",
-            dpi=300,
-        )
-
-    elif isinstance(save_file, str):  # a save path has been provided
-        if save_file[-4:] == ".zip":
+    if isinstance(save_file, str):
+        if save_file.endswith(".zip"):
             with zipfile.ZipFile(save_file, mode="a") as zf:
-                vis.plot([0, 0])
                 buf = io.BytesIO()
-                vis.savefig(buf, bbox_inches="tight", dpi=300)
-                vis.close()
-                zf.writestr(zinfo_or_arcname=f"{file_name}.png", data=buf.getvalue())
-                zf.close()
+
+                vis.savefig(
+                    buf,
+                    bbox_inches="tight",
+                    dpi=300,
+                    format="png",
+                )
+
+                buf.seek(0)
+
+                zf.writestr(f"{file_name}.png", buf.getvalue())
 
         else:
             if os.path.exists(save_file):
                 vis.savefig(
-                    save_file + f"/{file_name}.png",
+                    os.path.join(save_file, f"{file_name}.png"),
                     bbox_inches="tight",
                     dpi=300,
                 )
@@ -101,83 +91,90 @@ def save_vis(vis, save_file, file_name):
                     dpi=300,
                 )
 
+    elif save_file is True:
+        vis.savefig(
+            f"{file_name}_{time.strftime('%Y%m%d-%H%M%S')}.png",
+            bbox_inches="tight",
+            dpi=300,
+        )
+
 
 def graph_topic_num_evals(
-    method=["lda", "bert"],
-    bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus=None,
-    num_keywords=10,
-    topic_nums_to_compare=None,
-    metrics=True,
-    fig_size=(20, 10),
-    save_file=False,
-    return_ideal_metrics=False,
-    verbose=True,
+    method: str | list[str] = [
+        "lda",
+        "bert",
+    ],  # metrics: bool | Literal["stability", "coherence"] = True
+    bert_st_model: str = "xlm-r-bert-base-nli-stsb-mean-tokens",
+    text_corpus: list[str] | list[list[str]] | str | None = None,
+    num_keywords: int = 10,
+    topic_nums_to_compare: list[int] | None = None,
+    metrics: bool = True,
+    fig_size: tuple[int] = (20, 10),
+    save_file: bool | str = False,
+    return_ideal_metrics: bool = False,
+    verbose: bool = True,
     **kwargs,
 ):
     """
-    Graphs metrics for the given models over the given number of topics.
+    Graph metrics for the given models over the given number of topics.
 
     Parameters
     ----------
-        method : str (default=["lda", "bert"])
-            The modelling method.
+    method : str (default=["lda", "bert"])
+        The modelling method.
 
-            Options:
-                LDA: Latent Dirichlet Allocation
+        Options:
+            LDA: Latent Dirichlet Allocation
 
-                    - Text data is classified into a given number of categories.
-                    - These categories are then used to classify individual entries given the percent they fall into categories.
+                - Text data is classified into a given number of categories.
+                - These categories are then used to classify individual entries given the percent they fall into categories.
 
-                BERT: Bidirectional Encoder Representations from Transformers
+            BERT: Bidirectional Encoder Representations from Transformers
 
-                    - Words are classified via Google Neural Networks.
-                    - Word classifications are then used to derive topics.
+                - Words are classified via Google Neural Networks.
+                - Word classifications are then used to derive topics.
 
-        bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
-            The BERT model to use.
+    bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
+        The BERT model to use.
 
-        text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done.
+    text_corpus : list, list of lists, or str
+        The text corpus over which analysis should be done.
 
-        num_keywords : int (default=10)
-            The number of keywords that should be extracted.
+    num_keywords : int (default=10)
+        The number of keywords that should be extracted.
 
-        topic_nums_to_compare : list (default=None)
-            The number of topics to compare metrics over.
+    topic_nums_to_compare : list (default=None)
+        The number of topics to compare metrics over.
 
-            Note: None selects all numbers from 1 to num_keywords.
+        Note: None selects all numbers from 1 to num_keywords.
 
-        sample_size : float (default=None: sampling for non-BERT techniques)
-            The size of a sample for BERT models.
+    metrics : str or bool (default=True: all metrics)
+        The metrics to include.
 
-        metrics : str or bool (default=True: all metrics)
-            The metrics to include.
+        Options:
+            - stability: model stability based on Jaccard similarity.
 
-            Options:
-                - stability: model stability based on Jaccard similarity.
+            - coherence: how much the words associated with model topics co-occur.
 
-                - coherence: how much the words associated with model topics co-occur.
+    fig_size : tuple (default=(20,10))
+        The size of the figure.
 
-        fig_size : tuple (default=(20,10))
-            The size of the figure.
+    save_file : bool or str (default=False)
+        Whether to save the figure as a png or a path in which to save it.
 
-        save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it.
+    return_ideal_metrics : bool (default=False)
+        Whether to return the ideal number of topics for the best model based on metrics.
 
-        return_ideal_metrics : bool (default=False)
-            Whether to return the ideal number of topics for the best model based on metrics.
+    verbose : bool (default=True)
+        Whether to show a tqdm progress bar for the query.
 
-        verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query.
-
-        **kwargs : keyword arguments
-            Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
+    **kwargs : keyword arguments
+        Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode or gensim.models.ldamulticore.LdaMulticore.
 
     Returns
     -------
-        ax : matplotlib axis
-            A graph of the given metrics for each of the given models based on each topic number.
+    matplotlib.axis
+        A graph of the given metrics for each of the given models based on each topic number.
     """
     assert metrics == "stability" or metrics == "coherence" or metrics, (
         "An invalid value has been passed to the 'metrics' argument - please choose from 'stability', 'coherence', or True for both."
@@ -193,22 +190,38 @@ def graph_topic_num_evals(
 
     def jaccard_similarity(topic_1, topic_2):
         """
-        Derives the Jaccard similarity of two topics.
+        Derive the Jaccard similarity of two topics.
+
+        Parameters
+        ----------
+        topic_1 : list[str]
+            The words in the first topic.
+
+        topic_2 : list[str]
+            The words in the second topic.
+
+        Returns
+        -------
+        float
+            The Jaccard similarity of the provided topics.
 
         Notes
         -----
-            Jaccard similarity:
-                - A statistic used for comparing the similarity and diversity of sample sets.
-                - J(A,B) = (A ∩ B)/(A ∪ B).
-                - Goal is low Jaccard scores for coverage of the diverse elements.
+        Jaccard similarity:
+            - A statistic used for comparing the similarity and diversity of sample sets.
+            - J(A,B) = (A ∩ B)/(A ∪ B).
+            - Goal is low Jaccard scores for coverage of the diverse elements.
         """
         # Fix for cases where there are not enough texts for clustering models.
         if topic_1 == [] and topic_2 != []:
             topic_1 = topic_2
+
         if topic_1 != [] and topic_2 == []:
             topic_2 = topic_1
+
         if topic_1 == [] and topic_2 == []:
             topic_1, topic_2 = ["_None"], ["_None"]
+
         intersection = set(topic_1).intersection(set(topic_2))
         num_intersect = float(len(intersection))
 
@@ -223,6 +236,7 @@ def graph_topic_num_evals(
     # Initialize the topics numbers that models should be run for.
     if topic_nums_to_compare is None:
         topic_nums_to_compare = list(range(num_keywords + 2))[1:]
+
     else:
         # If topic numbers are given, then add one more for comparison.
         topic_nums_to_compare = topic_nums_to_compare + [topic_nums_to_compare[-1] + 1]
@@ -347,6 +361,7 @@ def graph_topic_num_evals(
     if return_ideal_metrics:
         if "lda" in method:
             ideal_lda_num_topics = ideal_topic_num_dict["lda"][0]
+
         else:
             ideal_lda_num_topics = False
 
@@ -375,27 +390,27 @@ def gen_word_cloud(
     save_file=False,
 ):
     """
-    Generates a word cloud for a group of words.
+    Generate a word cloud for a group of words.
 
     Parameters
     ----------
-        text_corpus : list or list of lists
-            The text_corpus that should be plotted.
+    text_corpus : list or list of lists
+        The text_corpus that should be plotted.
 
-        ignore_words : str or list (default=None)
-            Words that should be removed.
+    ignore_words : str or list (default=None)
+        Words that should be removed.
 
-        height : int (default=500)
-            The height of the resulting figure
-            Note: the width will be the golden ratio times the height.
+    height : int (default=500)
+        The height of the resulting figure
+        Note: the width will be the golden ratio times the height.
 
-        save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it.
+    save_file : bool or str (default=False)
+        Whether to save the figure as a png or a path in which to save it.
 
     Returns
     -------
-        plt.savefig or plt.show : pyplot methods
-            A word cloud based on the occurrences of words in a list without removed words.
+    None
+        A word cloud based on the occurrences of words in a list without removed words.
     """
     flat_words = utils._combine_texts_to_str(
         text_corpus=text_corpus, ignore_words=ignore_words
@@ -426,42 +441,39 @@ def pyLDAvis_topics(
     **kwargs,
 ):
     """
-    Returns the outputs of an LDA model plotted using pyLDAvis.
+    Return the outputs of an LDA model plotted using pyLDAvis.
 
     Parameters
     ----------
-        method : str or list (default=LDA)
-            The modelling method or methods to compare.
+    method : str or list (default=LDA)
+        The modelling method or methods to compare.
 
-            Option:
-                LDA: Latent Dirichlet Allocation
+        Option:
+            LDA: Latent Dirichlet Allocation
 
-                    - Text data is classified into a given number of categories.
+                - Text data is classified into a given number of categories.
 
-                    - These categories are then used to classify individual entries given the percent they fall into categories.
+                - These categories are then used to classify individual entries given the percent they fall into categories.
 
-        text_corpus : list, list of lists, or str
-            The text corpus over which analysis should be done.
+    text_corpus : list, list of lists, or str
+        The text corpus over which analysis should be done.
 
-        num_topics : int (default=10)
-            The number of categories for LDA and BERT based approaches.
+    num_topics : int (default=10)
+        The number of categories for LDA and BERT based approaches.
 
-        save_file : bool or str (default=False)
-            Whether to save the HTML file to the current working directory or a path in which to save it.
+    save_file : bool or str (default=False)
+        Whether to save the HTML file to the current working directory or a path in which to save it.
 
-        display_ipython : bool (default=False)
-            Whether iPython's display function should be used if in that working environment.
+    display_ipython : bool (default=False)
+        Whether iPython's display function should be used if in that working environment.
 
-        verbose : bool (default=True)
-            Whether to show a tqdm progress bar for the query.
-
-        **kwargs : keyword arguments
-            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore.
+    **kwargs : keyword arguments
+        Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore.
 
     Returns
     -------
-        pyLDAvis.save_html or pyLDAvis.show : pyLDAvis methods
-            A visualization of the topics and their main keywords via pyLDAvis.
+    None
+        A visualization of the topics and their main keywords via pyLDAvis.
     """
     method = method.lower()
 
@@ -470,7 +482,12 @@ def pyLDAvis_topics(
 
     def in_ipython():
         """
-        Allows for direct display in a Jupyter notebook.
+        Allow for direct display in a Jupyter notebook.
+
+        Returns
+        -------
+        bool
+            Whether an iPython notebook is being used.
         """
         try:
             shell = get_ipython().__class__.__name__
@@ -480,37 +497,50 @@ def pyLDAvis_topics(
                 return False  # Terminal running IPython
             else:
                 return False  # Other type (?)
+
         except NameError:
             return False  # Probably standard Python interpreter
 
-    vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
+    # vis = pyLDAvis_gensim.prepare(tm.lda_model, tm.bow_corpus, tm.dirichlet_dict)
+    vis = pyLDAvis_gensim.prepare(
+        tm.lda_model,
+        tm.bow_corpus,
+        tm.dirichlet_dict,
+        mds="mmds",
+    )
 
-    if save_file:
-        pyLDAvis.save_html(
-            vis, "lda_topics_{}.html".format(time.strftime("%Y%m%d-%H%M%S"))
-        )
-    elif isinstance(save_file, str):
-        if save_file[-4:] == ".zip":
-            pyLDAvis.save_html(vis, "lda_topics.html")
-            with zipfile.ZipFile(save_file, mode="a") as zf:
-                zf.write(filename="lda_topics.html")
-                os.remove("lda_topics.html")
-                zf.close()
+    if isinstance(save_file, str):
+        if save_file.endswith(".zip"):
+            html = pyLDAvis.prepared_data_to_html(vis)
+
+            with zipfile.ZipFile(save_file, mode="w") as zf:
+                zf.writestr("lda_topics.html", html)
+
         else:
             if os.path.exists(save_file):
-                pyLDAvis.save_html(vis, save_file + "/lda_topics.html")
+                pyLDAvis.save_html(
+                    vis,
+                    os.path.join(save_file, "lda_topics.html"),
+                )
+
             else:
                 pyLDAvis.save_html(
-                    vis, "/lda_topics_{}.html".format(time.strftime("%Y%m%d-%H%M%S"))
+                    vis,
+                    f"lda_topics_{time.strftime('%Y%m%d-%H%M%S')}.html",
                 )
+
+    elif save_file is True:
+        pyLDAvis.save_html(
+            vis,
+            f"lda_topics_{time.strftime('%Y%m%d-%H%M%S')}.html",
+        )
 
     else:
         if in_ipython() and display_ipython:
             pyLDAvis.enable_notebook()
-            # Display in an ipython notebook.
             display(pyLDAvis.display(vis))
+
         else:
-            # Opens HTML.
             pyLDAvis.show(vis)
 
 
@@ -524,40 +554,40 @@ def t_sne(
     **kwargs,
 ):
     """
-    Returns the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding).
-
-    Notes
-    -----
-        t-SNE reduces the dimensionality of a space such that similar points will be closer and dissimilar points farther.
+    Return the outputs of an LDA model plotted using t-SNE (t-distributed Stochastic Neighbor Embedding).
 
     Parameters
     ----------
-        dimension : str (default=both)
-            The dimension that t-SNE should reduce the data to for visualization
-            Options: 2d, 3d, and both (a plot with two subplots).
+    dimension : str (default=both)
+        The dimension that t-SNE should reduce the data to for visualization
+        Options: 2d, 3d, and both (a plot with two subplots).
 
-        text_corpus : list, list of lists
-            The tokenized and cleaned text corpus over which analysis should be done.
+    text_corpus : list, list of lists
+        The tokenized and cleaned text corpus over which analysis should be done.
 
-        num_topics : int (default=10)
-            The number of categories for LDA based approaches.
+    num_topics : int (default=10)
+        The number of categories for LDA based approaches.
 
-        remove_3d_outliers : bool (default=False)
-            Whether to remove outliers from a 3d plot.
+    remove_3d_outliers : bool (default=False)
+        Whether to remove outliers from a 3d plot.
 
-        fig_size : tuple (default=(20,10))
-            The size of the figure.
+    fig_size : tuple (default=(20,10))
+        The size of the figure.
 
-        save_file : bool or str (default=False)
-            Whether to save the figure as a png or a path in which to save it.
+    save_file : bool or str (default=False)
+        Whether to save the figure as a png or a path in which to save it.
 
-        **kwargs : keyword arguments
-            Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore or sklearn.manifold.TSNE.
+    **kwargs : keyword arguments
+        Keyword arguments correspoding to gensim.models.ldamulticore.LdaMulticore or sklearn.manifold.TSNE.
 
     Returns
     -------
-        fig : matplotlib.pyplot.figure
-            A t-SNE lower dimensional representation of an LDA model's topics and their constituent members.
+    matplotlib.pyplot.figure
+        A t-SNE lower dimensional representation of an LDA model's topics and their constituent members.
+
+    Notes
+    -----
+    t-SNE reduces the dimensionality of a space such that similar points will be closer and dissimilar points farther.
     """
     token_corpus = [t.split(" ") for t in text_corpus]
     dirichlet_dict = corpora.Dictionary(token_corpus)
@@ -576,7 +606,7 @@ def t_sne(
     )
 
     for i, b in enumerate(bow_corpus):
-        df_topic_coherences.loc[i] = [0] * num_topics
+        df_topic_coherences.loc[i] = [0.0] * num_topics
 
         output = dirichlet_model.__getitem__(bow=b, eps=0)
 
@@ -584,11 +614,6 @@ def t_sne(
             topic_num = o[0]
             coherence = o[1]
             df_topic_coherences.iloc[i, topic_num] = coherence
-
-    for i in range(num_topics):
-        df_topic_coherences.iloc[:, i] = df_topic_coherences.iloc[:, i].astype(
-            "float64", copy=False
-        )
 
     df_topic_coherences["main_topic"] = df_topic_coherences.iloc[:, :num_topics].idxmax(
         axis=1
