@@ -32,6 +32,8 @@ with warnings.catch_warnings():
 
 from kwx import languages
 
+# MARK: Load Data
+
 
 def load_data(
     data: str | pd.DataFrame, target_cols: str | list[str] | None = None
@@ -85,6 +87,9 @@ def load_data(
     return df_texts
 
 
+# MARK: Combine Texts
+
+
 def _combine_texts_to_str(
     text_corpus: str | list[str], ignore_words: str | list[str] | None = None
 ) -> str:
@@ -133,6 +138,9 @@ def _combine_texts_to_str(
     return " ".join(flat_words)
 
 
+# MARK: Remove Unwanted
+
+
 def _remove_unwanted(args: list[tuple[str], tuple[str], tuple[str]]) -> list[str]:
     """
     Lower cases tokens and removes numbers and possibly names.
@@ -154,6 +162,9 @@ def _remove_unwanted(args: list[tuple[str], tuple[str], tuple[str]]) -> list[str
         for token in text
         if token not in words_to_ignore and token not in stop_words
     ]
+
+
+# MARK: Lemmatize
 
 
 def _lemmatize(
@@ -206,6 +217,9 @@ def _lemmatize(
         base_tokens.append(lemmed_tokens)
 
     return base_tokens
+
+
+# MARK: Clean
 
 
 def clean(
@@ -527,6 +541,9 @@ def clean(
     return text_corpus
 
 
+# MARK: Prepare Data
+
+
 def prepare_data(
     data: str | pd.DataFrame = None,
     target_cols: str | list[str] = None,
@@ -625,6 +642,9 @@ def prepare_data(
     )
 
 
+# MARK: Prepare Corpus
+
+
 def _prepare_corpus_path(
     text_corpus: str | list[str] | list[list[str]] = None,
     clean_texts: str = None,
@@ -715,6 +735,9 @@ def _prepare_corpus_path(
     return text_corpus
 
 
+# MARK: Translate Output
+
+
 async def translate_output(
     outputs: list[str], input_language: str, output_language: str
 ) -> list[str]:
@@ -763,6 +786,9 @@ async def translate_output(
         ]
 
     return translated_outputs
+
+
+# MARK: Organize by Post
 
 
 def organize_by_pos(
@@ -816,6 +842,9 @@ def organize_by_pos(
     outputs_dict = {k: v for k, v in outputs_dict.items() if v}
 
     return outputs_dict
+
+
+# MARK: Prompt for Word Removal
 
 
 def prompt_for_word_removal(

@@ -19,6 +19,8 @@ logging.disable(logging.WARNING)
 warnings.filterwarnings("ignore", message=r"Passing", category=FutureWarning)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
+# MARK: TopicModel
+
 
 class TopicModel:
     """

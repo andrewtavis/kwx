@@ -24,6 +24,8 @@ from kwx import languages, topic_model, utils, visuals
 
 warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
 
+# MARK: Get Topic Words
+
 
 def get_topic_words(
     text_corpus: list[str],
@@ -74,6 +76,9 @@ def get_topic_words(
     topics = [topics[i] for i in non_blank_topic_idxs]
 
     return topics, non_blank_topic_idxs
+
+
+# MARK: Get Coherence
 
 
 def get_coherence(
@@ -136,6 +141,9 @@ def get_coherence(
         )
 
     return cm.get_coherence()
+
+
+# MARK: Order ad Subset Coherence
 
 
 def _order_and_subset_by_coherence(
@@ -246,6 +254,9 @@ def _order_and_subset_by_coherence(
     return ordered_topic_words, selection_indexes
 
 
+# MARK: Select KWs
+
+
 def _select_kws(
     method: str = "lda",
     kw_args: Any = None,
@@ -353,6 +364,9 @@ def _select_kws(
         keywords = keywords[:n]
 
     return keywords
+
+
+# MARK: Extract KWs
 
 
 async def extract_kws(
@@ -638,6 +652,9 @@ async def extract_kws(
 
     else:
         return keywords
+
+
+# MARK: Gen Files
 
 
 async def gen_files(

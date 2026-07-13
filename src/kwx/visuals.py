@@ -18,6 +18,7 @@ import pyLDAvis
 
 try:
     import pyLDAvis.gensim_models as pyLDAvis_gensim
+
 except ImportError:
     import pyLDAvis.gensim as pyLDAvis_gensim
 
@@ -36,6 +37,8 @@ from wordcloud import WordCloud
 from kwx import model, topic_model, utils
 
 warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarning)
+
+# MARK: Save Visualization
 
 
 def save_vis(vis, save_file, file_name):
@@ -97,6 +100,9 @@ def save_vis(vis, save_file, file_name):
             bbox_inches="tight",
             dpi=300,
         )
+
+
+# MARK: Topic Number Evals
 
 
 def graph_topic_num_evals(
@@ -187,6 +193,8 @@ def graph_topic_num_evals(
         method = [method]
 
     method = [m.lower() for m in method]
+
+    # MARK: Jaccard Similarity
 
     def jaccard_similarity(topic_1, topic_2):
         """
@@ -383,6 +391,9 @@ def graph_topic_num_evals(
         return ax
 
 
+# MARK: Word Cloud
+
+
 def gen_word_cloud(
     text_corpus,
     ignore_words=None,
@@ -430,6 +441,9 @@ def gen_word_cloud(
     save_vis(vis=plt, save_file=save_file, file_name="word_cloud")
 
     plt.show()
+
+
+# MARK: pyLDAvis
 
 
 def pyLDAvis_topics(
@@ -542,6 +556,9 @@ def pyLDAvis_topics(
 
         else:
             pyLDAvis.show(vis)
+
+
+# MARK: T-SNE
 
 
 def t_sne(
