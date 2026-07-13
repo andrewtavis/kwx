@@ -13,7 +13,7 @@ import math
 import os
 import time
 import zipfile
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 from gensim.models import CoherenceModel
@@ -28,8 +28,8 @@ warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarn
 def get_topic_words(
     text_corpus: list[str],
     labels: list[str],
-    num_topics: Optional[int] = None,
-    num_keywords: Optional[int] = None,
+    num_topics: int = None,
+    num_keywords: int = None,
 ) -> tuple[list[list[str]], list[int]]:
     """
     Get top words within each topic for cluster models.
@@ -50,7 +50,7 @@ def get_topic_words(
 
     Returns
     -------
-    list, list
+    tuple[list[list[str]], list]
         Topic keywords and indexes of those that are not empty lists.
     """
     if num_topics is None:
@@ -248,8 +248,8 @@ def _order_and_subset_by_coherence(
 
 def _select_kws(
     method: str = "lda",
-    kw_args: Optional[Any] = None,
-    words_to_ignore: Optional[list[str]] = None,
+    kw_args: Any = None,
+    words_to_ignore: list[str] = None,
     n: int = 10,
 ):
     """
@@ -358,14 +358,14 @@ def _select_kws(
 async def extract_kws(
     method: str = "lda",
     bert_st_model: str = "xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus: Optional[str] = None,
-    input_language: Optional[str] = None,
-    output_language: Optional[str] = None,
+    text_corpus: str = None,
+    input_language: str = None,
+    output_language: str = None,
     num_keywords: int = 10,
     num_topics: int = 10,
-    corpuses_to_compare: Optional[list[list[str]]] = None,
+    corpuses_to_compare: list[list[str]] = None,
     return_topics: bool = False,
-    ignore_words: Optional[Union[str, list[str]]] = None,
+    ignore_words: str | list[str] = None,
     prompt_remove_words: bool = True,
     return_kw_args: bool = False,
     **kwargs,
@@ -641,21 +641,21 @@ async def extract_kws(
 
 
 async def gen_files(
-    method: Union[str, list[str]] = ["lda", "bert"],
-    text_corpus: Optional[list[str]] = None,
-    input_language: Optional[str] = None,
-    output_language: Optional[str] = None,
+    method: str | list[str] = ["lda", "bert"],
+    text_corpus: list[str] = None,
+    input_language: str = None,
+    output_language: str = None,
     num_keywords: int = 10,
-    topic_nums_to_compare: Optional[list[int]] = None,
-    corpuses_to_compare: Optional[list[list[str]]] = None,
-    ignore_words: Optional[Union[str, list[str]]] = None,
+    topic_nums_to_compare: list[int] = None,
+    corpuses_to_compare: list[list[str]] = None,
+    ignore_words: str | list[str] = None,
     prompt_remove_words: bool = True,
     verbose: bool = True,
     fig_size: tuple[int, int] = (20, 10),
     incl_most_freq: bool = True,
     org_by_pos: bool = True,
     incl_visuals: bool = True,
-    save_dir: Optional[str] = None,
+    save_dir: str = None,
     zip_results: bool = True,
 ) -> None:
     """
@@ -663,7 +663,7 @@ async def gen_files(
 
     Parameters
     ----------
-    method : Union[str, list[str]] (default=["lda", "bert"])
+    method : str | list[str] (default=["lda", "bert"])
         The modelling method.
 
         Options:
@@ -684,27 +684,27 @@ async def gen_files(
                 - Words are classified via Google Neural Networks.
                 - Word classifications are then used to derive topics.
 
-    text_corpus : Optional[list[str]]
+    text_corpus : list[str]
         The text corpus over which analysis should be done.
 
-    input_language : Optional[str]
+    input_language : str
         The spoken language in which the texts are found.
 
-    output_language : Optional[str]
+    output_language : str
         The spoken language in which the results should be given.
 
     num_keywords : int (default=10)
         The number of keywords that should be extracted.
 
-    topic_nums_to_compare : Optional[list[int]]
+    topic_nums_to_compare : list[int]
         The number of topics to compare metrics over.
 
         Note: None selects all numbers from 1 to num_keywords.
 
-    corpuses_to_compare : Optional[list[list[str]]]
+    corpuses_to_compare : list[list[str]]
         A list of other text corpuses that the main corpus should be compared to using TFIDF.
 
-    ignore_words : Optional[Union[str, list[str]]]
+    ignore_words : str | list[str] (default=True)
         Words that should be removed.
 
     prompt_remove_words : bool (default=True)

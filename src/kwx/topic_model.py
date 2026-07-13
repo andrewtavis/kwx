@@ -8,7 +8,6 @@ import logging
 import os
 import warnings
 from datetime import datetime
-from typing import Optional
 
 import numpy as np
 from gensim import corpora
@@ -41,7 +40,7 @@ class TopicModel:
         self,
         num_topics: int = 10,
         method: str = "lda",
-        bert_model: Optional[SentenceTransformer] = None,
+        bert_model: SentenceTransformer = None,
     ) -> None:
         """
         Initialization of the TopicModel class.

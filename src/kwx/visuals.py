@@ -215,10 +215,13 @@ def graph_topic_num_evals(
         # Fix for cases where there are not enough texts for clustering models.
         if topic_1 == [] and topic_2 != []:
             topic_1 = topic_2
+
         if topic_1 != [] and topic_2 == []:
             topic_2 = topic_1
+
         if topic_1 == [] and topic_2 == []:
             topic_1, topic_2 = ["_None"], ["_None"]
+
         intersection = set(topic_1).intersection(set(topic_2))
         num_intersect = float(len(intersection))
 
@@ -358,6 +361,7 @@ def graph_topic_num_evals(
     if return_ideal_metrics:
         if "lda" in method:
             ideal_lda_num_topics = ideal_topic_num_dict["lda"][0]
+
         else:
             ideal_lda_num_topics = False
 
