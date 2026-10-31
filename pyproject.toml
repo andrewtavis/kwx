@@ -44,24 +44,24 @@ classifiers = [
 
 dependencies = [
     "defusedxml>=0.7.1",
-    "emoji>=2.15.0",
+    "emoji>=2.16.0",
     "gensim>=4.4.0",
     "googletrans>=4.0.2",
-    "ipython>=9.16.1",
+    "ipython>=9.18.0",
     "keras>=3.15.1",
-    "matplotlib>=3.11.1",
-    "nltk>=3.10.2",
-    "numpy>=2.5.1",
+    "matplotlib>=3.11.2",
+    "nltk>=3.10.4",
+    "numpy>=2.5.4",
     "packaging>=26.3",
-    "pandas>=3.0.5",
+    "pandas>=3.1.0",
     "pyldavis>=3.4.1",
-    "scikit-learn>=1.9.0",
+    "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
-    "sentence-transformers>=5.7.0",
-    "spacy>=3.8.15",
+    "sentence-transformers>=6.2.0",
+    "spacy>=3.8.18",
     "stopwordsiso>=0.7.1",
     "tensorflow>=2.21.0",
-    "tqdm>=4.70.0",
+    "tqdm>=4.70.1",
     "spacy[en-core-web-sm]>=3.8.11",
     "wordcloud>=1.9.6",
     "xlrd>=2.0.2",
@@ -69,18 +69,18 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "prek>=0.4.12",
-    "pytest>=9.1.1",
+    "prek>=0.5.9",
+    "pytest>=9.2.0",
     "pytest-cov>=7.1.0",
-    "ruff>=0.16.2",
-    "ty>=0.0.69",
-    "pytest-asyncio>=1.4.0",
+    "ruff>=0.17.3",
+    "ty>=0.0.95",
+    "pytest-asyncio>=1.4.1",
 ]
 
 docs = [
     # Keep docs dependencies formatted in this way with ruff to allow for upgrades via VS Code extension.
     "myst-parser>=5.1.0",
-    "numpydoc>=1.10.0",
+    "numpydoc>=1.11.0",
     "sphinx-rtd-theme>=3.1.0",
 ]
 
