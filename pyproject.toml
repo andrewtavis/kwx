@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kwx"
-version = "1.0.2"
+version = "2.0.0"
 description = "BERT, LDA, and TFIDF based keyword extraction in Python"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -47,39 +47,38 @@ dependencies = [
     "emoji>=2.16.0",
     "gensim>=4.4.0",
     "googletrans>=4.0.2",
-    "ipython>=9.18.0",
+    "ipython>=9.18.1",
     "keras>=3.15.1",
     "matplotlib>=3.11.2",
     "nltk>=3.10.4",
-    "numpy>=2.5.4",
+    "numpy>=2.5.5",
     "packaging>=26.3",
-    "pandas>=3.1.0",
+    "pandas>=3.1.1",
     "pyldavis>=3.4.1",
     "scikit-learn>=1.9.1",
     "seaborn>=0.13.2",
-    "sentence-transformers>=6.2.0",
+    "sentence-transformers>=6.3.0",
     "spacy>=3.8.18",
     "stopwordsiso>=0.7.1",
     "tensorflow>=2.21.0",
     "tqdm>=4.70.1",
-    "spacy[en-core-web-sm]>=3.8.11",
     "wordcloud>=1.9.6",
     "xlrd>=2.0.2",
 ]
 
 [dependency-groups]
 dev = [
-    "prek>=0.5.9",
+    "prek>=0.5.11",
     "pytest>=9.2.0",
     "pytest-cov>=7.1.0",
-    "ruff>=0.17.3",
-    "ty>=0.0.95",
-    "pytest-asyncio>=1.4.1",
+    "ruff>=0.17.6",
+    "ty>=0.0.107",
+    "pytest-asyncio>=1.5.0",
 ]
 
 docs = [
     # Keep docs dependencies formatted in this way with ruff to allow for upgrades via VS Code extension.
-    "myst-parser>=5.1.0",
+    "myst-parser>=5.2.0",
     "numpydoc>=1.11.0",
     "sphinx-rtd-theme>=3.1.0",
 ]
