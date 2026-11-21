@@ -54,4 +54,4 @@ jobs:
       - name: Sync environment and install dependencies
         run: uv sync --all-groups --frozen
       - name: Run pytest - Unit Tests
-        run: uv run pytest . --cov=src --cov-report=term-missing --cov-fail-under=50 --cov-config=./pyproject.toml -v
+        run: uv run pytest . --cov=src --cov-report=term-missing --cov-fail-under=85 --cov-config=./pyproject.toml -v

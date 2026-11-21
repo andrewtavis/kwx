@@ -30,8 +30,8 @@ warnings.filterwarnings(action="ignore", message=r"Passing", category=FutureWarn
 def get_topic_words(
     text_corpus: list[str],
     labels: list[str],
-    num_topics: int = None,
-    num_keywords: int = None,
+    num_topics: int | None = None,
+    num_keywords: int | None = None,
 ) -> tuple[list[list[str]], list[int]]:
     """
     Get top words within each topic for cluster models.
