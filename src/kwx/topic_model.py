@@ -42,7 +42,7 @@ class TopicModel:
         self,
         num_topics: int = 10,
         method: str = "lda",
-        bert_model: SentenceTransformer = None,
+        bert_model: SentenceTransformer | None = None,
     ) -> None:
         """
         Initialization of the TopicModel class.
@@ -55,7 +55,7 @@ class TopicModel:
         method : str (default=lda)
             The modelling method.
 
-        bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer
+        bert_model : sentence_transformers.SentenceTransformer.SentenceTransformer or None
             A sentence transformer model.
         """
         modeling_methods = ["lda", "bert"]
@@ -152,7 +152,7 @@ class TopicModel:
 
             return vec
 
-        elif method == "bert":
+        elif method == "bert" and self.bert_model:
             kwargs = {
                 k: v
                 for k, v in kwargs.items()
@@ -161,6 +161,9 @@ class TopicModel:
             vec = np.array(self.bert_model.encode(sentences=self.text_corpus, **kwargs))
 
             return vec
+
+        else:
+            raise ValueError(f"Unsupported method: {method}")
 
     def fit(self, text_corpus, method=None, m_clustering=None, **kwargs):
         """

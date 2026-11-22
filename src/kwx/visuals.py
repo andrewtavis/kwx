@@ -111,11 +111,11 @@ def graph_topic_num_evals(
         "bert",
     ],  # metrics: bool | Literal["stability", "coherence"] = True
     bert_st_model: str = "xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus: list[str] | list[list[str]] | str | None = None,
+    text_corpus: str | list[str] | list[list[str]] = "",
     num_keywords: int = 10,
     topic_nums_to_compare: list[int] | None = None,
-    metrics: bool = True,
-    fig_size: tuple[int] = (20, 10),
+    metrics: str | list[str] | bool = True,
+    fig_size: tuple[int, int] = (20, 10),
     save_file: bool | str = False,
     return_ideal_metrics: bool = False,
     verbose: bool = True,
@@ -264,7 +264,7 @@ def graph_topic_num_evals(
             desc=f"{m}-topics",
             disable=not verbose,
         ):
-            tm = topic_model.TopicModel(num_topics=t_n, method=m, bert_model=bert_model)
+            tm = topic_model.TopicModel(bert_model=bert_model, num_topics=t_n, method=m)
             tm.fit(text_corpus=text_corpus, method=m, m_clustering=None, **kwargs)
 
             # Assign topics given the current number t_n.
@@ -280,14 +280,12 @@ def graph_topic_num_evals(
                 measure="c_v",
             )
 
-        if "stability" in metrics:
+        if isinstance(metrics, (str, list)) and "stability" in metrics:
             for j in range(len(topic_nums_to_compare) - 1):
                 jaccard_sims = []
-                for t1, topic1 in enumerate(  # pylint: disable=unused-variable
-                    topics_dict[topic_nums_to_compare[j]]
-                ):
+                for t1, topic1 in enumerate(topics_dict[topic_nums_to_compare[j]]):
                     sims = []
-                    for t2, topic2 in enumerate(  # pylint: disable=unused-variable
+                    for t2, topic2 in enumerate(
                         topics_dict[topic_nums_to_compare[j + 1]]
                     ):
                         sims.append(jaccard_similarity(topic1, topic2))
@@ -304,22 +302,26 @@ def graph_topic_num_evals(
             ax = sns.lineplot(
                 x=topic_nums_to_compare[:-1],
                 y=mean_stabilities,
-                label="{}: Average Topic Overlap".format(m.upper()),
+                label=f"{m.upper()}: Average Topic Overlap",
             )
 
-        if "coherence" in metrics:
+        if isinstance(metrics, (str, list)) and "coherence" in metrics:
             coherences = [coherence_dict[t_n] for t_n in topic_nums_to_compare[:-1]]
             metric_vals += coherences
 
             ax = sns.lineplot(
                 x=topic_nums_to_compare[:-1],
                 y=coherences,
-                label="{}: Topic Coherence".format(m.upper()),
+                label=f"{m.upper()}: Topic Coherence",
             )
 
         # If both metrics can be calculated, then an optimal number of
         # topics can be derived.
-        if "stability" in metrics and "coherence" in metrics:
+        if (
+            isinstance(metrics, (str, list))
+            and "stability" in metrics
+            and "coherence" in metrics
+        ):
             coh_sta_diffs = [
                 coherences[i] - mean_stabilities[i]
                 for i in range(len(topic_nums_to_compare))[:-1]
@@ -343,9 +345,7 @@ def graph_topic_num_evals(
 
             ax.axvline(
                 x=plot_model_ideal_topic_num,
-                label="{} Ideal Num Topics: {}".format(
-                    m.upper(), model_ideal_topic_num
-                ),
+                label=f"{m.upper()} Ideal Num Topics: {model_ideal_topic_num}",
                 color="black",
             )
 
@@ -356,7 +356,7 @@ def graph_topic_num_evals(
     ax.set_ylim([0, y_max])
     ax.set_xlim([topic_nums_to_compare[0], topic_nums_to_compare[-1] - 1])
 
-    ax.axes.set_title("Method Metrics per Number of Topics", fontsize=25)
+    ax.set_title("Method Metrics per Number of Topics", fontsize=25)
     ax.set_ylabel("Metric Level", fontsize=20)
     ax.set_xlabel("Number of Topics", fontsize=20)
     plt.legend(fontsize=20, ncol=len(method))
@@ -395,7 +395,7 @@ def graph_topic_num_evals(
 
 
 def gen_word_cloud(
-    text_corpus,
+    text_corpus: str | list[str] = [],
     ignore_words=None,
     height=500,
     save_file=False,
@@ -405,7 +405,7 @@ def gen_word_cloud(
 
     Parameters
     ----------
-    text_corpus : list or list of lists
+    text_corpus : str or list[str]
         The text_corpus that should be plotted.
 
     ignore_words : str or list (default=None)
@@ -448,7 +448,7 @@ def gen_word_cloud(
 
 def pyLDAvis_topics(
     method="lda",
-    text_corpus=None,
+    text_corpus: list[str] | list[list[str]] = [],
     num_topics=10,
     save_file=False,
     display_ipython=False,
@@ -563,7 +563,7 @@ def pyLDAvis_topics(
 
 def t_sne(
     dimension="both",
-    text_corpus=None,
+    text_corpus: list[str] = [],
     num_topics=10,
     remove_3d_outliers=False,
     fig_size=(20, 10),
@@ -579,7 +579,7 @@ def t_sne(
         The dimension that t-SNE should reduce the data to for visualization
         Options: 2d, 3d, and both (a plot with two subplots).
 
-    text_corpus : list, list of lists
+    text_corpus : list[str]
         The tokenized and cleaned text corpus over which analysis should be done.
 
     num_topics : int (default=10)
@@ -619,7 +619,7 @@ def t_sne(
     )
 
     df_topic_coherences = pd.DataFrame(
-        columns=["topic_{}".format(i) for i in range(num_topics)]
+        columns=[f"topic_{i}" for i in range(num_topics)]
     )
 
     for i, b in enumerate(bow_corpus):
@@ -712,7 +712,7 @@ def t_sne(
         fig, (ax1, ax2) = plt.subplots(
             nrows=1,
             ncols=2,
-            figsize=fig_size,  # pylint: disable=unused-variable
+            figsize=fig_size,
         )
         ax1.axis("off")
 
@@ -753,7 +753,7 @@ def t_sne(
         )
 
         ax.set_facecolor(light_grey_tup)
-        ax.axes.set_title("t-SNE 2-Dimensional Representation", fontsize=25)
+        ax.set_title("t-SNE 2-Dimensional Representation", fontsize=25)
         ax.set_xlabel("tsne-d1", fontsize=20)
         ax.set_ylabel("tsne-d2", fontsize=20)
 
@@ -777,7 +777,7 @@ def t_sne(
         )
 
         ax2.set_facecolor("white")
-        ax2.axes.set_title("t-SNE 3-Dimensional Representation", fontsize=25)
+        ax2.set_title("t-SNE 3-Dimensional Representation", fontsize=25)
         ax2.set_xlabel("tsne-d1", fontsize=20)
         ax2.set_ylabel("tsne-d2", fontsize=20)
         ax2.set_zlabel("tsne-d3", fontsize=20)
@@ -797,7 +797,7 @@ def t_sne(
             ]
             ax2.legend(
                 proxy_handles,
-                ["topic_{}".format(i) for i in range(num_topics)],
+                [f"topic_{i}" for i in range(num_topics)],
                 loc="upper left",
                 facecolor=(light_grey_tup),
             )
@@ -816,7 +816,7 @@ def t_sne(
         )
 
         ax.set_facecolor("white")
-        ax.axes.set_title("t-SNE 3-Dimensional Representation", fontsize=25)
+        ax.set_title("t-SNE 3-Dimensional Representation", fontsize=25)
         ax.set_xlabel("tsne-d1", fontsize=20)
         ax.set_ylabel("tsne-d2", fontsize=20)
         ax.set_zlabel("tsne-d3", fontsize=20)
@@ -836,7 +836,7 @@ def t_sne(
             ]
             ax.legend(
                 proxy_handles,
-                ["topic_{}".format(i) for i in range(num_topics)],
+                [f"topic_{i}" for i in range(num_topics)],
                 loc="upper left",
                 facecolor=light_grey_tup,
             )

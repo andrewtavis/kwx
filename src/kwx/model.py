@@ -13,7 +13,8 @@ import math
 import os
 import time
 import zipfile
-from typing import Any
+from collections.abc import Callable
+from typing import Any, cast
 
 import numpy as np
 from gensim.models import CoherenceModel
@@ -57,10 +58,12 @@ def get_topic_words(
     """
     if num_topics is None:
         num_topics = len(np.unique(labels))
+
     topics = ["" for _ in range(num_topics)]
 
     for i, c in enumerate(text_corpus):
-        topics[labels[i]] += " " + "".join(c)
+        topic_idx = int(labels[i])
+        topics[topic_idx] += " " + "".join(c)
 
     # Count the words that appear for a given topic label.
     word_counts = list(map(lambda x: Counter(x.split()).items(), topics))
@@ -83,7 +86,7 @@ def get_topic_words(
 
 def get_coherence(
     model: Any,
-    text_corpus: list[str],
+    text_corpus: str | list[str] | list[list[str]],
     num_topics: int = 10,
     num_keywords: int = 10,
     measure: str = "c_v",
@@ -96,7 +99,7 @@ def get_coherence(
     model : kwx.topic_model.TopicModel
         A model trained on the given text corpus.
 
-    text_corpus : list, list of lists, or str
+    text_corpus : str, list or list of lists
         The text corpus over which analysis should be done.
 
     num_topics : int (default=10)
@@ -113,7 +116,17 @@ def get_coherence(
     float
         The coherence of the given model over the given texts.
     """
-    token_corpus = [t.split(" ") for t in text_corpus]
+    if isinstance(text_corpus, str):
+        token_corpus = [text_corpus]
+
+    elif (
+        isinstance(text_corpus, list)
+        and len(text_corpus) > 0
+        and isinstance(text_corpus[0], list)
+    ):
+        token_corpus = [" ".join(ts) for ts in text_corpus]
+
+    token_corpus = [t.split(" ") for t in text_corpus]  # ty: ignore[missing-union-attribute]
 
     if model.method.lower() == "lda":
         cm = CoherenceModel(
@@ -126,7 +139,7 @@ def get_coherence(
 
     else:
         topic_words = get_topic_words(
-            text_corpus=text_corpus,
+            text_corpus=text_corpus,  # ty: ignore[invalid-argument-type]
             labels=model.cluster_model.labels_,
             num_topics=num_topics,
             num_keywords=num_keywords,
@@ -194,7 +207,7 @@ def _order_and_subset_by_coherence(
         ]
 
     elif tm.method == "bert":
-        # The topics in cluster models are not guranteed to be the size of num_keywords.
+        # The topics in cluster models are not guaranteed to be the size of num_keywords.
         topic_words, non_blank_topic_idxs = get_topic_words(
             text_corpus=tm.text_corpus,
             labels=tm.cluster_model.labels_,
@@ -260,7 +273,7 @@ def _order_and_subset_by_coherence(
 def _select_kws(
     method: str = "lda",
     kw_args: Any = None,
-    words_to_ignore: list[str] = None,
+    words_to_ignore: list[str] | None = None,
     n: int = 10,
 ):
     """
@@ -307,7 +320,7 @@ def _select_kws(
         kw_dict = {
             k: v
             for k, v in sorted(kw_args.items(), key=lambda item: item[1])[::-1]
-            if k not in words_to_ignore
+            if words_to_ignore and k not in words_to_ignore
         }
 
         keywords = list(kw_dict.keys())[:n]
@@ -324,7 +337,9 @@ def _select_kws(
         ]
         set_ordered_topic_words = list(set(flat_ordered_topic_words))
         set_ordered_topic_words = [
-            t_w for t_w in set_ordered_topic_words if t_w not in words_to_ignore
+            t_w
+            for t_w in set_ordered_topic_words
+            if isinstance(words_to_ignore, list) and t_w not in words_to_ignore
         ]
         if len(set_ordered_topic_words) <= n:
             print("\n")
@@ -342,8 +357,8 @@ def _select_kws(
                 sel_idxs = selection_indexes[t_n]
 
                 for s_i in sel_idxs:
-                    if (
-                        ordered_topic_words[t_n][s_i] not in keywords
+                    if ordered_topic_words[t_n][s_i] not in keywords and (
+                        words_to_ignore
                         and ordered_topic_words[t_n][s_i] not in words_to_ignore
                     ):
                         keywords.append(ordered_topic_words[t_n][s_i])
@@ -372,14 +387,14 @@ def _select_kws(
 async def extract_kws(
     method: str = "lda",
     bert_st_model: str = "xlm-r-bert-base-nli-stsb-mean-tokens",
-    text_corpus: str = None,
-    input_language: str = None,
-    output_language: str = None,
+    text_corpus: str | list[str] | list[list[str]] = "",
+    input_language: str = "",
+    output_language: str | None = None,
     num_keywords: int = 10,
     num_topics: int = 10,
-    corpuses_to_compare: list[list[str]] = None,
+    corpuses_to_compare: list[list[str]] | None = None,
     return_topics: bool = False,
-    ignore_words: str | list[str] = None,
+    ignore_words: str | list[str] | None = None,
     prompt_remove_words: bool = True,
     return_kw_args: bool = False,
     **kwargs,
@@ -410,13 +425,13 @@ async def extract_kws(
                 - Words are classified via Google Neural Networks.
                 - Word classifications are then used to derive topics.
 
-    bert_st_model : str (deafault=xlm-r-bert-base-nli-stsb-mean-tokens)
+    bert_st_model : str (default=xlm-r-bert-base-nli-stsb-mean-tokens)
         The BERT model to use.
 
     text_corpus : list, list of lists, or str
         The text corpus over which analysis should be done.
 
-    input_language : str (default=None)
+    input_language : str
         The spoken language in which the texts are found.
 
     output_language : str (default=None: same as input_language)
@@ -444,7 +459,7 @@ async def extract_kws(
         Whether to return the keyword arguments from the function.
 
     **kwargs : keyword arguments
-        Keyword arguments correspoding to sentence_transformers.SentenceTransformer.encode, gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer.
+        Keyword arguments corresponding to sentence_transformers.SentenceTransformer.encode, gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer.
 
     Returns
     -------
@@ -489,7 +504,9 @@ async def extract_kws(
     if method in ["frequency", "tfidf"]:
         if method == "frequency":
             kw_args = Counter(
-                item for subtext in text_corpus for item in subtext.split()
+                item
+                for subtext in text_corpus
+                for item in subtext.split()  # ty: ignore[missing-union-attribute]
             )
 
             # Return for gen_files.
@@ -503,9 +520,11 @@ async def extract_kws(
                 n=num_keywords,
             )
 
-        elif method == "tfidf":  # Term Frequency Inverse Document Frequency
+        elif (
+            method == "tfidf" and corpuses_to_compare
+        ):  # Term Frequency Inverse Document Frequency
             if isinstance(corpuses_to_compare[0], str):  # only one corpus to compare
-                corpuses_to_compare = [corpuses_to_compare]
+                corpuses_to_compare = [corpuses_to_compare]  # ty: ignore[invalid-assignment]
 
             # Combine the main corpus and those to compare.
             comparative_corpus = [corpuses_to_compare]
@@ -513,14 +532,12 @@ async def extract_kws(
 
             comparative_string_corpus = []
             for c in comparative_corpus:
-                combined_tokens = utils._combine_texts_to_str(text_corpus=c)
+                combined_tokens = utils._combine_texts_to_str(text_corpus=c)  # ty: ignore[invalid-argument-type]
 
                 comparative_string_corpus.append(combined_tokens)
 
             tfidf_vectorizer = TfidfVectorizer(**kwargs)
-            tm = tfidf_vectorizer.fit_transform(  # pylint: disable=unused-variable
-                comparative_string_corpus
-            )
+            tm = tfidf_vectorizer.fit_transform(comparative_string_corpus)
             corpus_scored = tfidf_vectorizer.transform(comparative_string_corpus)
             terms = tfidf_vectorizer.get_feature_names_out()
             scores = corpus_scored.toarray().flatten().tolist()
@@ -560,7 +577,7 @@ async def extract_kws(
             bert_model = SentenceTransformer(bert_st_model)
 
         tm = topic_model.TopicModel(
-            num_topics=num_topics, method=method, bert_model=bert_model
+            bert_model=bert_model, num_topics=num_topics, method=method
         )
         tm.fit(text_corpus=text_corpus, method=method, m_clustering=None)
 
@@ -571,7 +588,7 @@ async def extract_kws(
         if return_topics:
             if output_language != input_language:
                 ordered_topic_words = await utils.translate_output(
-                    outputs=ordered_topic_words,
+                    outputs=ordered_topic_words,  # ty: ignore[invalid-argument-type]
                     input_language=input_language,
                     output_language=output_language,
                 )
@@ -659,20 +676,20 @@ async def extract_kws(
 
 async def gen_files(
     method: str | list[str] = ["lda", "bert"],
-    text_corpus: list[str] = None,
-    input_language: str = None,
-    output_language: str = None,
+    text_corpus: list[str] = [""],
+    input_language: str = "",
+    output_language: str | None = None,
     num_keywords: int = 10,
-    topic_nums_to_compare: list[int] = None,
-    corpuses_to_compare: list[list[str]] = None,
-    ignore_words: str | list[str] = None,
+    topic_nums_to_compare: list[int] | None = None,
+    corpuses_to_compare: list[list[str]] | None = None,
+    ignore_words: str | list[str] | None = None,
     prompt_remove_words: bool = True,
     verbose: bool = True,
     fig_size: tuple[int, int] = (20, 10),
     incl_most_freq: bool = True,
     org_by_pos: bool = True,
-    incl_visuals: bool = True,
-    save_dir: str = None,
+    incl_visuals: str | list[str] | bool = True,
+    save_dir: str | None = None,
     zip_results: bool = True,
 ) -> None:
     """
@@ -739,7 +756,7 @@ async def gen_files(
     org_by_pos : bool (default=True)
         Whether to organize words by their parts of speech.
 
-    incl_visuals : str or bool (default=True)
+    incl_visuals : str, list or bool (default=True)
         Which visual graphs to include in the output.
 
         Str options: topic_num_evals, word_cloud, pyLDAvis, t_sne.
@@ -900,7 +917,7 @@ async def gen_files(
     )
 
     model_kw = _select_kws(
-        method=method,
+        method=best_method,
         kw_args=model_kw_args,
         words_to_ignore=words_to_ignore,
         n=num_keywords,
@@ -918,7 +935,7 @@ async def gen_files(
                 print("The most frequent keywords are:\n")
                 print(most_freq_kw)
                 print("")
-                print("The {} keywords are:\n".format(best_method.upper()))
+                print(f"The {best_method.upper()} keywords are:\n")
                 print(model_kw)
 
             else:
@@ -926,7 +943,7 @@ async def gen_files(
                 print("The new most frequent keywords are:\n")
                 print(most_freq_kw)
                 print("")
-                print("The new {} keywords are:\n".format(best_method.upper()))
+                print(f"The new {best_method.upper()} keywords are:\n")
                 print(model_kw)
 
             new_words_to_ignore, words_added = utils.prompt_for_word_removal(
@@ -943,7 +960,7 @@ async def gen_files(
                 )
 
                 model_kw = _select_kws(
-                    method=method,
+                    method=best_method,
                     kw_args=model_kw_args,
                     words_to_ignore=new_words_to_ignore,
                     n=num_keywords,
@@ -961,7 +978,7 @@ async def gen_files(
             save_file=word_cloud_dest,
         )
 
-    block_feature = True  # t_sne isn't zipping propertly
+    block_feature = True  # t_sne isn't zipping properly
     if t_sne_dest and not block_feature:
         visuals.t_sne(
             dimension="both",  # 2d and 3d are also options
@@ -983,7 +1000,7 @@ async def gen_files(
 
     keywords_dict = {
         "Most Frequent Keywords": most_freq_kw,
-        "{} Keywords".format(best_method.upper()): model_kw,
+        f"{best_method.upper()} Keywords": model_kw,
     }
 
     def add_to_zip_str(input_obj: str, new_char: str) -> str:
@@ -1026,17 +1043,19 @@ async def gen_files(
         input_obj.write(new_char)
         return input_obj
 
+    edit_fxn: Callable[..., Any]
+
     if zip_results:
-        edit_fxn = add_to_zip_str
+        edit_fxn = cast(Callable[..., Any], add_to_zip_str)
         input_obj = ""
 
     else:
-        edit_fxn = add_to_txt_file
+        edit_fxn = cast(Callable[..., Any], add_to_txt_file)
         txt_file = "keywords.txt"
         input_obj = open(txt_file, "w")
 
     for model_key, model_val in keywords_dict.items():
-        if isinstance(keywords_dict[model_key], dict):
+        if isinstance(model_val, dict):
             input_obj = edit_fxn(input_obj=input_obj, new_char=str(model_key))
             input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
@@ -1056,11 +1075,11 @@ async def gen_files(
                 input_obj = edit_fxn(input_obj=input_obj, new_char="=" * len(model_key))
                 input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
-        elif isinstance(keywords_dict[model_key], list):
+        elif isinstance(model_val, list):
             input_obj = edit_fxn(input_obj=input_obj, new_char=str(model_key))
             input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
-            for word in keywords_dict[model_key]:
+            for word in model_val:
                 input_obj = edit_fxn(input_obj=input_obj, new_char=str(word))
                 input_obj = edit_fxn(input_obj=input_obj, new_char="\n")
 
@@ -1071,13 +1090,15 @@ async def gen_files(
                 input_obj = edit_fxn(input_obj=input_obj, new_char="\n\n")
 
     if zip_results:
+        data = input_obj if isinstance(input_obj, str) else input_obj.read()
+
         with zipfile.ZipFile(save_dir, mode="a") as zf:
-            zf.writestr(zinfo_or_arcname="keywords.txt", data=input_obj)
+            zf.writestr(zinfo_or_arcname="keywords.txt", data=data)
             zf.close()
             print("\n")
             print(f"Analysis zip folder {save_dir} created in the local directory.")
 
-    else:
+    elif not isinstance(input_obj, str):
         input_obj.close()
         print("\n")
         print(f"Analysis folder {save_dir} created in the local directory.")

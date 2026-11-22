@@ -13,6 +13,7 @@ import gc
 import os
 import random
 import string
+from collections.abc import Collection, Sequence
 from multiprocessing import Pool
 
 import emoji
@@ -77,7 +78,7 @@ def load_data(
         )
 
     if target_cols is None:
-        target_cols = df_texts.columns
+        target_cols = list(df_texts.columns)
 
     elif isinstance(target_cols, str):
         target_cols = [target_cols]
@@ -101,7 +102,7 @@ def _combine_texts_to_str(
     text_corpus : str or list
         The texts to be combined.
 
-    ignore_words : str or list
+    ignore_words : str or list or None (default=None)
         Strings that should be removed from the text body.
 
     Returns
@@ -141,7 +142,9 @@ def _combine_texts_to_str(
 # MARK: Remove Unwanted
 
 
-def _remove_unwanted(args: list[tuple[str], tuple[str], tuple[str]]) -> list[str]:
+def _remove_unwanted(
+    args: tuple[Sequence[str], Collection[str], Collection[str]],
+) -> list[str]:
     """
     Lower cases tokens and removes numbers and possibly names.
 
@@ -195,6 +198,9 @@ def _lemmatize(
 
     base_tokens = []
 
+    if nlp is None:
+        raise RuntimeError("The spaCy language pipeline has not been initialized.")
+
     for t in tqdm(
         tokens,
         total=len(tokens),
@@ -224,14 +230,14 @@ def _lemmatize(
 
 def clean(
     texts: str | list,
-    input_language: str = None,
+    input_language: str,
     min_token_freq: int = 2,
     min_token_len: int = 3,
     min_tokens: int = 0,
     max_token_index: int = -1,
     min_ngram_count: int = 3,
     remove_stopwords: int = True,
-    ignore_words: str | list[str] = None,
+    ignore_words: str | list[str] | None = None,
     sample_size: int = 1,
     verbose: bool = True,
 ) -> list[str] | list[list[str]]:
@@ -369,17 +375,17 @@ def clean(
             connector_words=stop_words,
         )
     else:
-        bigrams = Phrases(  # pylint: disable=unexpected-keyword-arg
+        bigrams = Phrases(
             sentences=tokenized_texts,
             min_count=min_ngram_count,
             threshold=5.0,
-            common_terms=stop_words,
+            common_terms=stop_words,  # ty: ignore[unknown-argument]
         )
-        trigrams = Phrases(  # pylint: disable=unexpected-keyword-arg
+        trigrams = Phrases(
             sentences=bigrams[tokenized_texts],
             min_count=min_ngram_count,
             threshold=5.0,
-            common_terms=stop_words,
+            common_terms=stop_words,  # ty: ignore[unknown-argument]
         )
 
     tokens_with_ngrams = []
@@ -545,9 +551,9 @@ def clean(
 
 
 def prepare_data(
-    data: str | pd.DataFrame = None,
-    target_cols: str | list[str] = None,
-    input_language: str | None = None,
+    data: str | pd.DataFrame,
+    target_cols: str | list[str] | None = None,
+    input_language: str = "",
     min_token_freq: int = 2,
     min_token_len: int = 3,
     min_tokens: int = 0,
@@ -569,7 +575,7 @@ def prepare_data(
     target_cols : str or list (default=None)
         The columns in the csv/xlsx or dataframe that contain the text data to be modeled.
 
-    input_language : str (default=None)
+    input_language : str
         The English name of the language in which the texts are found.
 
     min_token_freq : int (default=2)
@@ -610,10 +616,13 @@ def prepare_data(
     if input_language in languages.lem_abbr_dict().keys():
         input_language = languages.lem_abbr_dict()[input_language]
 
+    df_texts = load_data(data)
+
     if isinstance(target_cols, str):
         target_cols = [target_cols]
 
-    df_texts = load_data(data)
+    elif not target_cols:
+        target_cols = list(df_texts.columns)
 
     # Select columns from which texts should come.
     raw_texts = []
@@ -646,10 +655,10 @@ def prepare_data(
 
 
 def _prepare_corpus_path(
-    text_corpus: str | list[str] | list[list[str]] = None,
-    clean_texts: str = None,
-    target_cols: str | list[str] = None,
-    input_language: str | None = None,
+    text_corpus: str | list[str] | list[list[str]],
+    clean_texts: str | None = None,
+    target_cols: str | list[str] | None = None,
+    input_language: str = "",
     min_token_freq: int = 2,
     min_token_len: int = 3,
     min_tokens: int = 0,
@@ -659,7 +668,7 @@ def _prepare_corpus_path(
     ignore_words: str | list | None = None,
     sample_size: int = 1,
     verbose: bool = True,
-) -> list[str] | list[list[str]] | None:
+) -> str | list[str] | list[list[str]]:
     """
     Check a text corpus to see if it's a path, and prepares the data if so.
 
@@ -740,7 +749,7 @@ def _prepare_corpus_path(
 
 async def translate_output(
     outputs: list[str], input_language: str, output_language: str
-) -> list[str]:
+) -> list[str] | list[list[str]]:
     """
     Translate model outputs using https://github.com/ssut/py-googletrans.
 
@@ -849,7 +858,7 @@ def organize_by_pos(
 
 def prompt_for_word_removal(
     words_to_ignore: str | list[str] | None = None,
-) -> list[list[str], bool]:
+) -> tuple[list[str], bool]:
     """
     Prompt the user for words that should be ignored in kewword extraction.
 
@@ -865,6 +874,9 @@ def prompt_for_word_removal(
     """
     if isinstance(words_to_ignore, str):
         words_to_ignore = [words_to_ignore]
+
+    elif not words_to_ignore:
+        words_to_ignore = []
 
     words_to_ignore = [w.replace("'", "") for w in words_to_ignore]
 
