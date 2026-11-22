@@ -320,7 +320,7 @@ def _select_kws(
         kw_dict = {
             k: v
             for k, v in sorted(kw_args.items(), key=lambda item: item[1])[::-1]
-            if k not in words_to_ignore
+            if k not in words_to_ignore  # ty: ignore[unsupported-operator]
         }
 
         keywords = list(kw_dict.keys())[:n]
@@ -337,7 +337,9 @@ def _select_kws(
         ]
         set_ordered_topic_words = list(set(flat_ordered_topic_words))
         set_ordered_topic_words = [
-            t_w for t_w in set_ordered_topic_words if t_w not in words_to_ignore
+            t_w
+            for t_w in set_ordered_topic_words
+            if t_w not in words_to_ignore  # ty: ignore[unsupported-operator]
         ]
         if len(set_ordered_topic_words) <= n:
             print("\n")
@@ -357,7 +359,7 @@ def _select_kws(
                 for s_i in sel_idxs:
                     if (
                         ordered_topic_words[t_n][s_i] not in keywords
-                        and ordered_topic_words[t_n][s_i] not in words_to_ignore
+                        and ordered_topic_words[t_n][s_i] not in words_to_ignore  # ty: ignore[unsupported-operator]
                     ):
                         keywords.append(ordered_topic_words[t_n][s_i])
                     else:
