@@ -520,10 +520,8 @@ async def extract_kws(
                 n=num_keywords,
             )
 
-        elif (
-            method == "tfidf" and corpuses_to_compare
-        ):  # Term Frequency Inverse Document Frequency
-            if isinstance(corpuses_to_compare[0], str):  # only one corpus to compare
+        elif method == "tfidf":  # Term Frequency Inverse Document Frequency
+            if isinstance(corpuses_to_compare[0], str):  # ty: ignore[not-subscriptable]
                 corpuses_to_compare = [corpuses_to_compare]  # ty: ignore[invalid-assignment]
 
             # Combine the main corpus and those to compare.
@@ -577,7 +575,7 @@ async def extract_kws(
             bert_model = SentenceTransformer(bert_st_model)
 
         tm = topic_model.TopicModel(
-            bert_model=bert_model, num_topics=num_topics, method=method
+            num_topics=num_topics, method=method, bert_model=bert_model
         )
         tm.fit(text_corpus=text_corpus, method=method, m_clustering=None)
 
@@ -917,7 +915,7 @@ async def gen_files(
     )
 
     model_kw = _select_kws(
-        method=best_method,
+        method=method,  # ty: ignore[invalid-argument-type]
         kw_args=model_kw_args,
         words_to_ignore=words_to_ignore,
         n=num_keywords,
@@ -960,7 +958,7 @@ async def gen_files(
                 )
 
                 model_kw = _select_kws(
-                    method=best_method,
+                    method=method,  # ty: ignore[invalid-argument-type]
                     kw_args=model_kw_args,
                     words_to_ignore=new_words_to_ignore,
                     n=num_keywords,
