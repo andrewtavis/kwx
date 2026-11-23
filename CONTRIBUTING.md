@@ -6,7 +6,7 @@ Thank you for your consideration in contributing to this project!
 
 Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
 
-Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, and in accordance with this project's [code of conduct](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md), other contributors will reciprocate that respect in addressing your issue or assessing patches and features.
+Following these guidelines helps to communicate that you respect the time of the developers managing and developing this open source project. In return, and in accordance with this project's [code of conduct](https://codeberg.org/andrewtavis/kwx/src/branch/main/.forgejo/CODE_OF_CONDUCT.md), other contributors will reciprocate that respect in addressing your issue or assessing patches and features.
 
 ## Contents
 
@@ -24,11 +24,11 @@ Please follow the steps below to set up your development environment for kwx con
 
 ```bash
 # Clone your fork of the repo into the current directory.
-git clone https://github.com/<your-username>/kwx.git
+git clone https://codeberg.org/<your-username>/kwx.git
 # Navigate to the newly cloned directory.
 cd kwx
 # Assign the original repo to a remote called "upstream".
-git remote add upstream https://github.com/andrewtavis/kwx.git
+git remote add upstream https://codeberg.org/andrewtavis/kwx.git
 ```
 
 - Now, if you run `git remote -v` you should see two remote repositories named:
@@ -94,7 +94,7 @@ uv run prek run --all-files
 
 ## Using the issue tracker
 
-The [issue tracker for kwx](https://github.com/andrewtavis/kwx/issues) is the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests) and [submitting pull requests](#pull-requests).
+The [issue tracker for kwx](https://codeberg.org/andrewtavis/kwx/issues) is the preferred channel for [bug reports](#bug-reports), [features requests](#feature-requests) and [submitting pull requests](#pull-requests).
 
 <sub><a href="#top">Back to top.</a></sub>
 
@@ -104,7 +104,7 @@ A bug is a _demonstrable problem_ that is caused by the code in the repository. 
 
 Guidelines for bug reports:
 
-1. **Use the GitHub issue search** to check if the issue has already been reported.
+1. **Use the Codeberg issue search** to check if the issue has already been reported.
 
 2. **Check if the issue has been fixed** by trying to reproduce it using the latest `main` or development branch in the repository.
 
@@ -130,7 +130,7 @@ Feature requests are more than welcome! Please take a moment to find out whether
 
 ## Pull requests
 
-Good pull requests - patches, improvements and new features - are a fantastic help. They should remain focused in scope and avoid containing unrelated commits. Note that all contributions to this project will be made under [the specified license](https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt) and should follow the coding indentation and style standards (contact us if unsure).
+Good pull requests - patches, improvements and new features - are a fantastic help. They should remain focused in scope and avoid containing unrelated commits. Note that all contributions to this project will be made under [the specified license](https://codeberg.org/andrewtavis/kwx/src/branch/main/LICENSE.txt) and should follow the coding indentation and style standards (contact us if unsure).
 
 **Please ask first** before embarking on any significant pull request (implementing features, refactoring code, etc), otherwise you risk spending a lot of time working on something that the developers might not want to merge into the project. With that being said, major additions are very appreciated!
 
@@ -140,7 +140,7 @@ When making a contribution, adhering to the [GitHub flow](https://guides.github.
 
    ```bash
    # Clone your fork of the repo into the current directory
-   git clone https://github.com/<your-username>/<repo-name>
+   git clone https://codeberg.org/<your-username>/<repo-name>
    # Navigate to the newly cloned directory
    cd <repo-name>
    # Assign the original repo to a remote called "upstream"

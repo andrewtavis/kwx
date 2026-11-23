@@ -1,19 +1,19 @@
-.. image:: https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/logo/kwx_logo_transparent.png
+.. image:: https://codeberg.org/andrewtavis/kwx/raw/branch/main/.forgejo/resources/logo/kwx_logo_transparent.png
     :width: 431
     :height: 215
     :align: center
-    :target: https://github.com/andrewtavis/kwx
+    :target: https://codeberg.org/andrewtavis/kwx
 
-|rtd| |ci_static_analysis| |ci_pytest| |pyversions| |pypi| |pypistatus| |license| |coc| |codestyle| |colab|
+|rtd| |ci_static_analysis| |ci_pytest| |pyversions| |pypi| |pypistatus| |license| |coc| |colab|
 
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |ci_static_analysis| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_static_analysis.yaml?branch=main&label=ci&logo=ruff
-    :target: https://github.com/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml
+.. |ci_static_analysis| image:: https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml/badge.svg?branch=main&label=ci&logo=ruff
+    :target: https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_static_analysis.yaml
 
-.. |ci_pytest| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_pytest.yaml?branch=main&label=build&logo=pytest
-    :target: https://github.com/andrewtavis/kwx/actions/workflows/ci_pytest.yaml
+.. |ci_pytest| image:: https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_pytest.yaml/badge.svg?branch=main&label=build&logo=pytest
+    :target: https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_pytest.yaml
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998
     :target: https://pypi.org/project/kwx/
@@ -25,18 +25,20 @@
     :target: https://pypi.org/project/kwx/
 
 .. |license| image:: https://img.shields.io/github/license/andrewtavis/kwx.svg
-    :target: https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt
+    :target: https://codeberg.org/andrewtavis/kwx/src/branch/main/LICENSE.txt
 
 .. |coc| image:: https://img.shields.io/badge/coc-Contributor%20Covenant-ff69b4.svg
-    :target: https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md
-
-.. |codestyle| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
+    :target: https://codeberg.org/andrewtavis/kwx/src/branch/main/.forgejo/CODE_OF_CONDUCT.md
 
 .. |colab| image:: https://img.shields.io/badge/%20-Open%20in%20Colab-097ABB.svg?logo=google-colab&color=097ABB&labelColor=525252
     :target: https://colab.research.google.com/github/andrewtavis/kwx
 
 BERT, LDA, and TFIDF based keyword extraction in Python
+
+Maintenance
+-----------
+
+This project is maintained at `codeberg.org/andrewtavis/kwx <https://codeberg.org/andrewtavis/kwx>`_. Please visit this remote repository for issues and pull requests.
 
 Installation
 ------------
@@ -54,7 +56,7 @@ Installation
 .. code-block:: shell
 
     # For a development build of the package:
-    git clone https://github.com/andrewtavis/kwx.git
+    git clone https://codeberg.org/andrewtavis/kwx.git
     cd kwx
 
     # With uv (recommended):

@@ -1,47 +1,51 @@
 <a id="top"></a>
 
 <div align="center">
-  <a href="https://github.com/andrewtavis/kwx"><img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/logo/kwx_logo_transparent.png" height=215></a>
+  <a href="https://codeberg.org/andrewtavis/kwx"><img src="https://codeberg.org/andrewtavis/kwx/raw/branch/main/.forgejo/resources/logo/kwx_logo_transparent.png" height=215></a>
 </div>
 
 <ol></ol>
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![ci_static_analysis](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_static_analysis.yaml?branch=main&label=ci&logo=ruff)](https://github.com/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml)
-[![ci_pytest](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_pytest.yaml?branch=main&label=build&logo=pytest)](https://github.com/andrewtavis/kwx/actions/workflows/ci_pytest.yaml)
+[![ci_static_analysis](https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml/badge.svg?branch=main&label=ci&logo=ruff)](https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_static_analysis.yaml)
+[![ci_pytest](https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_pytest.yaml/badge.svg?branch=main&label=build&logo=pytest)](https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_pytest.yaml)
 [![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)
 [![pypistatus](https://img.shields.io/pypi/status/kwx.svg)](https://pypi.org/project/kwx/)
-[![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://github.com/andrewtavis/kwx/blob/main/LICENSE.txt)
-[![coc](https://img.shields.io/badge/coc-Contributor%20Covenant-ff69b4.svg)](https://github.com/andrewtavis/kwx/blob/main/.github/CODE_OF_CONDUCT.md)
-[![codestyle](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![license](https://img.shields.io/github/license/andrewtavis/kwx.svg)](https://codeberg.org/andrewtavis/kwx/src/branch/main/LICENSE.txt)
+[![coc](https://img.shields.io/badge/coc-Contributor%20Covenant-ff69b4.svg)](https://codeberg.org/andrewtavis/kwx/src/branch/main/.forgejo/CODE_OF_CONDUCT.md)
 [![colab](https://img.shields.io/badge/%20-Open%20in%20Colab-097ABB.svg?logo=google-colab&color=097ABB&labelColor=525252)](https://colab.research.google.com/github/andrewtavis/kwx)
 
 ### BERT, LDA, and TFIDF based keyword extraction in Python
 
-**kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert), [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and [Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) for the various degrees of language support). A unique focus is allowing users to decide which words to not include in outputs, thereby guaranteeing sensible results that are in line with user intuitions.
+**kwx** is a toolkit for multilingual keyword extraction based on Google's [BERT](https://github.com/google-research/bert), [Latent Dirichlet Allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) and [Term Frequency Inverse Document Frequency](https://en.wikipedia.org/wiki/Tf%E2%80%93idf). The package provides a suite of methods to process texts of any language to varying degrees and then extract and analyze keywords from the created corpus (see [kwx.languages](https://codeberg.org/andrewtavis/kwx/src/branch/main/src/kwx/languages.py) for the various degrees of language support). A unique focus is allowing users to decide which words to not include in outputs, thereby guaranteeing sensible results that are in line with user intuitions.
 
 For a thorough overview of the process and techniques see the [Google slides](https://docs.google.com/presentation/d/1BNddaeipNQG1mUTjBYmrdpGC6xlBvAi3rapT88fkdBU/edit?usp=sharing), and reference the [documentation](https://kwx.readthedocs.io/en/latest/) for explanations of the models and visualization methods.
 
 # Contents
 
-- [Installation](#installation-)
-- [Models](#models-)
-  - [BERT](#bert-)
-  - [LDA](#lda-)
-  - [TFIDF](#tfidf-)
-  - [Word Frequency](#word-frequency-)
-- [Usage](#usage-)
-  - [Text Cleaning](#text-cleaning-)
-  - [Keyword Extraction](#keyword-extraction-)
-- [Visuals](#visuals-)
-  - [Topic Number Evaluation](#topic-number-evaluation-)
-  - [t-SNE](#t-sne-)
-  - [pyLDAvis](#pyldavis-)
-  - [Word Cloud](#word-cloud-)
-- [Development environment](#development-environment-)
-- [To-Do](#to-do-)
+- [Maintenance](#maintenance)
+- [Installation](#installation)
+- [Models](#models)
+  - [BERT](#bert)
+  - [LDA](#lda)
+  - [TFIDF](#tfidf)
+  - [Word Frequency](#word-frequency)
+- [Usage](#usage)
+  - [Text Cleaning](#text-cleaning)
+  - [Keyword Extraction](#keyword-extraction)
+- [Visuals](#visuals)
+  - [Topic Number Evaluation](#topic-number-evaluation)
+  - [t-SNE](#t-sne)
+  - [pyLDAvis](#pyldavis)
+  - [Word Cloud](#word-cloud)
+- [Development environment](#development-environment)
+- [To-Do](#to-do)
+
+# Maintenance
+
+`kwx` is maintained at [codeberg.org/andrewtavis/kwx](https://codeberg.org/andrewtavis/kwx). Please visit this remote repository for issues and pull requests.
 
 ## Installation
 
@@ -60,7 +64,7 @@ pip install kwx
 ### For Development Build
 
 ```bash
-git clone https://github.com/andrewtavis/kwx.git
+git clone https://codeberg.org/andrewtavis/kwx.git
 cd kwx
 
 # With uv (recommended):
@@ -83,7 +87,7 @@ import kwx
 
 ## Models
 
-Implemented NLP modeling methods within [kwx.model](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) include:
+Implemented NLP modeling methods within [kwx.model](https://codeberg.org/andrewtavis/kwx/src/branch/main/src/kwx/model.py) include:
 
 <a id="bert"></a>
 
@@ -117,7 +121,7 @@ Finally a user can simply query the most common words from a text corpus. This m
 
 ## Usage
 
-Keyword extraction can be useful to analyze surveys, tweets and other kinds of social media posts, research papers, and further classes of texts. [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
+Keyword extraction can be useful to analyze surveys, tweets and other kinds of social media posts, research papers, and further classes of texts. [examples/kw_extraction](https://codeberg.org/andrewtavis/kwx/src/branch/main/examples/kw_extraction.ipynb) provides an example of how to use kwx by deriving keywords from tweets in the Kaggle [Twitter US Airline Sentiment](https://www.kaggle.com/crowdflower/twitter-airline-sentiment) dataset.
 
 The following outlines using kwx to derive keywords from a text corpus with `prompt_remove_words` as `True` (the user will be asked if some of the extracted words need to be replaced):
 
@@ -128,7 +132,7 @@ The following outlines using kwx to derive keywords from a text corpus with `pro
 ```python
 from kwx.utils import prepare_data
 
-input_language = "english" # see kwx.languages for options
+input_language = "english"  # see kwx.languages for options
 
 # kwx.utils.clean() can be used on a list of lists.
 text_corpus = prepare_data(
@@ -161,7 +165,7 @@ corpus_no_ngrams = [
 # We can pass keywords for sentence_transformers.SentenceTransformer.encode,
 # gensim.models.ldamulticore.LdaMulticore, or sklearn.feature_extraction.text.TfidfVectorizer
 bert_kws = extract_kws(
-    method="BERT", # "BERT", "LDA", "TFIDF", "frequency"
+    method="BERT",  # "BERT", "LDA", "TFIDF", "frequency"
     bert_st_model="xlm-r-bert-base-nli-stsb-mean-tokens",
     text_corpus=corpus_no_ngrams,  # automatically tokenized if using LDA
     input_language=input_language,
@@ -193,13 +197,13 @@ The new BERT keywords are:
 Should words be removed [y/n]? n
 ```
 
-The model will be rerun until all words known to be unreasonable are removed for a suitable output. [kwx.model.gen_files](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
+The model will be rerun until all words known to be unreasonable are removed for a suitable output. [kwx.model.gen_files](https://codeberg.org/andrewtavis/kwx/src/branch/main/src/kwx/model.py) could also be used as a run-all function that produces a directory with a keyword text file and visuals (for experienced users wanting quick results).
 
 <sub><a href="#top">Back to top.</a></sub>
 
 ## Visuals
 
-[kwx.visuals](https://github.com/andrewtavis/kwx/blob/main/src/kwx/visuals.py) includes the following functions for presenting and analyzing the results of keyword extraction:
+[kwx.visuals](https://codeberg.org/andrewtavis/kwx/src/branch/main/src/kwx/visuals.py) includes the following functions for presenting and analyzing the results of keyword extraction:
 
 ### Topic Number Evaluation
 
@@ -214,13 +218,13 @@ graph_topic_num_evals(
     text_corpus=text_corpus,
     num_keywords=num_keywords,
     topic_nums_to_compare=list(range(5, 15)),
-    metrics=True, #  stability and coherence
+    metrics=True,  #  stability and coherence
 )
 plt.show()
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/topic_num_eval.png" width="600" />
+  <img src="https://codeberg.org/andrewtavis/kwx/raw/branch/main/.forgejo/resources/images/topic_num_eval.png" width="600" />
 </p>
 
 <sub><a href="#top">Back to top.</a></sub>
@@ -243,7 +247,7 @@ plt.show()
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/t_sne.png" width="600" />
+  <img src="https://codeberg.org/andrewtavis/kwx/raw/branch/main/.forgejo/resources/images/t_sne.png" width="600" />
 </p>
 
 <sub><a href="#top">Back to top.</a></sub>
@@ -264,14 +268,14 @@ pyLDAvis_topics(
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/pyLDAvis.png" width="600" />
+  <img src="https://codeberg.org/andrewtavis/kwx/raw/branch/main/.forgejo/resources/images/pyLDAvis.png" width="600" />
 </p>
 
 <sub><a href="#top">Back to top.</a></sub>
 
 ### Word Cloud
 
-Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples/kw_extraction](https://github.com/andrewtavis/kwx/blob/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
+Word clouds via [wordcloud](https://github.com/amueller/word_cloud) are included for a basic representation of the text corpus - specifically being a way to convey basic visual information to potential stakeholders. The following figure from [examples/kw_extraction](https://codeberg.org/andrewtavis/kwx/src/branch/main/examples/kw_extraction.ipynb) shows a word cloud generated from tweets of US air carrier passengers:
 
 ```python
 from kwx.visuals import gen_word_cloud
@@ -286,7 +290,7 @@ gen_word_cloud(
 ```
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/andrewtavis/kwx/main/.github/resources/images/word_cloud.png" width="600" />
+  <img src="https://codeberg.org/andrewtavis/kwx/raw/branch/main/.forgejo/resources/images/word_cloud.png" width="600" />
 </p>
 
 <sub><a href="#top">Back to top.</a></sub>
@@ -299,11 +303,11 @@ Please follow the steps below to set up your development environment for kwx con
 
 ```bash
 # Clone your fork of the repo into the current directory.
-git clone https://github.com/<your-username>/kwx.git
+git clone https://codeberg.org/<your-username>/kwx.git
 # Navigate to the newly cloned directory.
 cd kwx
 # Assign the original repo to a remote called "upstream".
-git remote add upstream https://github.com/andrewtavis/kwx.git
+git remote add upstream https://codeberg.org/andrewtavis/kwx.git
 ```
 
 - Now, if you run `git remote -v` you should see two remote repositories named:
@@ -369,21 +373,21 @@ uv run prek run --all-files
 
 ## To-Do
 
-Please see the [contribution guidelines](https://github.com/andrewtavis/kwx/blob/main/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
+Please see the [contribution guidelines](https://codeberg.org/andrewtavis/kwx/src/branch/main/CONTRIBUTING.md) if you are interested in contributing to this project. Work that is in progress or could be implemented includes:
 
-- Including more methods to extract keywords [(see issue)](https://github.com/andrewtavis/kwx/issues/17)
+- Including more methods to extract keywords [(see issue)](https://codeberg.org/andrewtavis/kwx/issues/17)
 
-- Adding key phrase extraction as an option for [kwx.model.extract_kws](https://github.com/andrewtavis/kwx/blob/main/src/kwx/model.py) [(see issues)](https://github.com/andrewtavis/kwx/issues/)
+- Adding key phrase extraction as an option for [kwx.model.extract_kws](https://codeberg.org/andrewtavis/kwx/src/branch/main/src/kwx/model.py) [(see issues)](https://codeberg.org/andrewtavis/kwx/issues/)
 
-- Adding t-SNE and pyLDAvis style visualizations for BERT models [(see issues\)](https://github.com/andrewtavis/kwx/issues/45)
+- Adding t-SNE and pyLDAvis style visualizations for BERT models [(see issues\)](https://codeberg.org/andrewtavis/kwx/issues/45)
 
-- Converting the translation feature over to use another translation api rather than [py-googletrans](https://github.com/ssut/py-googletrans) [(see issue)](https://github.com/andrewtavis/kwx/issues/44)
+- Converting the translation feature over to use another translation api rather than [py-googletrans](https://codeberg.org/ssut/py-googletrans) [(see issue)](https://codeberg.org/andrewtavis/kwx/issues/44)
 
-- Updates to [kwx.languages](https://github.com/andrewtavis/kwx/blob/main/src/kwx/languages.py) as lemmatization and other linguistic package dependencies evolve
+- Updates to [kwx.languages](https://codeberg.org/andrewtavis/kwx/src/branch/main/src/kwx/languages.py) as lemmatization and other linguistic package dependencies evolve
 
-- Creating, improving and sharing [examples](https://github.com/andrewtavis/kwx/tree/main/examples)
+- Creating, improving and sharing [examples](https://codeberg.org/andrewtavis/kwx/tree/main/examples)
 
-- Improving [tests](https://github.com/andrewtavis/kwx/tree/main/tests) for greater [code coverage](https://codecov.io/gh/andrewtavis/kwx)
+- Improving [tests](https://codeberg.org/andrewtavis/kwx/tree/main/tests) for greater [code coverage](https://codecov.io/gh/andrewtavis/kwx)
 
 - Updating and refining the [documentation](https://kwx.readthedocs.io/en/latest/)
 

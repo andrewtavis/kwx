@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kwx"
-version = "2.0.0"
+version = "2.0.1"
 description = "BERT, LDA, and TFIDF based keyword extraction in Python"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -84,7 +84,7 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/andrewtavis/kwx"
+Homepage = "https://codeberg.org/andrewtavis/kwx"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

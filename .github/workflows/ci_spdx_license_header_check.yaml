@@ -15,7 +15,7 @@ jobs:
   check_license_header:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Project
+      - name: Checkout
         uses: actions/checkout@v6
 
       - name: Check SPDX Licenses

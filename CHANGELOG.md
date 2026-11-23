@@ -6,7 +6,11 @@ kwx tries to follow [semantic versioning](https://semver.org/), a MAJOR.MINOR.PA
 - MINOR version when we add functionality in a backwards compatible manner
 - PATCH version when we make backwards compatible bug fixes
 
-## kwx 2.0.0
+## kwx v2.0.1
+
+- Development of the project was switched to [codeberg.org/andrewtavis/kwx](https://codeberg.org/andrewtavis/kwx).
+
+## kwx v2.0.0
 
 - All functions were typed and docstrings were expanded
 - `prek` based pre-commit hooks are used to improve package development
@@ -16,11 +20,11 @@ kwx tries to follow [semantic versioning](https://semver.org/), a MAJOR.MINOR.PA
 - All production and development dependencies were updated
 - Tests and GitHub workflows were updated given the above changes
 
-## kwx 1.0.0
+## kwx v1.0.0
 
 - Release switches kwx over to [semantic versioning](https://semver.org/) and indicates that it is stable
 
-## kwx 0.1.8
+## kwx v0.1.8
 
 Changes include:
 
@@ -29,7 +33,7 @@ Changes include:
 - An alert for users when the corpus size is to small for the number of topics was added
 - An import error for pyLDAvis was fixed
 
-## kwx 0.1.7.3
+## kwx v0.1.7.3
 
 Changes include:
 
@@ -41,7 +45,7 @@ Changes include:
 - More extensive contributing guidelines
 - Tests now use random seeds and are thus more robust
 
-## kwx 0.1.5
+## kwx v0.1.5
 
 Changes include:
 
@@ -52,7 +56,7 @@ Changes include:
 - The user has greater control over the cleaning process
 - Reformatting of the code to make the process more clear
 
-## kwx 0.1.0
+## kwx v0.1.0
 
 First stable release of kwx
 
@@ -64,7 +68,7 @@ Changes include:
 - Extensive testing of all modules with GH Actions and Codecov
 - Code of conduct and contribution guidelines
 
-## kwx 0.0.2.2
+## kwx v0.0.2.2
 
 The minimum viable product of kwx:
 

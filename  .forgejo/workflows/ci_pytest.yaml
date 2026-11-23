@@ -1,4 +1,5 @@
 name: ci_pytest
+
 on:
   workflow_dispatch:
   pull_request:
@@ -13,6 +14,7 @@ on:
       - "tests/**"
       - "pyproject.toml"
       - "uv.lock"
+      - ".forgejo/workflows/ci_pytest.yaml"
   push:
     branches:
       - main
@@ -21,37 +23,27 @@ on:
       - "tests/**"
       - "pyproject.toml"
       - "uv.lock"
+      - ".forgejo/workflows/ci_pytest.yaml"
 
 jobs:
-  run:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os:
-          - macos-latest
-          - ubuntu-latest
-          - windows-latest
-        python-version:
-          - "3.12"
-
-    env:
-      OS: ${{ matrix.os }}
-      PYTHON: ${{ matrix.python-version }}
+  run_ci_pytest:
+    name: Run CI Pytest
+    runs-on: codeberg-small
 
     steps:
-      - name: Clone Repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - name: Setup Python
-        uses: actions/setup-python@main
+      - name: Set up Python Environment
+        uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
 
-      - name: Sync environment and install dependencies
+      - name: Sync Environment and Install Dependencies
         run: uv sync --all-groups --frozen
+
       - name: Run pytest - Unit Tests
         run: uv run pytest . --cov=src --cov-report=term-missing --cov-fail-under=80 --cov-config=./pyproject.toml -v
