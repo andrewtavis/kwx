@@ -7,8 +7,8 @@
 <ol></ol>
 
 [![rtd](https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs)](http://kwx.readthedocs.io/en/latest/)
-[![ci_static_analysis](https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml/badge.svg?branch=main&label=ci&logo=ruff)](https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_static_analysis.yaml)
-[![ci_pytest](https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_pytest.yaml/badge.svg?branch=main&label=build&logo=pytest)](https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_pytest.yaml)
+[![ci_static_analysis](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_static_analysis.yaml?branch=main&label=ci&logo=ruff)](https://github.com/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml)
+[![ci_pytest](https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_pytest.yaml?branch=main&label=build&logo=pytest)](https://github.com/andrewtavis/kwx/actions/workflows/ci_pytest.yaml)
 [![codecov](https://codecov.io/gh/andrewtavis/kwx/branch/main/graphs/badge.svg)](https://codecov.io/gh/andrewtavis/kwx)
 [![pyversions](https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998)](https://pypi.org/project/kwx/)
 [![pypi](https://img.shields.io/pypi/v/kwx.svg?color=4B8BBE)](https://pypi.org/project/kwx/)

@@ -14,7 +14,7 @@ on:
       - "tests/**"
       - "pyproject.toml"
       - "uv.lock"
-      - ".forgejo/workflows/ci_pytest.yaml"
+      - ".github/workflows/ci_pytest.yaml"
   push:
     branches:
       - main
@@ -23,12 +23,22 @@ on:
       - "tests/**"
       - "pyproject.toml"
       - "uv.lock"
-      - ".forgejo/workflows/ci_pytest.yaml"
+      - ".github/workflows/ci_pytest.yaml"
 
 jobs:
   run_ci_pytest:
     name: Run CI Pytest
-    runs-on: codeberg-medium
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    env:
+      OS: ${{ matrix.os }}
 
     steps:
       - name: Checkout

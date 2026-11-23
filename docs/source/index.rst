@@ -9,11 +9,11 @@
 .. |rtd| image:: https://img.shields.io/readthedocs/kwx.svg?logo=read-the-docs
     :target: http://kwx.readthedocs.io/en/latest/
 
-.. |ci_static_analysis| image:: https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml/badge.svg?branch=main&label=ci&logo=ruff
-    :target: https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_static_analysis.yaml
+.. |ci_static_analysis| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_static_analysis.yaml?branch=main&label=ci&logo=ruff
+    :target: https://github.com/andrewtavis/kwx/actions/workflows/ci_static_analysis.yaml
 
-.. |ci_pytest| image:: https://codeberg.org/andrewtavis/kwx/actions/workflows/ci_pytest.yaml/badge.svg?branch=main&label=build&logo=pytest
-    :target: https://codeberg.org/andrewtavis/kwx/actions?workflow=ci_pytest.yaml
+.. |ci_pytest| image:: https://img.shields.io/github/actions/workflow/status/andrewtavis/kwx/.github/workflows/ci_pytest.yaml?branch=main&label=build&logo=pytest
+    :target: https://github.com/andrewtavis/kwx/actions/workflows/ci_pytest.yaml
 
 .. |pyversions| image:: https://img.shields.io/pypi/pyversions/kwx.svg?logo=python&logoColor=FFD43B&color=306998
     :target: https://pypi.org/project/kwx/
