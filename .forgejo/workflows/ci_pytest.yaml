@@ -28,7 +28,7 @@ on:
 jobs:
   run_ci_pytest:
     name: Run CI Pytest
-    runs-on: codeberg-small
+    runs-on: codeberg-medium
 
     steps:
       - name: Checkout
