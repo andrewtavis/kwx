@@ -28,7 +28,7 @@ on:
 jobs:
   run_ci_static_analysis:
     name: Run CI Static Analysis
-    runs-on: codeberg-tiny
+    runs-on: codeberg-small
     steps:
       - name: Checkout
         uses: actions/checkout@v6
