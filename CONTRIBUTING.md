@@ -134,9 +134,9 @@ Good pull requests - patches, improvements and new features - are a fantastic he
 
 **Please ask first** before embarking on any significant pull request (implementing features, refactoring code, etc), otherwise you risk spending a lot of time working on something that the developers might not want to merge into the project. With that being said, major additions are very appreciated!
 
-When making a contribution, adhering to the [GitHub flow](https://guides.github.com/introduction/flow/index.html) process is the best way to get your work merged:
+When making a contribution, adhering to the [Codeberg PR and Git flow](https://docs.codeberg.org/collaborating/pull-requests-and-git-flow/) process is the best way to get your work merged:
 
-1. [Fork](http://help.github.com/fork-a-repo/) the repo, clone your fork, and configure the remotes:
+1. [Fork](https://docs.codeberg.org/collaborating/pull-requests-and-git-flow/) the repo, clone your fork, and configure the remotes:
 
    ```bash
    # Clone your fork of the repo into the current directory
@@ -144,7 +144,7 @@ When making a contribution, adhering to the [GitHub flow](https://guides.github.
    # Navigate to the newly cloned directory
    cd <repo-name>
    # Assign the original repo to a remote called "upstream"
-   git remote add upstream https://github.com/<upsteam-owner>/<repo-name>
+   git remote add upstream https://codeberg.org/<upsteam-owner>/<repo-name>
    ```
 
 2. If you cloned a while ago, get the latest changes from upstream:
@@ -160,7 +160,7 @@ When making a contribution, adhering to the [GitHub flow](https://guides.github.
    git checkout -b <topic-branch-name>
    ```
 
-4. Commit your changes in logical chunks, and please try to adhere to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). Use Git's [interactive rebase](https://docs.github.com/en/github/getting-started-with-github/about-git-rebase) feature to tidy up your commits before making them public.
+4. Commit your changes in logical chunks, and please try to adhere to [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/). Use Git's [interactive rebase](https://docs.codeberg.org/collaborating/pull-requests-and-git-flow/) feature to tidy up your commits before making them public.
 
 5. Locally merge (or rebase) the upstream development branch into your topic branch:
 
@@ -174,7 +174,7 @@ When making a contribution, adhering to the [GitHub flow](https://guides.github.
    git push origin <topic-branch-name>
    ```
 
-7. [Open a Pull Request](https://help.github.com/articles/using-pull-requests/) with a clear title and description.
+7. [Open a Pull Request](https://docs.codeberg.org/collaborating/pull-requests-and-git-flow/) with a clear title and description.
 
 Thank you in advance for your contributions!
 
